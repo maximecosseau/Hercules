@@ -1,0 +1,202 @@
+// Hercules Battle configuration file.
+
+// -- battle.conf
+
+// Rate at which equipment can break. 1 = 0.01% chance (Official: 0)
+equip_natural_break_rate: 0
+
+// Do weapon attacks have a attack speed delay before actual damage is applied? (Official:yes)
+delay_battle_damage: yes
+
+// If attacker and target are on the same tile, knock back the target to the left? (Official:yes)
+knockback_left: no
+
+// -- battleground.conf
+
+// Interval before updating the bg-member map mini-dots (milliseconds)
+bg_update_interval: 500
+
+// -- client.conf
+
+// Whether to enable the official packet obfuscation support (good vs WPE)
+// 0: disabled
+// 1: optional (not recommended) -- identifies whether it is required
+// 2: enabled (recommended)
+packet_obfuscation: 1
+
+// Valid range of dyes and styles on the client.
+min_hair_style: 0
+max_hair_style: 29
+min_hair_color: 0
+max_hair_color: 33
+min_cloth_color: 0
+max_cloth_color: 35
+
+// Visible area size (how many squares away a player can see)
+area_size: 22
+
+// Maximum walk path (how many cells a player can walk with mouse)
+max_walk_path: 32
+
+// Will tuxedo and wedding dresses be shown when worn?
+wedding_modifydisplay: yes
+
+// Do not display cloth colors for special classes?
+wedding_ignorepalette: no
+xmas_ignorepalette: no
+summer_ignorepalette: no
+hanbok_ignorepalette: no
+oktoberfest_ignorepalette: no
+
+// Show rAthena version to users when they login?
+display_version: no
+
+// When affected with the "Hallucination" status effect, send the effect to client?
+display_hallucination: no
+
+// Limits use of blank (transparent) pixels in guild emblems to a set percentage of the total.
+client_emblem_max_blank_percent: 75
+
+// -- feature.conf
+
+// Atcommand suggestions
+feature.atcommand_suggestions: yes
+
+// Warp suggestions
+//feature.warp_suggestions: yes
+
+// -- gm.conf
+
+// allow gms to bypass the maximum stat parameter? ( if yes gm stats can go up to 32k ) default: no
+atcommand_max_stat_bypass: yes
+
+// modifies @mobinfo @iteminfo @whodrops as per renewal formulas
+atcommand_mobinfo_type: 0
+
+// -- guild.conf
+
+// Maximum tax limit on a guild member
+guild_exp_limit: 90
+
+// Maximum castles one guild can own (0 = unlimited)
+guild_max_castles: 0
+
+// When to re-display the guild notice
+// Do not re-display: 0 / changing maps: 1 / teleporting : 2
+guild_notice_changemap: 0
+
+// -- homunc.conf
+
+// The rate a homunculus will get friendly by feeding it
+homunculus_friendly_rate: 500
+
+// Can you name a homunculus more then once?
+hom_rename: no
+
+// Max level for Homunculus S
+homunculus_S_max_level: 99
+
+// -- items.conf
+
+// Tax to apply to all vending transactions (eg: 10000 = 100%, 50 = 0.50%)
+vending_tax: 200
+
+// How much time must pass between item uses? Prevents healing item abuse. Recommended ~200 ms
+item_use_interval: 125
+
+// Will disabled consumables (disabled by map_zone_db.conf) be consumed when trying to use them?
+item_restricted_consumption_type: 0
+
+// -- misc.conf
+
+// Delay between using @duel in minutes
+duel_time_interval: 0
+
+// Restrict duel usage to same map
+duel_only_on_same_map: yes
+
+// Allow autotrade only in map with autotrade flag?
+at_mapflag: no
+
+// Set this to the amount of minutes autotrade chars will be kicked from the server.
+at_timeout: 0
+
+// -- monster.conf
+
+// Defines various mob AI related settings
+monster_ai: 0
+
+// Zeny from mobs
+zeny_from_mobs: no
+
+// Monsters level up
+mobs_level_up: no
+mobs_level_up_exp_rate: 1
+
+// How should a monster be trapped by an icewall casted directly on it?
+// Default (least exploitable): mob - 75, boss - 0
+// Default (most official): mob - 220, boss - 1
+mob_icewall_walk_block: 100
+boss_icewall_walk_block: 0
+
+// -- party.conf
+
+// Interval before updating the party-member map mini-dots (milliseconds)
+party_update_interval: 500
+
+// Method of distribution when item party share is enabled in a party
+// 0: random / 1: disabled for non-mob drops / 2: distributed evenly and in order / 3: 1+2
+party_item_share_type: 1
+
+// Is exp/item sharing disabled for idle members in the party? (amount in seconds)
+idle_no_share: 120
+
+// Give additional experience bonus per party-member involved on even-share parties?
+party_even_share_bonus: 20
+
+// Display party name regardless if player is in a guild
+display_party_name: yes
+
+// -- pet.conf
+
+// The rate a pet will get friendly by feeding it. (Note 2)
+pet_friendly_rate: 500
+
+// Are pets disabled during Guild Wars?
+pet_disable_in_gvg: no
+
+// -- player.conf
+
+// The amount (%) of HP/SP a player will respawn with, 0 is default
+restart_hp_rate: 5
+restart_sp_rate: 5
+
+// Prevent logout of players after being hit for how long (in ms, 0 disables)?
+prevent_logout: 5000
+
+// Players' will drop a 'Skull' when killed?
+bone_drop: 1
+
+// Idle characters can receive autoloot? (in seconds, 0: disabled)
+idle_no_autoloot: 120
+
+// -- skill.conf
+
+// What level of ASPD should the skill system account when casting skills
+// NOTE: Setting this to 100% may cause some issues with valid skills not being cast.
+skill_amotion_leniency: 90
+
+// Should traps change their target to "all" inside gvg/pvp grounds?
+gvg_traps_target_all: 1
+
+// Allows players to skip menu when casting Teleport level 1
+skip_teleport_lv1_menu: yes
+
+// Area of Bowling Bash chain reaction
+bowling_bash_area: 20
+
+// -- status.conf
+
+// Import custom rates config (don't change that)
+import: conf/import/rates_conf.txt
+

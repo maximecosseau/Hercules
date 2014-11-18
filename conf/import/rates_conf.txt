@@ -1,0 +1,92 @@
+// Hercules Rates configuration file.
+
+// - Item drop rates
+// - All 50x ; Boss Card 1x
+
+// The rate the common items are dropped
+item_rate_common: 5000
+item_rate_common_boss: 5000
+item_drop_common_min: 1
+item_drop_common_max: 10000
+
+// The rate healing items are dropped
+item_rate_heal: 5000
+item_rate_heal_boss: 5000
+item_drop_heal_min: 1
+item_drop_heal_max: 10000
+
+// The rate at which usable items are dropped.
+item_rate_use: 5000
+item_rate_use_boss: 5000
+item_drop_use_min: 1
+item_drop_use_max: 10000
+
+// The rate at which equipment is dropped.
+item_rate_equip: 5000
+item_rate_equip_boss: 5000
+item_drop_equip_min: 1
+item_drop_equip_max: 10000
+
+// The rate at which cards are dropped.
+item_rate_card: 5000
+item_rate_card_boss: 100
+item_drop_card_min: 1
+item_drop_card_max: 10000
+
+// The rate adjustment for the MVP items that the MVP gets in their inventory.
+item_rate_mvp: 5000
+item_drop_mvp_min: 1
+item_drop_mvp_max: 10000
+
+// The rate adjustment for card-granted item drops.
+item_rate_adddrop: 2500
+item_drop_add_min: 1
+item_drop_add_max: 10000
+
+// Rate adjustment for Treasure Box drops.
+item_rate_treasure: 2500
+item_drop_treasure_min: 1
+item_drop_treasure_max: 10000
+
+// Make broadcast ** Player1 won Pupa's Pupa Card (chance 0.01%) ***
+// 0 = disable / 1 = 0.01% drop chance
+rare_drop_announce: 5
+
+// - Experience rates
+// - Exp 50x ; Quest 25x
+
+// Rate at which exp. is given.
+base_exp_rate: 5000
+job_exp_rate: 5000
+mvp_exp_rate: 5000
+quest_exp_rate: 2500
+
+// Turn this on to allow a player to level up more than once from a kill.
+multi_level_up: yes
+
+// The rate of job exp. from using Heal skill. (100 is the same as the heal amount, 200 is double)
+heal_exp: 200
+
+// The rate of exp. that is gained by the process of resurrection, a unit is 0.01%.
+resurrection_exp: 100
+
+// The rate of job exp. when using discount and overcharge on an NPC
+// (in 0.01% increments - 100 is 1%, 10000 is normal, 20000 is double.)
+shop_exp: 100
+
+// Do players get exp. in PvP maps ?
+pvp_exp: yes
+
+// When a player dies, how should we penalize them?
+// 0 = No penalty.
+// 1 = Lose % of current level when killed.
+// 2 = Lose % of total experience when killed.
+death_penalty_type: 1
+
+// Exp. penalty rate (Each 100 is 1% of their exp)
+death_penalty_base: 100
+death_penalty_job: 100
+
+// When a player dies (to another player), how much zeny should we penalize them with?
+// NOTE: It is a percentage of their zeny, so 100 = 1%
+zeny_penalty: 0
