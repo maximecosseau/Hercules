@@ -1,0 +1,59 @@
+// Hercules Character Server configuration file.
+
+// Server Communication username and password
+userid: caelumserv
+passwd: t3ZUpHsU47JuF2Rt
+
+// Server name, use alternative character such as ASCII 160 for spaces
+server_name: Caelum
+
+// Wisp name for server: used to send wisp from server to players (4 to 23 characters)
+wisp_server_name: Caelum
+
+// Login Server IP
+login_ip: 127.0.0.1
+
+// Login Server Port
+login_port: 6900
+
+// Character Server IP
+char_ip: 37.59.41.194
+
+// Character Server Port
+char_port: 6121
+
+// Type of server (0 normal, 1 maintenance)
+char_server_type: 0
+
+// Minimum Group ID to join char server when it is on char_server_type 1 (maintenance)
+char_maintenance_min_group_id: 2
+
+// Enable or disable creation of new characters
+char_new: 1
+
+// Maximum users able to connect to the server (-1 unlimited)
+max_connect_user: -1
+
+// Starting point for new characters <map_name>,<x>,<y>
+start_point: new_1-1,53,111
+
+// Starting items and zenny for new characters
+// Format: <id>,<amount>,<position>:<id>,<amount>,<position>:...
+// To auto-equip an item, include the position where it will be equipped; otherwise, use zero.
+start_items: 1201,1,2:2301,1,16
+start_zeny: 20000
+
+// Size for the fame-lists
+fame_list_alchemist: 5
+fame_list_blacksmith: 5
+fame_list_taekwon: 5
+
+// Name used for unknown characters
+unknown_char_name: Inconnu
+
+// Amount of time in seconds by which the character deletion is delayed (seconds)
+// Default: 86400 (24 hours)
+char_del_delay: 7200
+
+// Pincode system, requires client 2011-03-09aragexeRE or newer
+pincode_enabled: 0

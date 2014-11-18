@@ -1,0 +1,35 @@
+// Hercules Inter Server configuration file.
+
+// Level range for sharing within a party
+party_share_level: 15
+
+// Global SQL settings
+sql.db_hostname: 127.0.0.1
+sql.db_port: 3306
+sql.db_username: caelum
+sql.db_password: !15t^7+<#/B+
+sql.db_database: caelum_hercules
+sql.codepage:
+
+// MySQL Character SQL server
+char_server_ip: 127.0.0.1
+char_server_port: 3306
+char_server_id: caelum
+char_server_pw: !15t^7+<#/B+
+char_server_db: caelum_hercules
+
+// MySQL Map SQL Server
+map_server_ip: 127.0.0.1
+map_server_port: 3306
+map_server_id: caelum
+map_server_pw: !15t^7+<#/B+
+map_server_db: caelum_hercules
+
+// MySQL Log SQL Database
+log_db_ip: 127.0.0.1
+log_db_port: 3306
+log_db_id: caelum
+log_db_pw: !15t^7+<#/B+
+log_db_db: caelum_logs
+log_codepage:
+log_login_db: loginlog

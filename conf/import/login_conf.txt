@@ -1,0 +1,20 @@
+// Hercules Login Server configuration file.
+
+// Login Server Port
+login_port: 6900
+
+// Can you use _M/_F to make new accounts on the server?
+new_account: no
+
+// Store passwords as MD5 hashes instead of plaintext ?
+// NOTE: Will not work with clients that use <passwordencrypt>
+use_MD5_passwords: yes
+
+// Client MD5 hash check
+// Note: see doc/md5_hashcheck.txt for more details.
+client_hash_check: off
+
+// Client valid MD5 hashes (client_hash: group_id, hash)
+//client_hash: 0, 113e195e6c051bb1cfb12a644bb084c5
+//client_hash: 10, cb1ea78023d337c38e8ba5124e2338ae
+//client_hash: 99, disabled

@@ -1,0 +1,31 @@
+// Hercules Logs configuration file.
+
+// Log Players Actions
+enable_logs: 0xFFFFF
+
+// Log Items
+log_filter: 4088
+
+// Log Dead Branch Usage
+log_branch: yes
+
+// Track Zeny Changes
+log_zeny: 1
+
+// Track Cash Changes
+log_cash: 1
+
+// Log MVP Monster Drops
+log_mvpdrop: yes
+
+// Log AtCommands & Charcommands
+log_commands: yes
+
+// Log NPC 'logmes' commands
+log_npc: yes
+
+// Log Chat - 31: everything
+log_chat: 31
+
+// Use SQL database?
+sql_logs: yes

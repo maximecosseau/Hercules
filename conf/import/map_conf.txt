@@ -1,0 +1,23 @@
+// Hercules Map Server configuration file.
+
+// Interserver communication passwords
+userid: caelumserv
+passwd: t3ZUpHsU47JuF2Rt
+
+// Character Server IP
+char_ip: 127.0.0.1
+
+// Character Server Port
+char_port: 6121
+
+// Map Server IP
+map_ip: 37.59.41.194
+
+// Map Server Port
+map_port: 5121
+
+// Enable the @guildspy and @partyspy at commands?
+enable_spy: no
+
+// Database autosave time
+autosave_time: 120
