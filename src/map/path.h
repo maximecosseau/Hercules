@@ -11,7 +11,7 @@
 #define MOVE_COST 10
 #define MOVE_DIAGONAL_COST 14
 
-#define MAX_WALKPATH 32
+#define MAX_WALKPATH 48
 
 struct walkpath_data {
 	unsigned char path_len,path_pos;
