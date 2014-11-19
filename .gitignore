@@ -58,6 +58,8 @@ Thumbs.db
 
 # /conf/
 # /conf/import
+/conf/import/char_local.txt
+/conf/import/map_local.txt
 
 # /log/
 /log/*.log

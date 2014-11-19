@@ -12,9 +12,6 @@ log_branch: yes
 // Track Zeny Changes
 log_zeny: 1
 
-// Track Cash Changes
-log_cash: 1
-
 // Log MVP Monster Drops
 log_mvpdrop: yes
 

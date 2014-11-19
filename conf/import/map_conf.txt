@@ -21,3 +21,5 @@ enable_spy: no
 
 // Database autosave time
 autosave_time: 120
+
+import: conf/import/map_local.txt

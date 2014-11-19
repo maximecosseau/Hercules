@@ -46,7 +46,6 @@ wedding_ignorepalette: no
 xmas_ignorepalette: no
 summer_ignorepalette: no
 hanbok_ignorepalette: no
-oktoberfest_ignorepalette: no
 
 // Show rAthena version to users when they login?
 display_version: no

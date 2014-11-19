@@ -38,10 +38,9 @@ max_connect_user: -1
 start_point: new_1-1,53,111
 
 // Starting items and zenny for new characters
-// Format: <id>,<amount>,<position>:<id>,<amount>,<position>:...
-// To auto-equip an item, include the position where it will be equipped; otherwise, use zero.
-start_items: 1201,1,2:2301,1,16
-start_zeny: 20000
+// Format is: id1,quantity1,stackable1,idN,quantityN,stackableN (weapon, armor = non stackable)
+start_items: 1201,1,0,2301,1,0
+start_zeny: 25000
 
 // Size for the fame-lists
 fame_list_alchemist: 5
@@ -52,8 +51,10 @@ fame_list_taekwon: 5
 unknown_char_name: Inconnu
 
 // Amount of time in seconds by which the character deletion is delayed (seconds)
-// Default: 86400 (24 hours)
-char_del_delay: 7200
+// Default: 86400 (24 hours) 43200 = 12 hours
+char_del_delay: 43200
 
 // Pincode system, requires client 2011-03-09aragexeRE or newer
 pincode_enabled: 0
+
+import: conf/import/char_local.txt
