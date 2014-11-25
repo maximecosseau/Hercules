@@ -5586,7 +5586,7 @@ void map_cp_defaults(void) {
 #ifdef CONSOLE_INPUT
 	/* default HCP data */
 	map->cpsd = pc->get_dummy_sd();
-	strcpy(map->cpsd->status.name, "Hercules Console");
+	strcpy(map->cpsd->status.name, "Hercules");
 	map->cpsd->bl.x = MAP_DEFAULT_X;
 	map->cpsd->bl.y = MAP_DEFAULT_Y;
 	map->cpsd->bl.m = map->mapname2mapid(MAP_DEFAULT);

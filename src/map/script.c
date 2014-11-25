@@ -18997,6 +18997,73 @@ bool script_hp_add(char *name, char *args, bool (*func)(struct script_state *st)
 	return script->add_builtin(&buildin, true);
 }
 
+//	createbgid <respawn map>, <respawn x>, <respawn y>, <On Quit event>, <On Death event>;
+BUILDIN(createbgid) {
+	unsigned int bg_id;
+	if ( ( bg_id = bg->create( mapindex->name2id( script_getstr(st,2) ), script_getnum(st,3), script_getnum(st,4), script_getstr(st,5), script_getstr(st,6) ) ) > 0 )
+		script_pushint( st, bg_id );
+	else
+		script_pushint( st, 0 );
+	return true;
+}
+
+//	setbgid <battleground ID> {, <player name> };
+//	setbgid <battleground ID> {, <player account ID> };
+BUILDIN(setbgid) {
+	unsigned int bg_id = script_getnum(st,2);
+	struct battleground_data *bgd = bg->team_search( bg_id );
+	struct map_session_data *sd;
+	if ( script_hasdata( st, 3 ) ) {
+		if ( data_isstring( script_getdata(st,3) ) )
+			sd = map->nick2sd( script_getstr(st,3) );
+		else
+			sd = map->id2sd( script_getnum(st,3) );
+	} else
+		sd = script->rid2sd(st);
+	if ( !sd ) {
+		script_pushint( st, -3 ); // player no attach
+		return true;
+	}
+	if ( !bgd && bg_id > 0 ) {
+		script_pushint( st, -1 ); // battleground team haven't created
+		return true;
+	}
+	if ( bg_id && sd->bg_id == bg_id ) {
+		script_pushint( st, -5 ); // the player has already join this battleground team
+		return true;
+	}
+	if ( sd->bg_id )
+		bg->team_leave( sd, 0 );
+	if ( bg_id == 0 ) {
+		script_pushint( st, 0 );
+		return true;
+	}
+	if ( !bg->team_join( bg_id, sd ) )
+		script_pushint( st, -2 ); // cannot join anymore, because has reached MAX_BG_MEMBERS
+	else
+		script_pushint( st, bg_id );
+	return true;
+}
+
+//	getbgusers <battleground ID>;
+BUILDIN(getbgusers) {
+	struct battleground_data *bgd = bg->team_search( script_getnum(st,2) );
+	int i, j = 0;
+	if ( !bgd ) {
+		script_pushint( st, -1 );
+		return true;
+	}
+	for ( i = 0; i < MAX_BG_MEMBERS; i++ ) {
+		if ( bgd->members[i].sd ) {
+			mapreg->setreg( reference_uid( script->add_str("$@arenamembers"), j ), bgd->members[i].sd->bl.id );
+			j++;
+		}
+	}
+	mapreg->setreg( script->add_str("$@arenamembersnum"), j );
+	script_pushint( st, j );
+	return true;
+}
+
 #define BUILDIN_DEF(x,args) { buildin_ ## x , #x , args, false }
 #define BUILDIN_DEF2(x,x2,args) { buildin_ ## x , x2 , args, false }
 #define BUILDIN_DEF_DEPRECATED(x,args) { buildin_ ## x , #x , args, true }
@@ -19006,6 +19073,11 @@ void script_parse_builtin(void) {
 		/* Commands for internal use by the script engine */
 		BUILDIN_DEF(__jump_zero,"il"),
 		BUILDIN_DEF(__setr,"rv?"),
+
+		// Custom BG Commands by AnnieRuru
+		BUILDIN_DEF(createbgid,"siiss"),
+		BUILDIN_DEF(setbgid,"i?"),
+		BUILDIN_DEF(getbgusers,"i"),
 
 		// NPC interaction
 		BUILDIN_DEF(mes,"s*"),
