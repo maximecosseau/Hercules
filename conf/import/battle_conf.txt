@@ -125,6 +125,10 @@ at_timeout: 0
 // Defines various mob AI related settings
 monster_ai: 0
 
+// Display some mob info next to their name?
+// 1: mob HP (Hp/MaxHp format) 2: mob HP (Percent of full life format) 4: mob's level
+show_mob_info: 1
+
 // Zeny from mobs
 zeny_from_mobs: no
 

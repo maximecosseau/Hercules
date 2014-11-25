@@ -638,7 +638,7 @@ Strings
 -------
 
 Strings are enclosed in "double quotes". To include the literal double
-quote symbol (") in a string you need to escape it with a blackslash:
+quote symbol (")" in a string you need to escape it with a blackslash:
 
     .@string$ = "This string contains some \"double quote\" symbols";
 

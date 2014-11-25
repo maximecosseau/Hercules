@@ -50,6 +50,9 @@ fame_list_taekwon: 5
 // Name used for unknown characters
 unknown_char_name: Inconnu
 
+// Set the letters/symbols that you want use with the 'char_name_option' option.
+char_name_letters: abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'-
+
 // Amount of time in seconds by which the character deletion is delayed (seconds)
 // Default: 86400 (24 hours) 43200 = 12 hours
 char_del_delay: 43200
