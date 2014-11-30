@@ -1,0 +1,909 @@
+
+// --------------------------------------------------------------
+// --- Imagination.2 Custom Functions [by Sky] ------------------
+// --------------------------------------------------------------
+
+// da_check			Renvoie le nombre de joueurs connectés sur la même IP que le joueur ciblé. [SQL]
+// ip_check			Renvoie l'adresse IP du joueur ciblé. [SQL]
+
+////////////////////////////////////////////////////////////////////////////
+///  INT callfunc ("da_check");
+///  Renvoie le nombre de joueurs connectés sur la même IP que le joueur ciblé.
+///  Le joueur ciblé est aussi compté. S'il n'y a pas de DA, la fonction revoie donc 1.
+///  > Ne fonctionne que sur eAthena version SQL.
+///  TOTO : Pouvoir spécifier un ID joueur. (argument)
+///  TODO : Ne pas compter les autotrade.
+////////////////////////////////////////////////////////////////////////////
+function	script	da_check	{
+	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id`='"+getcharid(3)+"';",.@ip$;
+	query_sql "SELECT COUNT(l.`account_id`) FROM `login` l, `char` c WHERE l.`last_ip`='"+.@ip$+"' AND c.`online`='1' AND l.`account_id`=c.`account_id`;",.@aid;
+	return .@aid;
+}
+
+////////////////////////////////////////////////////////////////////////////
+///  STRING callfunc ("da_check");
+///  Renvoie l'adresse IP du joueur ciblé.
+///  > Ne fonctionne que sur eAthena version SQL.
+///  TOTO : Pouvoir spécifier un ID joueur. (argument)
+////////////////////////////////////////////////////////////////////////////
+
+function	script	ip_check	{
+	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id`='"+getcharid(3)+"';",.@ip$;
+	return .@ip$;
+}
+
+
+// --------------------------------------------------------------
+// --- Key's Pack -----------------------------------------------
+// --------------------------------------------------------------
+
+// str_toArray			exporte un texte vers un tableau séparé entre chaque caractère.
+// str_explode			exporte un texte vers un tableau séparé par un caractère ou mort prédéfinis.
+// str_implode			joint tous les éléments d'un tableau dans un texte.
+// str_charAt			retourne le caractère à la position choisie dans un texte.
+// str_substr			retourne une partie d'un texte.
+// str_toLower			retourne un texte en bas de casse.
+// str_toUpper			retourne un texte en haut de casse.
+// str_trim				efface les espaces (ou caractères choisis) en début et fin d'un texte
+// is_string			retourne 1 si l'argument envoyé est une string, 0 dans le cas contraire
+// is_int				retourne 1 si l'argument envoyé est numérique, 0 dans le cas contraire
+// print_r				affiche tous les éléments d'un tableau dans le map-server (même affichage qu'en php)
+// array_push			ajoute un ou plusieurs éléments à la fin d'un tableau.
+// array_sort			classe un tableau du plus petit ou plus grand (ou inversement)
+// array_reverse		inverse un tableau
+// array_slice			sélectionne une partie d'un tableau (une amélioration de copyarray)
+// array_search			retourne l'index de l'élément recherché dans un tableau.
+// in_array				retourne 1 si l'élément a été trouvé dans le tableau
+// array_deleteval		recherche et supprime toutes correspondances avec l'argument envoyé.
+// array_rand			mélange un tableau
+// swap					échange deux valeurs
+// randGroupCreation	permet de retourner plusieurs tableaux au contenu aléatoire provenant d'un tableau clef
+// party_countOnline	compte le nombre de joueur en ligne dans une party spécifié (ou courante)
+// party_countOnMap		compte le nombre de joueurs sur une certaine map de la party courante ou spécifiée.
+// party_getitem		donne un ou plusieurs items à toute une team
+// showTemporaryHat		permet d'afficher temporairement un hat
+// clientGetItemName	retourne le nom contenu dans la data du client d'un item
+// cutin_anim			joue une animation à partir de plusieurs cutin
+// getitemOwner			retourne le nom du possesseur d'un item
+
+////////////////////////////////////////////////////////////////////////////
+///  INT callfunc( "str_toArray", string "<string>" , array <output> );
+///  return the size of the output array. 
+///  <output> contains all chars of "<string>" in an array.
+///
+///  set .@total, callfunc( "str_toArray", "Test_322" , .@output$ );
+///  .@total -> arraysize(.@output$)
+///  .@output$[0] -> "T";
+///  .@output$[1] -> "e";
+///  .@output$[2] -> "s";
+///  .@output$[3] -> "t";
+///  .@output$[4] -> "_";
+///  .@output$[5] -> "3";
+///  .@output$[6] -> "2";
+///  .@output$[7] -> "2";
+////////////////////////////////////////////////////////////////////////////
+function	script	str_toArray	{
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(0);
+	set .@len ,  getstrlen(getarg(0));
+	if ( .@len > 128 )
+		return 0;
+
+	while( .@len > .@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$, "[~NOTHING~]", .@char$ ) ) == "-1" )
+			return 0;
+		set getelementofarray( getarg(1), .@s ), .@char$ ;
+		set .@tmp$, .@tmp$ + .@char$;
+		set .@s, .@s+1 ;
+	}
+	return .@s;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// INT callfunc( "str_explode" , array <output>, string "<string>" {, string "<delemiter>"});
+/// return the size of the output array.
+/// Returns an array of strings, each of which is a substring of string formed by splitting
+/// it on boundaries formed by the string delimiter.
+///
+/// set .@total, callfunc( "str_explode" , .@output$, "Here a Sample Test !", " ");
+/// .@total -> arraysize(.@output$)
+/// .@output$[0] -> "Here"
+/// .@output$[1] -> "a"
+/// .@output$[2] -> "Sample"
+/// .@output$[3] -> "Test"
+/// .@output$[4] -> "!"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_explode	{
+	if ( getarg(2,"") == "" )
+		return callfunc("str_toArray", getarg(1), getarg(0) );
+
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(1) ;
+	set .@len, getstrlen(getarg(1));
+	set .@parse_len, getstrlen(getarg(2))-1;
+	
+	while( .@len > .@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$, "[~NOTHING~]", .@char$ ) ) == "-1" )
+			return 0;
+		if ( .@char$ == getarg(2) ) {
+			set .@i, .@i+1;
+			set .@s, .@s+ .@parse_len;
+		}
+		else
+			set getelementofarray( getarg(0), .@i ), getelementofarray( getarg(0), .@i ) + .@char$ ;
+		set .@tmp$, .@tmp$ + .@char$;
+		set .@s, .@s+1 ;
+		sleep2( !(.@s%150) );
+	}
+	return .@i;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_implode", array <input> {, "<string" };
+/// Join array elements with a string
+///
+/// setarray .@var$, "Potatoes", "Fruits", "Orange", "Banana";
+/// set .@str$, callfunc("str_implode", .@var$ , ", ");
+/// .@str$ -> "Potatoes, Fruits, Orange, Banana"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_implode	{
+	set .@size, getarraysize( getarg(0) );
+	set .@delimiter$, getarg(1,"");
+	set .@str$, getarg(0);
+	set .@i, 1;
+	while( .@i<.@size ) {
+		set .@str$ , .@str$ + .@delimiter$ + getelementofarray(getarg(0),.@i);
+		set .@i, .@i+1;
+	}
+	return .@str$;	
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_charAt", string "<string>" , int <pos>;
+/// get the character in the given position in the string.
+///
+/// set .@str$, "abcdefghi";
+/// set .@pos1$, callfunc("str_charAt", .@str$, 0);
+/// set .@pos2$, callfunc("str_charAt", .@str$, 2);
+/// set .@pos3$, callfunc("str_charAt", .@str$, -1);
+/// .@pos1$ -> "a"
+/// .@pos2$ -> "c"
+/// .@pos3$ -> "i"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_charAt	{
+
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(0) ;
+	set .@len, getstrlen(getarg(0));
+	set .@pos, getarg(1) < 0 ? .@len+getarg(1) : getarg(1);
+
+	if ( .@pos >= .@len )
+		return "";
+
+	while( .@len > .@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$, "[~NOTHING~]", .@char$ ) ) == "-1" )
+			return "";
+		set .@tmp$, .@tmp$ + .@char$;
+		if ( .@s == .@pos )
+			return .@char$;
+		set .@s, .@s+1 ;
+		sleep2( !(.@s%150) );
+	}
+	return "";
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_substr", string "<string>" , int <start>{, int <end>} ;
+/// Returns the portion of string specified by the start and length parameters.
+///
+/// set .@str$, "abcdef";
+/// set .@val1$, callfunc("str_substr", .@str$, -1);
+/// set .@val2$, callfunc("str_substr", .@str$, -2);
+/// set .@val3$, callfunc("str_substr", .@str$, -3, 1);
+/// set .@val4$, callfunc("str_substr", .@str$, 0, -1);
+/// set .@val5$, callfunc("str_substr", .@str$, -3, -1);
+///  .@va11$ -> "f"
+///  .@va12$ -> "ef"
+///  .@va13$ -> "d"
+///  .@va14$ -> "abcde"
+///  .@va15$ -> "de"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_substr	{
+
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(0) ;
+	set .@len, getstrlen(getarg(0));
+	set .@begin , getarg(1)>-1 ? getarg(1) : .@len+getarg(1) ;
+	set .@end   , getarg(2,.@len-1)>-1 ? .@begin + getarg(2,.@len-1)-1 : .@len+getarg(2,.@len)-1 ;
+
+	while( .@len>.@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$, "[~NOTHING~]", .@char$ ) ) == "-1" )
+			return "";
+		set .@tmp$, .@tmp$ + .@char$;
+		if ( .@s >= .@begin ) {
+			if ( .@s > .@end )
+				return .@result$;
+			set .@result$, .@result$ + .@char$;
+		}
+		set .@s, .@s+1 ;
+		sleep2( !(.@s%150) );
+	}
+	return .@result$;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_toLower", string "<string>" ;
+/// Returns string with all alphabetic characters converted to lowercase.
+///
+/// set .@str$, "Here A SAmple Test !";
+/// set .@result$, callfunc("str_toLower", .@str$);
+///  .@result$ -> "here a sample test !"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_toLower	{
+
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(0);
+	set .@len ,  getstrlen(getarg(0));
+
+	while( .@len > .@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$ + .@result$, "[~TOLOWER~]", .@char$ ) ) == "-1" )
+			return "";
+		set .@result$, .@result$ + .@char$;
+		set .@s, .@s+1 ;
+		sleep2( !(.@s%150) );
+	}
+	return .@result$;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_toUpper", string "<string>" ;
+/// Returns string with all alphabetic characters converted to uppercase.
+///
+/// set .@str$, "Here A SAmple Test !";
+/// set .@result$, callfunc("str_toUpper", .@str$);
+///  .@result$ -> "HERE A SAMPLE TEST !"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_toUpper	{
+
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(0);
+	set .@len ,  getstrlen(getarg(0));
+
+	while( .@len > .@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$ + .@result$ , "[~TOUPPER~]", .@char$ ) ) == "-1" )
+			return "";
+		set .@result$ , .@result$ + .@char$;
+		set .@s, .@s+1 ;
+		sleep2( !(.@s%150) );
+	}
+	return .@result$;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_trim", "<string>" {,"<char>"} ;
+/// This function returns a string with whitespace stripped from the beginning
+/// and end of str. Without the second parameter, trim() will just strip space: " "
+///
+/// set .@str$, "  here a test    ";
+/// set .@result$, callfunc("str_trim", .@str$);
+///  .@result$ -> "here a test"
+///
+/// set .@str$, "||||here a test||||||";
+/// set .@result$, callfunc("str_trim", .@str$, "|");
+///  .@result$ -> "here a test"
+////////////////////////////////////////////////////////////////////////////
+function	script	str_trim	{
+	set .@tmp$, "|~["+rand(0xffff)+"]~|";
+	set .@str$, .@tmp$ + getarg(0);
+	set .@len ,  getstrlen(getarg(0));
+	set .@del$, getarg(1," ");
+
+	while( .@len > .@s ) {
+		if ( set( .@char$, callfunc("str_parseString", .@str$, .@tmp$ + .@result$ , "[~NOTHING~]", .@char$ ) ) == "-1" )
+			return "";
+		if ( .@char$ != .@del$ ) {
+			set .@res$, .@res$ + .@temp$ + .@char$;
+			set .@temp$, "";
+		}
+		else if ( .@res$ != "" )
+			set .@temp$, .@temp$ + .@del$;
+
+		set .@result$ , .@result$ + .@char$;
+		set .@s, .@s+1 ;
+		sleep2( !(.@s%150) );
+	}
+	return .@res$;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// BOOL callfunc "is_string", mixed <var> ;
+/// Finds whether the type given variable is string.
+///
+/// set .@result, callfunc("is_string", "0");
+///  .@result -> 1
+/// set .@result, callfunc("is_string", 0);
+///  .@result -> 0
+/// set .@result, callfunc("is_string", "test);
+///  .@result -> 1
+////////////////////////////////////////////////////////////////////////////
+function	script	is_string	{	return ( getarg(0) + 0 != getarg(0) );	}
+function	script	is_int	{	return ( getarg(0) + 0 == getarg(0) );	}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING callfunc "str_parseString", string "<string>", string "<substring>", string "<type>", string "<last char>" ;
+/// This is a callfunc helper for string manipulation, you don't need to call it.
+/// Nothing more to say about it.
+////////////////////////////////////////////////////////////////////////////
+function	script	str_parseString	{
+
+	set .@a$, getarg(0);
+	set .@b$, getarg(1);
+	set .@c$, getarg(2,"[~NOTHING~]");
+	set .@d$, getarg(3,"");
+
+	if ( compare( .@a$ , .@b$ + " " ) )
+		return " ";
+
+	// Quick search with last character find("...", "eee" "aaa" "!!!!!!", etc...)
+	if ( .@d$ != "" && compare( .@a$ , .@b$ + .@d$ ) )
+		return .@d$;
+
+	if ( ( .@a$ >= .@b$ + "a" && .@a$ <= .@b$ + "z~" && .@c$ != "[~TOUPPER~]") || .@c$ == "[~TOLOWER~]" ) {
+		if ( compare( .@a$ , .@b$ + "e" ) ) return "e";
+		if ( compare( .@a$ , .@b$ + "i" ) ) return "i";
+		if ( compare( .@a$ , .@b$ + "a" ) ) return "a";
+		if ( compare( .@a$ , .@b$ + "s" ) ) return "s";
+		if ( compare( .@a$ , .@b$ + "r" ) ) return "r";
+		if ( compare( .@a$ , .@b$ + "n" ) ) return "n";
+		if ( compare( .@a$ , .@b$ + "t" ) ) return "t";
+		if ( compare( .@a$ , .@b$ + "o" ) ) return "o";
+		if ( compare( .@a$ , .@b$ + "u" ) ) return "u";
+		if ( compare( .@a$ , .@b$ + "l" ) ) return "l";
+		if ( compare( .@a$ , .@b$ + "c" ) ) return "c";
+		if ( compare( .@a$ , .@b$ + "p" ) ) return "p";
+		if ( compare( .@a$ , .@b$ + "m" ) ) return "m";
+		if ( compare( .@a$ , .@b$ + "d" ) ) return "d";
+		if ( compare( .@a$ , .@b$ + "v" ) ) return "v";
+		if ( compare( .@a$ , .@b$ + "h" ) ) return "h";
+		if ( compare( .@a$ , .@b$ + "g" ) ) return "g";
+		if ( compare( .@a$ , .@b$ + "f" ) ) return "f";
+		if ( compare( .@a$ , .@b$ + "b" ) ) return "b";
+		if ( compare( .@a$ , .@b$ + "y" ) ) return "y";
+		if ( compare( .@a$ , .@b$ + "q" ) ) return "q";
+		if ( compare( .@a$ , .@b$ + "k" ) ) return "k";
+		if ( compare( .@a$ , .@b$ + "z" ) ) return "z";
+		if ( compare( .@a$ , .@b$ + "x" ) ) return "x";
+		if ( compare( .@a$ , .@b$ + "j" ) ) return "j";
+		if ( compare( .@a$ , .@b$ + "w" ) ) return "w";
+	}
+	if ( ( .@a$ >= .@b$ + "A" && .@a$ <= .@b$ + "Z~" ) || .@c$ == "[~TOUPPER~]" ) {
+		if ( compare( .@a$ , .@b$ + "E" ) ) return "E";
+		if ( compare( .@a$ , .@b$ + "I" ) ) return "I";
+		if ( compare( .@a$ , .@b$ + "A" ) ) return "A";
+		if ( compare( .@a$ , .@b$ + "S" ) ) return "S";
+		if ( compare( .@a$ , .@b$ + "R" ) ) return "R";
+		if ( compare( .@a$ , .@b$ + "N" ) ) return "N";
+		if ( compare( .@a$ , .@b$ + "T" ) ) return "T";
+		if ( compare( .@a$ , .@b$ + "O" ) ) return "O";
+		if ( compare( .@a$ , .@b$ + "U" ) ) return "U";
+		if ( compare( .@a$ , .@b$ + "L" ) ) return "L";
+		if ( compare( .@a$ , .@b$ + "C" ) ) return "C";
+		if ( compare( .@a$ , .@b$ + "P" ) ) return "P";
+		if ( compare( .@a$ , .@b$ + "M" ) ) return "M";
+		if ( compare( .@a$ , .@b$ + "D" ) ) return "D";
+		if ( compare( .@a$ , .@b$ + "V" ) ) return "V";
+		if ( compare( .@a$ , .@b$ + "H" ) ) return "H";
+		if ( compare( .@a$ , .@b$ + "G" ) ) return "G";
+		if ( compare( .@a$ , .@b$ + "F" ) ) return "F";
+		if ( compare( .@a$ , .@b$ + "B" ) ) return "B";
+		if ( compare( .@a$ , .@b$ + "Y" ) ) return "Y";
+		if ( compare( .@a$ , .@b$ + "Q" ) ) return "Q";
+		if ( compare( .@a$ , .@b$ + "K" ) ) return "K";
+		if ( compare( .@a$ , .@b$ + "Z" ) ) return "Z";
+		if ( compare( .@a$ , .@b$ + "X" ) ) return "X";
+		if ( compare( .@a$ , .@b$ + "J" ) ) return "J";
+		if ( compare( .@a$ , .@b$ + "W" ) ) return "W";
+	}
+	if ( .@a$ >= .@b$ + "0" && .@a$ <=  .@b$ + "9~" ) {
+		if ( compare( .@a$ , .@b$ + "0" ) ) return "0";
+		if ( compare( .@a$ , .@b$ + "1" ) ) return "1";
+		if ( compare( .@a$ , .@b$ + "2" ) ) return "2";
+		if ( compare( .@a$ , .@b$ + "3" ) ) return "3";
+		if ( compare( .@a$ , .@b$ + "4" ) ) return "4";
+		if ( compare( .@a$ , .@b$ + "5" ) ) return "5";
+		if ( compare( .@a$ , .@b$ + "6" ) ) return "6";
+		if ( compare( .@a$ , .@b$ + "7" ) ) return "7";
+		if ( compare( .@a$ , .@b$ + "8" ) ) return "8";
+		if ( compare( .@a$ , .@b$ + "9" ) ) return "9";
+	}
+	{
+		if ( compare( .@a$ , .@b$ + "è" ) ) return ( .@c$ == "[~TOUPPER~]" ? "E" : "è" );
+		if ( compare( .@a$ , .@b$ + "é" ) ) return ( .@c$ == "[~TOUPPER~]" ? "E" : "é" );
+		if ( compare( .@a$ , .@b$ + "ê" ) ) return ( .@c$ == "[~TOUPPER~]" ? "E" : "ê" );
+		if ( compare( .@a$ , .@b$ + "ë" ) ) return ( .@c$ == "[~TOUPPER~]" ? "E" : "ë" );
+		if ( compare( .@a$ , .@b$ + "à" ) ) return ( .@c$ == "[~TOUPPER~]" ? "A" : "à" );
+		if ( compare( .@a$ , .@b$ + "ù" ) ) return ( .@c$ == "[~TOUPPER~]" ? "U" : "ù" );
+		if ( compare( .@a$ , .@b$ + "ü" ) ) return ( .@c$ == "[~TOUPPER~]" ? "U" : "ü" );
+		if ( compare( .@a$ , .@b$ + "ç" ) ) return ( .@c$ == "[~TOUPPER~]" ? "C" : "ç" );
+		if ( compare( .@a$ , .@b$ + "ï" ) ) return ( .@c$ == "[~TOUPPER~]" ? "I" : "ï" );
+		if ( compare( .@a$ , .@b$ + "î" ) ) return ( .@c$ == "[~TOUPPER~]" ? "I" : "î" );
+		if ( compare( .@a$ , .@b$ + "ö" ) ) return ( .@c$ == "[~TOUPPER~]" ? "O" : "ö" );
+		if ( compare( .@a$ , .@b$ + "ô" ) ) return ( .@c$ == "[~TOUPPER~]" ? "O" : "ô" );
+		if ( compare( .@a$ , .@b$ + "." ) ) return ".";
+		if ( compare( .@a$ , .@b$ + "," ) ) return ",";
+		if ( compare( .@a$ , .@b$ + "!" ) ) return "!";
+		if ( compare( .@a$ , .@b$ + "?" ) ) return "?";
+		if ( compare( .@a$ , .@b$ + "'" ) ) return "'";
+		if ( compare( .@a$ , .@b$ + "_" ) ) return "_";
+		if ( compare( .@a$ , .@b$ + "-" ) ) return "-";
+		if ( compare( .@a$ , .@b$ + "@" ) ) return "@";
+		if ( compare( .@a$ , .@b$ + "$" ) ) return "$";
+		if ( compare( .@a$ , .@b$ + "~" ) ) return "~";
+		if ( compare( .@a$ , .@b$ + "+" ) ) return "+";
+		if ( compare( .@a$ , .@b$ + "&" ) ) return "&";
+		if ( compare( .@a$ , .@b$ + ":" ) ) return ":";
+		if ( compare( .@a$ , .@b$ + ";" ) ) return ";";
+		if ( compare( .@a$ , .@b$ + "(" ) ) return "(";
+		if ( compare( .@a$ , .@b$ + ")" ) ) return ")";
+		if ( compare( .@a$ , .@b$ + "\"" ) ) return "\"";
+		if ( compare( .@a$ , .@b$ + "/" ) ) return "/";
+		if ( compare( .@a$ , .@b$ + "#" ) ) return "#";
+		if ( compare( .@a$ , .@b$ + "%" ) ) return "%";
+		if ( compare( .@a$ , .@b$ + "*" ) ) return "*";
+		if ( compare( .@a$ , .@b$ + "/" ) ) return "/";
+		if ( compare( .@a$ , .@b$ + "<" ) ) return "<";
+		if ( compare( .@a$ , .@b$ + "=" ) ) return "=";
+		if ( compare( .@a$ , .@b$ + ">" ) ) return ">";
+		if ( compare( .@a$ , .@b$ + "[" ) ) return "]";
+		if ( compare( .@a$ , .@b$ + "\\" ) ) return "\\";
+		if ( compare( .@a$ , .@b$ + "]" ) ) return "]";
+		if ( compare( .@a$ , .@b$ + "^" ) ) return "^";
+		if ( compare( .@a$ , .@b$ + "`" ) ) return "`";
+		if ( compare( .@a$ , .@b$ + "{" ) ) return "{";
+		if ( compare( .@a$ , .@b$ + "|" ) ) return "|";
+		if ( compare( .@a$ , .@b$ + "}" ) ) return "}";
+		if ( compare( .@a$ , .@b$ + "²" ) ) return "²";
+		if ( compare( .@a$ , .@b$ + "°" ) ) return "°";
+	}
+	logmes "STR parse string failed:\n\t" + .@a$ + "\n\t" + .@b$;
+	debugmes "STR parse string failed:\n\t" + .@a$ + "\n\t" + .@b$;
+	return "-1";
+}
+
+////////////////////////////////////////////////////////////////////////////
+///  callfunc( "print_r", array <input> );
+///  Displays information about a variable in your map-server.
+///
+///  setarray .@tmp, 5, 12, 3, 0, 4, 2;
+///  callfunc("print_r", .@tmp);
+///  Will show in your map-server:
+///  Array(
+///    [0] => 5
+///    [1] => 12
+///    [2] => 3
+///    [4] => 4
+///    [5] => 2
+///  )
+////////////////////////////////////////////////////////////////////////////
+function	script	print_r	{
+	set .@white$ , "\033[1;37m" ;
+	set .@grey$  , "\033[1;30m" ;
+	set .@yellow$, "\033[1;33m" ;
+
+	if ( ! callfunc("is_string",getarg(0)) ) { // val
+		copyarray .@o,getarg(0),getarraysize(getarg(0));
+		while( set(.@size,getarraysize(.@o)-1) > -1 ) {
+			set .@s$, "\n\t" + .@white$ + "["+.@size+"]" + .@grey$ + " => "+.@o[.@size] + .@s$;
+			deletearray .@o[.@size],1;
+		}
+	}
+	else { // str
+		copyarray .@o$,getarg(0),getarraysize(getarg(0));
+		while( set(.@size,getarraysize(.@o$)-1) > -1 ) {
+			set .@s$, "\n\t" + .@white$ + "["+.@size+"]" + .@grey$ + " => "+.@o$[.@size] + .@s$;
+			deletearray .@o$[.@size],1;
+		}
+	}
+	debugmes "\033[45D\033[K"+.@yellow$ + "Array\n("+.@s$+ .@yellow$ +"\n)";
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// ARRAY callfunc( "array_push", array <input>, mixed <value>, { mixed <value> ... } );
+/// Push one or more elements onto the end of array
+///
+/// setarray .@tmp, 5, 7, 8;
+/// callfunc("array_push", 12, 18, 36, 5);
+/// .@tmp -> 5, 7, 8, 12, 18, 36, 5
+////////////////////////////////////////////////////////////////////////////
+function	script	array_push	{
+	set .@size, getarraysize(getarg(0))-1;
+	set .@i,1;
+	while( getarg(.@i,0) == getarg(.@i,1) && .@size+.@i < 128 ) {
+		set getelementofarray( getarg(0), .@size+.@i ), getarg(.@i);
+		set .@i,.@i+1;
+	}
+	return getarg(0);
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc( "array_sort", array <input>, ASC/DESC );
+/// This function sorts an array. Elements will be arranged from lowest to highest when this function has completed.
+///
+/// setarray .@tmp, 12, 3, 5, 7, 4, 2, 18;
+/// callfunc( "sort", .@tmp );
+/// .@tmp -> 2 3 4 5 7 12 18
+///
+/// callfunc( "sort", .@tmp, -1 );
+/// .@tmp -> 18 12 7 5 4 3 2
+////////////////////////////////////////////////////////////////////////////
+function	script	array_sort	{
+	set .@size, getarraysize(getarg(0));
+    set .@gap, .@size;
+	set .@swapped, 1;
+	set .@ASC, getarg(1,1) > 0 ? 1 : -1;
+	do {
+		set .@gap, ( .@gap>1 ) ? .@gap*10000000/12473309 : .@gap;
+		set .@swapped, 0;
+		set .@i, 0;
+		while ( .@i+.@gap < .@size ) {
+			if ( getelementofarray( getarg(0),.@i)*.@ASC > getelementofarray( getarg(0),.@gap+.@i)*.@ASC ){
+				callfunc( "swap", getelementofarray( getarg(0),.@i), getelementofarray( getarg(0),.@gap+.@i) );
+				set .@swapped,1;
+			}
+			set .@i,.@i+1;
+		}
+		sleep2( ! (set(.@j,.@j+1)%7) );
+	} while( .@swapped || .@gap>1 );
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc( "array_reverse", array <input> );
+/// Return the array with the order of the elements reversed.
+///
+/// setarray .@tmp, 5, 3, 1, 2, 12;
+/// callfunc( "array_reverse", .@tmp );
+///  .@tmp -> 12, 2, 1, 3, 5
+/// callfunc( "array_reverse", .@tmp );
+///  .@tmp -> 5, 3, 1, 2, 12;
+////////////////////////////////////////////////////////////////////////////
+function	script	array_reverse	{
+	set .@size, getarraysize(getarg(0))-1;
+	set .@mid, .@size/2;
+
+	while( .@i<.@mid ) {
+		callfunc( "swap", getelementofarray(getarg(0),.@i), getelementofarray(getarg(0),.@size-.@i) );
+		set .@i, .@i+1;
+	}
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc( "array_slice", array <input>, <begin>{, <end>} );
+/// Returns the sequence of elements from the array array as specified by the offset and length parameters.
+///
+/// setarray .@tmp, "a", "b", "c", "d", "e";
+/// callfunc( "array_slice", .@tmp, 2 );       // .@tmp ->  "c", "d", "e"
+/// callfunc( "array_slice", .@tmp, -2, 1 );   // .@tmp ->  "d"
+/// callfunc( "array_slice", .@tmp, 2, -1 );   // .@tmp ->  "c", "d"
+////////////////////////////////////////////////////////////////////////////
+function	script	array_slice	{
+	set .@size,  getarraysize(getarg(0));
+	set .@begin, getarg(1)>-1 ? getarg(1) : .@size+getarg(1);
+	set .@end,   getarg(2,.@size-1)>-1 ? .@begin + getarg(2,.@size-1) : .@size+getarg(2,.@size-1) ;
+	deletearray getarg(0), .@begin ;
+	deletearray getelementofarray(getarg(0),.@end-.@begin), .@size-.@begin;
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// INT callfunc("array_search", array <input>, mixed <search> );
+/// Searches the array for a given value and returns the corresponding key if successful
+///
+/// setarray .@tmp, 5, 13, 12, 14, 22, 3;
+/// callfunc("array_search", .@tmp, 13 ); // return 1
+/// callfunc("array_search", .@tmp, 3 );  // return 5
+/// callfunc("array_search", .@tmp, 11 ); // return -1
+////////////////////////////////////////////////////////////////////////////
+function	script	array_search	{
+	set .@size, getarraysize(getarg(0));
+	set .@i, -1;
+	while( set(.@i,.@i+1) <.@size )
+		if ( getelementofarray(getarg(0), .@i ) == getarg(1) )
+			return .@i;
+	return -1;	
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("array_deleteval", array <input>, mixed <val> );
+/// Search and delete all same value in the array.
+///
+/// setarray .@tmp, 12, 4, 6, 3, 22, 4, 5;
+/// callfunc("array_deleteval", .@tmp, 4 );
+///  .@tmp -> 12, 6, 3, 22, 5
+////////////////////////////////////////////////////////////////////////////
+function	script	array_deleteval	{
+	set .@size, getarraysize(getarg(0));
+	while( .@i<.@size ) {
+		if ( getelementofarray(getarg(0),.@i) == getarg(1) )
+			deletearray getelementofarray(getarg(0),.@i), 1;
+		else
+			set .@i,.@i+1;
+	}
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// BOOL callfunc("in_array", array <input>, mixed <search> );
+/// Checks if a value exists in an array
+///
+/// setarray .@tmp, 12, 15, 17, 3, 2, 9;
+/// set .@res, callfunc("in_array", .@tmp, 3); // return 1
+/// set .@res, callfunc("in_array", .@tmp, 5); // return 0
+////////////////////////////////////////////////////////////////////////////
+function	script	in_array	{
+	set .@size, getarraysize(getarg(0));
+	set .@i, -1;
+	while( set(.@i,.@i+1) <.@size )
+		if ( getelementofarray(getarg(0), .@i) == getarg(1) )
+			return 1;
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("array_rand", array <input> );
+/// randomize all entries in an array
+///
+/// setarray .@tmp, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10;
+/// callfunc("array_rand", .@tmp);
+///  .@tmp -> 7, 3, 1, 4, 2, 6, 8, 9, 10, 5
+////////////////////////////////////////////////////////////////////////////
+function	script	array_rand	{
+	set .@size, getarraysize(getarg(0));
+	set .@i, -1;
+
+	while( set(.@i,.@i+1) <.@size )
+		set .@tmp[.@i], .@i ;
+
+	set .@i, -1;
+	while( set(.@i,.@i+2) < .@size ) {
+		set .@r, rand(getarraysize(.@tmp));
+		callfunc( "swap", getelementofarray(getarg(0),.@i), getelementofarray(getarg(0), .@tmp[.@r] ) );
+		callfunc( "swap", getelementofarray(getarg(0),.@size-.@i), getelementofarray(getarg(0), .@tmp[.@size-.@r] ) );
+		deletearray .@tmp[.@size-.@r], 1;
+		deletearray .@tmp[.@r], 1;
+	}
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("swap", mixed <val1>, mixed <val2> );
+/// Swap two elements.
+///
+/// set .@val_1, 17;
+/// set .@val_2, 32;
+/// callfunc("swap",.@val_1,.@val_2);
+///  .@val_1 -> 32
+///  .@val_2 -> 17
+////////////////////////////////////////////////////////////////////////////
+function	script	swap	{
+	set getarg(0), getarg(0)^getarg(1);
+	set getarg(1), getarg(0)^getarg(1);
+	set getarg(0), getarg(0)^getarg(1);
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("randGroupCreation", array <input> {, array <output>} );
+/// Will randomize all elements of the first array to others array.
+///
+/// setarray .@tmp, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15;
+/// callfunc("randGroupCreation", .@tmp, .@group_1, .@group_2, .@group_3 );
+///  .@group_1 -> 6, 1, 12, 3, 9
+///  .@group_2 -> 2, 4, 15, 11, 5
+///  .@group_3 -> 5, 8, 7, 13, 10
+////////////////////////////////////////////////////////////////////////////
+function	script	randGroupCreation	{ 
+	set .@size, getarraysize(getarg(0));
+	while( getarg(.@i+1,0) == getarg(.@i+1,1) )
+		set .@i,.@i+1;
+	set .@ngroup, .@i;
+
+    while( .@size-.@j ) {
+        set .@i, rand( .@size-.@j );
+		set getelementofarray( getarg(.@j%.@ngroup+1) , .@j/.@ngroup ), getelementofarray( getarg(0),.@i );
+        deletearray getelementofarray( getarg(0), .@i), 1;
+        set .@j, .@j+1;
+    }
+    return .@size/.@ngroup;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// INT callfunc("party_countOnline", {, int <team id>} );
+/// Will return the number of member online. If team id isn't specified, return of the current team.
+///
+/// set .@online, callfunc("party_countOnline");
+/// set .@online, callfunc("party_countOnline", .@red_team );
+////////////////////////////////////////////////////////////////////////////
+function	script	party_countOnline	{
+	getpartymember getarg(0,getcharid(1));
+	while( .@i< $@partymembercount ) {
+		set .@count, .@count + ( !getmapxy(.@map$,.@x,.@y,0,$@partymembername$[.@i]) );
+		set .@i,.@i+1;
+	}
+	return .@count;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// INT callfunc("party_countOnMap", { int <party id>}, string "<map>" );
+/// Return the number of member in the specified map.
+///
+/// set .@samemap, callfunc("party_countOnMap", @blue_team, "guild_vs4" );
+/// set .@samemap, callfunc("party_countOnMap", "guild_vs4" );
+////////////////////////////////////////////////////////////////////////////
+function	script	party_countOnMap	{
+	if ( getarg(1,0) == getarg(1,1) ) {
+		getpartymember getarg(0);
+		set .@map$, getarg(1);
+	}
+	else {
+		getpartymember getcharid(1);
+		set .@map$ , getarg(0);
+	}
+	while( .@i< $@partymembercount ) {
+		if ( !getmapxy(.@map_$,.@x,.@y,0,$@partymembername$[.@i]) )
+			set .@count, .@count + ( .@map$ == .@map_$ );
+		set .@i,.@i+1;
+	}
+	return .@count;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("party_getitem", { int <party id>}, int <item id>, int <item quantity> );
+/// Give item of all member in a specified party.
+///
+/// callfunc("party_getitem", 502, 10);
+/// callfunc("party_getitem", @green_team, 502, 10);
+////////////////////////////////////////////////////////////////////////////
+function	script	party_getitem	{
+	if ( getarg(2,0) == getarg(2,1) ) {
+		getpartymember getarg(0),2;
+		getpartymember getarg(0),1;
+		set .@item_id, getarg(1);
+		set .@item_count, getarg(2);
+	}
+	else {
+		getpartymember getcharid(1),2;
+		getpartymember getcharid(1),1;
+		set .@item_id, getarg(0);
+		set .@item_count, getarg(1);
+	}
+	while( .@i< $@partymembercount ) {
+		if ( isloggedin($@partymemberaid[.@i], $@partymembercid[.@i] ) )
+			getitem .@item_id, .@item_count, $@partymemberaid[.@i];
+		set .@i,.@i+1;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("showTemporary", {int <id hat>} )
+/// Allow to wear a hat temporary in a dialog box.
+///
+/// callfunc("showTemporary", 5074 ); // wear angel wing ear.
+/// mes "This is the hat ! Do you want accept the quest ?";
+/// next;
+/// select("I want this hat ! I accept the quest !,"No !");
+/// callfunc("showTemporary"); // remove.
+///
+/// If the player lougout or press close / warp / or other, the hat is automaticaly remove.
+////////////////////////////////////////////////////////////////////////////
+function	script	showTemporaryHat	{
+
+	if ( getarg(0,0)^getarg(0,1) && getarraysize(@Temporary_id) ) {
+		atcommand "@changelook 1 " + @Temporary_id[0];
+		atcommand "@changelook 2 " + @Temporary_id[1];
+		atcommand "@changelook 3 " + @Temporary_id[2];
+		return 0;
+	}
+
+    setarray @Temporary_id, getlook(4), getlook(5), getlook(3) ;
+	addtimer 10, "ShowTemporyHat_sub::OnReload";
+    
+	set .@equip_pos, getiteminfo( getarg(0), 5);
+	set .@view_id,   getiteminfo( getarg(0), 11);
+
+	if ( .@equip_pos + 1 && .@view_id > 0 ) {
+		if ( .@equip_pos&256 ) atcommand "@changelook 1 " + .@view_id ; // top
+		if ( .@equip_pos&512 ) atcommand "@changelook 2 " + .@view_id ; // mid
+		if ( .@equip_pos&1 )   atcommand "@changelook 3 " + .@view_id ; // bottom
+	}
+	return 0;
+}
+
+-	script	ShowTemporyHat_sub	-1,{
+	OnReload:
+		if ( getarraysize(@Temporary_id) ) {
+			atcommand "@changelook 1 " + @Temporary_id[0];
+			atcommand "@changelook 2 " + @Temporary_id[1];
+			atcommand "@changelook 3 " + @Temporary_id[2];
+		}
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID callfunc("clientGetItemName", int <item id> )
+/// Show the name of the item id in your client instead of the server item name.
+/// (only work in a "mes" command)
+///
+/// mes "I want ^ff0000 " + callfunc("clientGetItemName", 5074) + " !";
+////////////////////////////////////////////////////////////////////////////
+function	script	clientGetItemName	{
+	return "^nItemID^" + getarg(0) ;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// VOID cutin_anim( string "<file name>", int <cutin type>, int <start>, int <end>, int <frame rate> {, string "<npc::OnEvent/myfunction>"} );
+/// Play an animation with a multitude of cutin.
+///
+/// cutin_anim( "progress_", 2, 1, 67, 200, "Animfinish" );
+/// will play progress_1 to progress_67, 200ms for each frame and call the function Animfinish() on the end.
+////////////////////////////////////////////////////////////////////////////
+function	script	cutin_anim	{
+	if (
+		getarg(0,0) != getarg(0,1) ||
+		getarg(1,0) ^ getarg(1,1) ||
+		getarg(2,0) ^ getarg(2,1) ||
+		getarg(3,0) ^ getarg(3,1)
+	) return 0;
+
+	if ( getarg(2) < getarg(3) ) setarray @cutin_range, getarg(2), getarg(3) ;
+	else setarray @cutin_range, getarg(3), getarg(2) ;
+
+	set @cutin_name$, getarg(0);
+	set @cutin_type,  getarg(1);
+	set @cutin_progress, @cutin_range;
+	set @cutin_funcevent$,  getarg(5,"");
+	set @cutin_delay, getarg(4,100);
+	set @cutin_MAXEVENT, 20;
+	set .@j,0;
+
+	for ( set .@i,0; .@i<@cutin_MAXEVENT; set .@i,.@i+1)
+		deltimer "CutinAnim::OnCutin";
+
+	for ( set .@i,@cutin_progress; .@i<=@cutin_range[1] && .@j<@cutin_MAXEVENT ; set .@i,.@i+1 ) {
+		addtimer .@i*@cutin_delay-50,  "CutinAnim::OnCutin";
+		set .@j,.@j+1;
+	}
+	return 1;
+}
+
+-	script	CutinAnim	-1,{
+OnCutin:
+	cutin @cutin_name$ + @cutin_progress, @cutin_type;
+	set @cutin_progress, @cutin_progress+1;
+
+	if ( !( (@cutin_progress-@cutin_range) % @cutin_MAXEVENT) ) {
+		set .@j,0;
+		for ( set .@i,@cutin_progress; .@i<=@cutin_range[1] && .@j<@cutin_MAXEVENT ; set .@i,.@i+1 ) {
+			addtimer (.@i-@cutin_progress+1)*@cutin_delay-50,  "CutinAnim::OnCutin";
+			set .@j,.@j+1;
+		}
+	}
+	if ( ( @cutin_progress + @cutin_range - 1 ) > @cutin_range[1] ) {
+		set @cutin_progress, 0;
+		if ( @cutin_funcevent$ != "" ) {
+			if ( compare( @cutin_funcevent$, "::On" ) ) doevent @cutin_funcevent$;
+			else callfunc @cutin_funcevent$;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// STRING getitemOwner( int <slot 1>, int <slot 2>, int <slot 3>, int <slot 4> );
+/// Return the item owner name.
+////////////////////////////////////////////////////////////////////////////
+function	script	getitemOwner	{
+	if ( getarg(0) == 254 || getarg(0) == 255 )
+		set .@req, query_sql("SELECT `name` FROM `char` WHERE `char_id`=" + ( getarg(2) | getarg(3) << 16 ), .@name$ );
+	return ( .@req > 0 ? .@name$ : "Unknown" );
+}

@@ -1,0 +1,40 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Nom du script v0.1
+//
+// - Créé par : Sky
+//
+// - Description : Blablabla
+//
+// - v0.1 Notes de version
+//
+//------------------------------------------------------------//
+
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Nom du script
+//
+// - Créé par : Sky
+//
+// - Description : Blablabla
+//
+//------------------------------------------------------------//
+
+prontera,165,190,3	script	Nom du NPC	861,{
+
+	cutin "kafra_09",2;
+	mes .name$;
+	mes "";
+	close2;
+	cutin "",255;
+	end;
+	
+OnInit:	// configuration
+
+	.name$ = "^0000FF[ Nom du NPC ]^000000";
+	end;
+	
+}
+
