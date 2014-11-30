@@ -1,2 +1,4 @@
 
-// Leave Empty
+// For local server only
+// map_ip: 127.0.0.1
+

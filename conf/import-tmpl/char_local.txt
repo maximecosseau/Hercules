@@ -1,2 +1,4 @@
 
-// Leave Empty
+// For local server only
+// char_ip: 127.0.0.1
+
