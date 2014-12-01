@@ -1,0 +1,42 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  loginScript
+//
+// - Créé par : Sky
+//
+// - Description : Lance automatiquement diverses actions
+//    lors du login avec OnPCLoginEvent
+//
+//------------------------------------------------------------//
+
+-	script	loginScript	-1,{
+	
+	end;
+	
+	OnPCLoginEvent:
+		
+		if (getgmlevel() == 99 ) {
+		
+			dispbottom "Bienvenue GM "+strcharinfo(0)+" ! Sois sans pitié avec les joueurs.";
+			atcommand "@uptime";
+			atcommand "@battleignore";
+			atcommand "@speed 0";
+			// atcommand "@size 2";
+			// atcommand "@hide";
+		}
+		
+		if (getgmlevel() == 1 ) {
+		
+			dispbottom "Bienvenue GM "+strcharinfo(0)+".";
+			atcommand "@monsterignore";
+		}
+		
+		if (getgmlevel() == 0 ) {
+		
+			dispbottom "Bonjour "+strcharinfo(0)+".";
+			dispbottom "Pour voir la liste des commandes du serveur, tapez @commands";
+		}
+		
+	end;
+}

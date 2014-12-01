@@ -1,0 +1,43 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  cash reward
+//
+// - Créé par : Sky (2014-10-18)
+//
+// - Description : recompense en cash point par pm
+//
+//------------------------------------------------------------//
+
+-	script	coins	-1,{
+
+OnWhisperGlobal:
+	
+	if (getgmlevel() < 1 ) end;
+	if (@whispervar0$ != "" && @whispervar1$ != "") {
+	
+		.char = getcharid (3,@whispervar0$);
+		.coin = atoi (@whispervar1$);
+		
+		if (.char == 0) {
+			dispbottom "Le joueur n'existe pas ou n'est pas connecté.";
+			end;
+		}
+		
+		if (.coin == 0) {
+			dispbottom "J'ai besoin de la quantité de Poring Coins à donner.";
+			end;
+		}
+		
+		getitem 7539,.coin,.char;
+		dispbottom rid2name(.char)+" a obtenu "+.coin+" Poring Coins.";
+		
+	} else {
+		dispbottom "J'ai besoin du nom du joueur et de la quantité de Poring Coins à donner.";
+		dispbottom "Exemple : Sky#5";
+	}
+	
+	end;
+
+}
+

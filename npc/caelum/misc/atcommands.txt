@@ -1,0 +1,47 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  @commands
+//
+// - Créé par : Sky
+//
+// - Description : @commands custom de Caelum
+//
+//------------------------------------------------------------//
+
+// -- @storage -----------------------------------------------
+// Bloque l'utilisation de @storage sur les maps GvG
+-	script	atcommand_storage	-1,{
+	end;
+
+OnInit:
+	bindatcmd "storage",strnpcinfo(0)+"::OnAtcommand";
+	end;
+	
+OnAtcommand:
+	if(getmapflag(strcharinfo(3),mf_gvg_castle)) {
+		dispbottom "Impossible d'ouvrir le Storage dans un chateau";
+		end;
+	}
+	openstorage;
+	end;
+}
+
+// -- @gstorage -----------------------------------------------
+// Bloque l'utilisation de @gstorage sur les maps GvG
+-	script	atcommand_gstorage	-1,{
+	end;
+
+OnInit:
+	bindatcmd "gstorage",strnpcinfo(0)+"::OnAtcommand";
+	end;
+	
+OnAtcommand:
+	if(getmapflag(strcharinfo(3),mf_gvg_castle)) {
+		dispbottom "Impossible d'ouvrir le Guild Storage dans un chateau";
+		end;
+	}
+	guildopenstorage;
+	end;
+}
+

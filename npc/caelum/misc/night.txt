@@ -1,0 +1,26 @@
+//===== rAthena Script =======================================
+//= Night and day time.
+//===== By: ==================================================
+//= Energy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena SVN
+//===== Description: =========================================
+//= Définir la nuit et le jour sur le serveur.
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//============================================================
+
+-	script	NightScript	724,{
+
+OnClock2000:
+	atcommand "@night";
+	end;
+
+OnClock0800:
+	atcommand "@day";
+	end;
+
+}
+
