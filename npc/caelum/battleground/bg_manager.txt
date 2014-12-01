@@ -1,0 +1,392 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Battleground Manager v0.4
+//
+// - Créé par : Sky
+//
+// - Description : File d'attente pour les BG sans salle de chat
+//   Voir le label OnInit: pour configurer le script
+//
+// - v0.1 Première version, structure et dialogues.
+// - v0.2 Ajout du système de file d'attente.
+// - v0.3 Divers checks et liens vers les scripts BG offi
+// - v0.4 Ajout du NPC pour échanger les badges
+//
+//------------------------------------------------------------//
+
+prontera,165,190,3	script	Battleground Manager	728,{
+	
+	cutin "jpn_lilia01",2;
+	for (.@i=0; .@i<$@flaviusTotal; .@i++) {
+		if (getcharid(3) == .flaviusQueue[.@i]) { // déjà dans la file d'attente
+			mes .name$;
+			mes "Re-bonjour ! Je vois que tu es déjà inscrit dans la file d'attente. Il ne te reste plus qu'à attendre d'autres joueurs.";
+			next;
+			if (select("Ok, à plus.:Je voudrais me désinscrire du BG.") == 1) {
+				mes .name$;
+				mes "A la prochaine.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes .name$;
+			mes "D'accord, je viens de te retirer de la file d'attente. A la prochaine.";
+			close2;
+			cutin "",255;
+			end;
+			goto OnBGLeave; // enlever le joueur de la file d'attente
+		}
+	}
+	if (gettimetick(2) < lastBGLeave + 60) { // vient de se désinscrire
+		mes .name$;
+		mes "Encore toi ? Je viens juste de te désinscrire ! Laisse moi une minute pour ranger mes papiers.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	
+L_START:
+	mes .name$;
+	mes "Salut l'aventurier !";
+	mes "Si l'arène PvP t'ennuie je peux te proposer quelque chose de bien plus intéressant. As-tu envie de tenter ta chance aux ^0000FFBattlegrounds^000000 ?";
+	next;
+	menu "Oh oui, génial !", L_BGLIST, "En quoi ça consiste ?", L_HELP, "Non ça va, merci.", L_QUIT;
+
+L_BGLIST: // listes des BG
+	mes .name$;
+	// mes "Quel enthousiasme ! Voici la liste des Battlegrounds disponibles, dis moi auquel tu veux participer.";
+	// mes "Si tu es perdu je peux aussi te faire une description rapide pour chaque variante.";
+	mes "Quel enthousiasme !";
+	mes "Pour l'instant le seul Battleground ouvert est ^0000FFFlavius^000000, mais d'autres modes seront bientot disponibles.";
+	next;
+	
+L_BGMENU:
+	// menu "Flavius ^FF0000[" + $@flaviusTotal + "/12]^000000", L_FLAVIUS, "Tierra ^FF0000[0/12]^000000", L_TIERRA, "KvM ^FF0000[0/12]^000000", L_KVM, "Je veux bien la description.", L_DESC, "Ça ne m'interesse plus.", L_QUIT;
+	menu "Flavius " + ($@FlaviusBG1?"^FF0000[En cours]^000000":"^FF0000[" + $@flaviusTotal + "/" + .flaviusMin + "]^000000"), L_FLAVIUS, "Ça ne m'interesse plus.", L_QUIT;
+
+L_HELP: // description des BG en général
+	mes .name$;
+	mes "Les Battlegrounds (ou BG) sont des combats en équipe. Chaque type de BG a un but différent, pour gagner dans ^0000FFFlavius^000000 il faut détruire le cristal adverse qui est protégé par deux guardes.";
+	next;
+	mes .name$;
+	mes "A la fin d'une partie, chaque équipe gagne un certain nombre de badges qui pourront être échangés contre des items ou de l'équipement.";
+	next;
+	mes .name$;
+	mes "Alors, tu veux faire quoi ?";
+	next;
+	menu "Un Battleground !", L_BGLIST, "Tu peux répéter ?", L_HELP, "Rien du tout.", L_QUIT;
+
+L_DESC: // description de chaque type de BG
+	mes .name$;
+	mes "déscriptions des types de BG";
+	close;
+
+L_QUIT: // le joueur quitte le dialogue
+	mes .name$;
+	mes "Très bien, je ne te dérange pas plus longtemps.";
+	close2;
+	cutin "",255;
+	end;
+
+L_FLAVIUS: // file d'attente pour Flavius
+	if ($@flaviusTotal == .flaviusMin || $@FlaviusBG1 == 1) { // BG en cours
+		mes .name$;
+		mes "Je suis désolée, ce Battleground est déjà en cours d'utilisation par un groupe de joueurs.";
+		next;
+		goto L_BGMENU;
+	}
+	cutin "jpn_lilia02",2;
+	mes .name$;
+	mes "Voilà, je viens de t'ajouter dans la file d'attente pour ^0000FFFlavius^000000.";
+	mes "Bonne chance !";
+	.flaviusQueue[$@flaviusTotal] = getcharid(3); // ajout dans la file d'attente
+	$@flaviusTotal = $@flaviusTotal + 1;
+	for (.@i=0; .@i<$@flaviusTotal; .@i++) { // annonce l'arrivée du nouveau joueur
+		attachrid (.flaviusQueue[.@i]);
+		announce "[ BG Manager ] " + rid2name (.flaviusQueue[$@flaviusTotal-1]) + " vient de rejoindre le match ! [" + $@flaviusTotal + "/" + .flaviusMin + "]",bc_self,.bgColor$;
+	}
+	close2;
+	cutin "",255;
+	if ($@flaviusTotal == .flaviusMin) { // lance le BG
+		sleep2 2000;
+		for (.@i=0; .@i<$@flaviusTotal; .@i++) {
+			attachrid (.flaviusQueue[.@i]);
+			announce "[ BG Manager ] Les équipes sont prêtes ! Début du Battleground dans 10 secondes.",bc_self,.bgColor$;
+			soundeffect "trumpets.wav",0;
+			cutin_anim ("BGstart_", 4, 1, 38, 100);
+		}
+		$@FlaviusBG1_id1 = createbgid ("bat_b01", 10, 290, "start#bat_b01::OnGuillaumeQuit", "");
+		$@FlaviusBG1_id2 = createbgid ("bat_b01", 390, 10, "start#bat_b01::OnCroixQuit", "");
+		randGroupCreation (.flaviusQueue, .blue, .red);
+		for (.@i=0; .@i<getarraysize(.blue) ; .@i++)
+			setbgid ($@FlaviusBG1_id1, .blue[.@i]);
+		for (.@i=0; .@i<getarraysize(.red) ; .@i++)
+			setbgid ($@FlaviusBG1_id2, .red[.@i]);
+		sleep 8000;
+		donpcevent "start#bat_b01::OnReadyCheck";
+		deletearray .flaviusQueue;
+		$@flaviusTotal = 0;
+	}
+	end;
+
+L_TIERRA: // file d'attente pour Tierra
+	mes .name$;
+	mes "Très bien, je m'occupe de t'ajouter dans la file d'attente pour Tierra.";
+	close;
+
+L_KVM: // file d'attente pour KvM
+	mes .name$;
+	mes "Très bien, je m'occupe de t'ajouter dans la file d'attente pour KvM.";
+	close;
+
+OnBGLeave:
+OnPCLogoutEvent: // enlever le joueur de la file d'attente
+
+	.flaviusPosition = -1;
+	for (.@i=0; .@i<$@flaviusTotal; .@i++) { // check si le joueur fait partie d'un BG
+		if (getcharid(3) == .flaviusQueue[.@i]) {
+			.flaviusPosition = .@i;
+		}
+	}
+	if (.flaviusPosition == -1) end;
+	for (.@i=0; .@i<$@flaviusTotal; .@i++) { // annonce le départ du joueur
+		attachrid (.flaviusQueue[.@i]);
+		announce "[ BG Manager ] " + rid2name (.flaviusQueue[.flaviusPosition]) + " vient de quitter le match. [" + ($@flaviusTotal-1) + "/12]",bc_self,.bgColor$;
+	}
+	deletearray .flaviusQueue[.flaviusPosition],1; // supprime le joueur de la file d'attente
+	$@flaviusTotal = $@flaviusTotal - 1;
+	lastBGLeave = gettimetick(2);
+	end;
+
+OnInit:	// configuration
+
+	.name$ = "^0000FF[Battleground Manager]^000000";
+	.minLevel = 80; // niveau minimum pour participer aux BG
+	.bgColor$ = "0x00c8a9"; // couleur des annonces
+	
+	.flaviusMin = 12; // nombre minimum de joueurs pour lancer le BG
+	.flaviusMax = 20; // nombre maximum de joueurs autorisés dans le BG
+	
+		// ne pas toucher
+		
+	$@flaviusTotal = 0;
+	setarray .flaviusQueue$, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+	
+	end;
+	
+}
+
+prontera,166,191,5	script	Récompenses BG	861,{
+
+	cutin "kafra_09",2;
+	if (checkweight(1201,1) == 0) {
+		mes .name$;
+		mes "Bonjour. Mon pauvre, tu as l'air surchargé.";
+		mes "Reviens me voir quand tu aura vidé tes poches.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	
+	mes .name$;
+	mes "Bonjour. As-tu gagné des ^0000FFBadges^000000 aux Battlegrounds ? Je peux te les échanger contre des ^0000FFitems uniques^000000.";
+	mes "Qu'est-ce qui t'intéresse ?";
+	next;
+L_MENU:
+	menu "Des consommables.", L_CONSOS, "Des équipements.", L_EQUIP, "Voir le catalogue.", L_CATALOG, "Rien du tout.", L_EXIT;
+	
+L_CONSOS:
+	mes .name$;
+	mes "Voici la liste des consommables disponibles.";
+	deletearray .@items;
+	deletearray .@amount;
+	deletearray .@price;
+	next;
+	setarray .@items[0], 547,522,505,678,13989,12029,12030,1025,12072,12077,12092,12087,12082,12097;
+	setarray .@amount[0],100,100, 50, 50, 5,    25,   25,   50,  5,    5,    5,    5,    5,    5;
+	setarray .@price[0],  25, 25, 25, 25,25,    25,   25,   25,  10,   10,   10,   10,   10,   10;
+	.@menu$ = "";
+	for (.@i=0; .@i < getarraysize(.@items); .@i++)
+		.@menu$ += getitemname(.@items[.@i]) + " x" + .@amount[.@i] + " ^FF0000[" + .@price[.@i] + " Badges]^000000:");
+	.@i = (select(.@menu$)-1);
+	mes .name$;
+	mes "Tu as choisi :";
+	mes "^0000FF" + getitemname(.@items[.@i]) + " x" + .@amount[.@i] + "^000000.";
+	mes "Je peux t'échanger cet item contre ^FF0000" + .@price[.@i] +" Badges^000000. C'est bon ?";
+	next;
+	switch(select("Euh attend, je suis pas sûr.:Oui c'est parfait !")) {
+	case 1:
+		mes .name$;
+		mes "Comme tu voudra. Autre chose ?";
+		next;
+		goto L_MENU;
+	case 2:
+		mes .name$;
+		if (countitem(7828) < .@price[.@i]) {
+			mes "Je suis désolée, tu n'as pas assez de badges. Tu veux autre chose ?";
+			next;
+			goto L_MENU;
+		}
+		mes "Tiens, c'est pour toi ! Merci pour les badges, à bientôt.";
+		delitem 7828,.@price[.@i];
+		getitem .@items[.@i],.@amount[.@i];
+		break;
+	}
+	close2;
+	cutin "",255;
+	end;
+	
+L_EQUIP:
+	mes .name$;
+	mes "La liste des équipements est divisée en plusieurs catégories.";
+	mes "Tu cherches quelque chose en particulier ?";
+	deletearray .@items;
+	next;
+	switch(select("Armes (Dague / Epée / Mace / Hache):Armes (Arc / Katar / Shuriken / Instru):Armes (Baton / Livre / Poing / Pistolet):Capes et Chaussures:Armures:Accessoires:Menu Précédent")) {
+	case 1: // Armes 01
+		mes .name$;
+		mes "Voici les armes disponibles dans cette catégorie.";
+		next;
+		.@price = 100;
+		setarray .@items[0],13036,13037,13411,13410,1183,1184,1425,1482,1543,1542,1380,1379;
+		break;
+	case 2: // Armes 02
+		mes .name$;
+		mes "Voici les armes disponibles dans cette catégorie.";
+		next;
+		.@price = 100;
+		setarray .@items[0],1739,1738,1279,1280,13305,13306,1924,1923,1978,1977;
+		break;
+	case 3: // Armes 03
+		mes .name$;
+		mes "Voici les armes disponibles dans cette catégorie.";
+		next;
+		.@price = 100;
+		setarray .@items[0],1632,1633,1634,1635,1574,1575,1824,1823,13108,13171,13172,13173,13174;
+		break;
+	case 4: // Capes et Chaussures
+		mes .name$;
+		mes "Voici les armures disponibles dans cette catégorie.";
+		next;
+		.@price = 50;
+		setarray .@items[0],2538,2539,2540,2435,2436,2437;
+		break;
+	case 5: // Armures
+		mes .name$;
+		mes "Voici les armures disponibles dans cette catégorie.";
+		next;
+		.@price = 80;
+		setarray .@items[0],2376,2377,2378,2379,2380,2381,2382;
+		break;
+	case 6: // Accessoires
+		mes .name$;
+		mes "Voici les accessoires disponibles dans cette catégorie.";
+		next;
+		.@price = 500;
+		setarray .@items[0],2733,2720,2721,2722,2723,2724,2725;
+		setarray .@class$[0],"Gunslinger","Swordsman, Star Glad","Thief, Ninja","Acolyte","Mage, Soul Linker","Archer","Merchant";
+		break;
+	case 7: // Menu Précédent
+		mes .name$;
+		mes "Tu veux autre chose ?";
+		next;
+		goto L_MENU;
+	}
+	.@menu$ = "";
+	for (.@i=0; .@i < getarraysize(.@items); .@i++)
+		.@menu$ += getitemname(.@items[.@i]) + (.@price==500?" [" + .@class$[.@i] + "]:":":");
+	.@i = (select(.@menu$)-1);
+	mes .name$;
+	mes "Tu as choisi :";
+	mes "^0000FF" + getitemname(.@items[.@i]) + "^000000.";
+	mes "Je peux t'échanger cet item contre ^FF0000" + .@price +" Badges^000000. C'est bon ?";
+	mes "Attention, l'item sera ^FF0000lié à ce personnage^000000 et non échangeable.";
+	next;
+	switch(select("Euh attend, je suis pas sûr.:Oui c'est parfait !")) {
+	case 1:
+		mes .name$;
+		mes "Comme tu voudra. Autre chose ?";
+		next;
+		goto L_MENU;
+	case 2:
+		mes .name$;
+		if (countitem(7828) < .@price) {
+			mes "Je suis désolée, tu n'as pas assez de badges. Tu veux autre chose ?";
+			next;
+			goto L_MENU;
+		}
+		mes "Tiens, c'est pour toi ! Merci pour les badges, à bientôt.";
+		delitem 7828,.@price;
+		getitem .@items[.@i],1;
+		close2;
+		cutin "",255;
+		end;
+	}
+	close2;
+	cutin "",255;
+	end;
+	
+L_CATALOG:
+	mes .name$;
+	mes "D'accord, voici notre catalogue.";
+	mes "Reviens me voir quand aura trouvé ce qui t'intéresse !";
+	close2;
+	cutin "",255;
+	readbook 11010,1;
+	end;
+	
+L_EXIT:
+	mes .name$;
+	mes "Oh, d'accord.";
+	mes "Reviens me voir si tu as des badges à échanger.";
+	close2;
+	cutin "",255;
+	end;
+	
+OnInit:	// configuration
+
+	.name$ = "^0000FF[Récompenses BG]^000000";
+	end;
+	
+}
+
+-	script	Battleground AFK	-1,{
+
+OnPCLoadMapEvent:
+
+    if (strcharinfo(3) != "bat_b01") end;
+	sleep2 15000;
+	if (checkidle() >= 14 && strcharinfo(3) == "bat_b01") {
+		dispbottom "Attention, vous êtes inactif depuis 15 seconde.";
+	}
+	sleep2 15000;
+	if (checkidle() >= 29 && strcharinfo(3) == "bat_b01") {
+		dispbottom "Vous avez été éjecté du Battleground après 30 secondes d'inactivité.";
+		warp "SavePoint",0,0;
+	}
+	while(strcharinfo(3) == "bat_b01") {
+		if (checkidle() >= 14 && checkidle() <= 18) {
+			dispbottom "Attention, vous êtes inactif depuis 15 seconde.";
+		}
+		if (checkidle() >= 29) {
+			dispbottom "Vous avez été éjecté du Battleground après 30 secondes d'inactivité.";
+			warp "SavePoint",0,0;
+		}
+		sleep2 2000;
+	}
+	end;
+
+}
+
+bat_room,157,146,3	script	Battleground Eject	81,10,10,{
+
+	warp "SavePoint",0,0;
+	end;
+	
+}
+
+// battleground mapflags
+
+bat_b01	mapflag	loadevent
+

@@ -18997,7 +18997,18 @@ bool script_hp_add(char *name, char *args, bool (*func)(struct script_state *st)
 	return script->add_builtin(&buildin, true);
 }
 
-//	createbgid <respawn map>, <respawn x>, <respawn y>, <On Quit event>, <On Death event>;
+////////////////////////////////
+//-- custom script commands --//
+////////////////////////////////
+
+/* battleground commands by AnnieRuru
+ * doc: http://hercules.ws/board/topic/4570-battleground-system-without-waitingroom/
+ * createbgid setbgid getbgusers */
+
+/*==========================================
+ * createbgid <respawn map>, <respawn x>, <respawn y>, <On Quit event>, <On Death event>;
+ * create a specific battleground ID
+ *------------------------------------------*/
 BUILDIN(createbgid) {
 	unsigned int bg_id;
 	if ( ( bg_id = bg->create( mapindex->name2id( script_getstr(st,2) ), script_getnum(st,3), script_getnum(st,4), script_getstr(st,5), script_getstr(st,6) ) ) > 0 )
@@ -19007,8 +19018,11 @@ BUILDIN(createbgid) {
 	return true;
 }
 
-//	setbgid <battleground ID> {, <player name> };
-//	setbgid <battleground ID> {, <player account ID> };
+/*==========================================
+ * setbgid <battleground ID> {, <player name> };
+ * setbgid <battleground ID> {, <player account ID> };
+ * player attached to the script or specified player will join the battleground team
+ *------------------------------------------*/
 BUILDIN(setbgid) {
 	unsigned int bg_id = script_getnum(st,2);
 	struct battleground_data *bgd = bg->team_search( bg_id );
@@ -19045,7 +19059,11 @@ BUILDIN(setbgid) {
 	return true;
 }
 
-//	getbgusers <battleground ID>;
+/*==========================================
+ * getbgusers <battleground ID>;
+ * similar to getpartymember, will create an array with
+ * all the player's account ID from the battleground team
+ *------------------------------------------*/
 BUILDIN(getbgusers) {
 	struct battleground_data *bgd = bg->team_search( script_getnum(st,2) );
 	int i, j = 0;
@@ -19064,6 +19082,35 @@ BUILDIN(getbgusers) {
 	return true;
 }
 
+/*==========================================
+ * channelmes("#channel","message");
+ * sends a message to the given channel
+ *------------------------------------------*/
+ /*
+BUILDIN_FUNC(channelmes)
+{
+	const char *channel_name = script_getstr(st,2), *msg = script_getstr(st,3);
+	struct Channel * channel = channel_name2channel(channel_name,NULL,0);
+	
+	if( channel ) {
+		DBIterator *iter;
+		struct map_session_data *user;
+		char message[CHAN_MSG_LENGTH];
+
+		snprintf(message, CHAN_MSG_LENGTH, "[ #%s ] %s",channel->name, msg);
+		iter = db_iterator(channel->users);
+
+		for( user = (struct map_session_data*)dbi_first(iter); dbi_exists(iter); user = (struct map_session_data*)dbi_next(iter) ) {
+			clif_colormes(user,channel->color,message);
+		}
+	}
+	return SCRIPT_CMD_SUCCESS;
+}
+*/
+////////////////////////////////
+//-- end of custom commands --//
+////////////////////////////////
+
 #define BUILDIN_DEF(x,args) { buildin_ ## x , #x , args, false }
 #define BUILDIN_DEF2(x,x2,args) { buildin_ ## x , x2 , args, false }
 #define BUILDIN_DEF_DEPRECATED(x,args) { buildin_ ## x , #x , args, true }
@@ -19078,6 +19125,9 @@ void script_parse_builtin(void) {
 		BUILDIN_DEF(createbgid,"siiss"),
 		BUILDIN_DEF(setbgid,"i?"),
 		BUILDIN_DEF(getbgusers,"i"),
+		
+		// Caelum custom Commands
+		//BUILDIN_DEF(channelmes,"ss"),
 
 		// NPC interaction
 		BUILDIN_DEF(mes,"s*"),

@@ -1,38 +1,3 @@
-
-// --------------------------------------------------------------
-// --- Imagination.2 Custom Functions [by Sky] ------------------
-// --------------------------------------------------------------
-
-// da_check			Renvoie le nombre de joueurs connectés sur la même IP que le joueur ciblé. [SQL]
-// ip_check			Renvoie l'adresse IP du joueur ciblé. [SQL]
-
-////////////////////////////////////////////////////////////////////////////
-///  INT callfunc ("da_check");
-///  Renvoie le nombre de joueurs connectés sur la même IP que le joueur ciblé.
-///  Le joueur ciblé est aussi compté. S'il n'y a pas de DA, la fonction revoie donc 1.
-///  > Ne fonctionne que sur eAthena version SQL.
-///  TOTO : Pouvoir spécifier un ID joueur. (argument)
-///  TODO : Ne pas compter les autotrade.
-////////////////////////////////////////////////////////////////////////////
-function	script	da_check	{
-	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id`='"+getcharid(3)+"';",.@ip$;
-	query_sql "SELECT COUNT(l.`account_id`) FROM `login` l, `char` c WHERE l.`last_ip`='"+.@ip$+"' AND c.`online`='1' AND l.`account_id`=c.`account_id`;",.@aid;
-	return .@aid;
-}
-
-////////////////////////////////////////////////////////////////////////////
-///  STRING callfunc ("da_check");
-///  Renvoie l'adresse IP du joueur ciblé.
-///  > Ne fonctionne que sur eAthena version SQL.
-///  TOTO : Pouvoir spécifier un ID joueur. (argument)
-////////////////////////////////////////////////////////////////////////////
-
-function	script	ip_check	{
-	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id`='"+getcharid(3)+"';",.@ip$;
-	return .@ip$;
-}
-
-
 // --------------------------------------------------------------
 // --- Key's Pack -----------------------------------------------
 // --------------------------------------------------------------

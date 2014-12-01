@@ -1,0 +1,28 @@
+// --------------------------------------------------------------
+// --- Caelum Custom Functions [by Sky] -------------------------
+// --------------------------------------------------------------
+
+// ip_check			Renvoie l'adresse IP du joueur ciblé.
+// da_check			Renvoie le nombre de joueurs connectés sur l'IP du joueur ciblé.
+
+// -- *ip_check -------------------------------------------------
+//  Renvoie l'adresse IP du joueur ciblé.
+//  TOTO : Pouvoir spécifier un charID.
+// --------------------------------------------------------------
+function	script	ip_check	{
+	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id`='"+getcharid(3)+"';",.@ip$;
+	return .@ip$;
+}
+
+// -- *da_check -------------------------------------------------
+//  Renvoie le nombre de joueurs connectés sur l'IP du joueur ciblé.
+//  Le joueur ciblé est aussi compté. S'il n'y a pas de DA, la fonction revoie donc 1.
+//  TOTO : Pouvoir spécifier un ID joueur.
+//  TODO : Ne pas compter les autotrade.
+// --------------------------------------------------------------
+function	script	da_check	{
+	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id`='"+getcharid(3)+"';",.@ip$;
+	query_sql "SELECT COUNT(l.`account_id`) FROM `login` l, `char` c WHERE l.`last_ip`='"+.@ip$+"' AND c.`online`='1' AND l.`account_id`=c.`account_id`;",.@aid;
+	return .@aid;
+}
+
