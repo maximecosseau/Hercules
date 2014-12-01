@@ -1,0 +1,95 @@
+
+prontera,140,175,5	script	PvP Warper	107,{
+
+	set .@name$, "[PvP Warper]";
+	set .@server$, "CaelumRo";
+	set @zeny, 1000;
+
+	mes .@name$;
+	mes "Salut toi ! Je gère le PvP, ça te dis de te mesurer aux autres ?";
+	mes "En ce moment il y a ^5555FF"+getmapusers("guild_vs2")+"^000000 joueurs dans la salle.";
+	mes "J'oubliais ! Tu sera dispell avant de rentrer au PvP.";
+	next;
+	
+	if (select("Ouais, je vais les exploser !:Euh, pas tout de suite.") == 2) {
+		mes .@name$;
+		mes "Haha, je vois !";
+		mes "Reviens quand tu aura moins peur.";
+		close;
+	}
+	
+	mes .@name$;
+	mes "J'aime les gens comme toi.";
+	mes "Bonne chance !";
+	next;
+	
+	while ( .@STATUS < 297 ) {
+        if (
+            .@STATUS != SC_WEIGHTOVER50 &&
+            .@STATUS != SC_WEIGHTOVER90 &&
+            .@STATUS != SC_NOCHAT &&
+            .@STATUS != SC_XMAS &&
+            .@STATUS != SC_SUMMER &&
+            .@STATUS != SC_JAILED
+        )
+            sc_end .@STATUS;
+        set .@STATUS, .@STATUS+1;
+    }
+	
+	if (getmapusers("guild_vs2") == 0 && .delayTime <= gettimetick(2)) {
+		announce strcharinfo(0)+" vous défie tous au PvP !",bc_blue;
+		set .delayTime,gettimetick(2) + ( 30*60 );
+	}
+	warp "guild_vs2",0,0;
+	close;
+}
+
+
+-	script	PvPAnnounce	-1,{
+
+	OnPCKillEvent:
+	
+		set .@killed$, rid2name(killedrid);
+		if (getmapxy(.@mapname$,.@mapx,.@mapy,0,""+strcharinfo(0)+"") != 0) end;
+		if (.@mapname$ != "guild_vs2") end;
+		if (strcharinfo(0)==.@killed$) {
+			mapannounce "guild_vs2",""+.@killed$+" s'est suicidé.",0;
+		} else {
+			mapannounce "guild_vs2",""+.@killed$+" s'est fait tuer par "+strcharinfo(0)+" !",0;
+		}
+}
+
+
+guild_vs2	mapflag	pvp
+guild_vs2	mapflag	pvp_noparty
+guild_vs2	mapflag	pvp_noguild
+guild_vs2	mapflag	nomemo
+guild_vs2	mapflag	noteleport
+guild_vs2	mapflag	noreturn
+guild_vs2	mapflag	nosave
+guild_vs2	mapflag	nobranch
+guild_vs2	mapflag	noexppenalty
+guild_vs2	mapflag	nozenypenalty
+guild_vs2	mapflag	nowarp
+
+
+guild_vs2,40,70,5	script	Entraineur	107,{
+
+	mes "[Entraineur]";
+	mes "Tu en as eu assez ? Je peux te faire sortir d'ici si tu veux.";
+	next;
+	
+	if (select("Ok, j'en ai mare.:Non je veux continuer !") == 2) {
+		mes "[Entraineur]";
+		mes "D'accord, comme tu veux.";
+		close;
+	}
+	
+	mes "[Entraineur]";
+	mes "Très bien, je te renvoie à ton point de sauvegarde.";
+	next;
+	
+	warp "SavePoint", 0, 0;
+	close;
+}
+

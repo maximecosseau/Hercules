@@ -1,0 +1,61 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Annonceur
+//
+// - Créé par : Sky
+//
+// - Description : Un annonceur avec délais
+//
+//------------------------------------------------------------//
+
+prontera,147,175,5	script	Annonceur	100,{
+	
+	// delais entre deux annonces
+	set .@minutes,15;
+	
+	mes .name$;
+	mes "Bonjour "+strcharinfo(0)+".";
+	mes "Tu veux passer une annonce ? Ça coute 10000 zeny.";
+	next;
+	
+	if (select("Oui s'il te plait !:Non, merci.") == 2 ) {
+		mes .name$;
+		mes "D'accord, au revoir.";
+		close;
+	}
+	
+	if (Zeny < 10000) {
+		mes .name$;
+		mes "On dirait que tu n'as pas assez d'argent. Reviens quand tu aura au moins 10000 zeny.";
+		close;
+	}
+	
+	if (.delayTime <= gettimetick(2))
+	{
+		mes .name$;
+		mes "Ok, écris ton message et je vais faire l'annonce pour toi.";
+		next;
+		input .@message$;
+		mes .name$;
+		mes "Et voilà ! A bientôt.";
+		set Zeny,Zeny-10000;
+		set .delayTime,gettimetick(2) + ( .@minutes*60 );
+		announce "[Annonce] "+strcharinfo(0)+": "+.@message$,0;
+		close;
+	}
+	else {
+		set .@last,.delayTime - gettimetick(2);
+		set .@min, .@last % (24*60*60) % (60*60) / (60) + 1;
+		mes .name$;
+		mes "Je viens de faire une annonce. Il va falloir attendre "+.@min+" minutes pour la prochaine.";
+	}
+	close;
+	
+OnInit:	// configuration
+
+	.name$ = "^0000FF[Annonceur]^000000";
+	end;
+	
+}
+

@@ -1,0 +1,237 @@
+//===== rAthena Script =======================================
+//= Private MVP & Branch Room
+//===== By: ==================================================
+//= AnnieRuru
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Allows players to rent an MVP room for personal use,
+//= or for a party or guild.
+//===== Additional Comments: =================================
+//= 1.0 First version, edited. [Euphy]
+//============================================================
+
+prontera,143,177,3	script	DB Room	455,{
+
+	set .@name$, "[DB Room]";
+	
+	mes .@name$;
+	mes "Bonjour, je peux te réserver une salle pour casser tes Dead Branch.";
+	if ( getvariableofnpc( .rentcost, "Assistant" ) )
+		mes "The cost to rent a room for "+ getvariableofnpc( .timeout, "Assistant" ) +" minutes is "+ callfunc("F_InsertComma", getvariableofnpc( .rentcost, "Assistant" ) ) +" zeny.";
+	else
+		mes "La salle sera réservée pour ta team pendant "+ getvariableofnpc( .timeout, "Assistant" ) +" minutes.";
+	mes " ";
+	for ( .@i = 1; .@i <= 8; .@i++ )
+		if ( getvariableofnpc( .renttime[.@i], "Assistant" ) )
+			mes "Salle #"+ .@i +" = "+ .color$[ .type[.@i] ] + .whoinuse$[.@i] +"^000000";
+	next;
+	.@room = select(
+		"DB Room 1 ["+ getmapusers("pvp_n_1-1") +"]",
+		"DB Room 2 ["+ getmapusers("pvp_n_2-1") +"]",
+		"DB Room 3 ["+ getmapusers("pvp_n_3-1") +"]",
+		"DB Room 4 ["+ getmapusers("pvp_n_4-1") +"]",
+		"DB Room 5 ["+ getmapusers("pvp_n_5-1") +"]",
+		"DB Room 6 ["+ getmapusers("pvp_n_6-1") +"]",
+		"DB Room 7 ["+ getmapusers("pvp_n_7-1") +"]",
+		"DB Room 8 ["+ getmapusers("pvp_n_8-1") +"]");
+	if ( getvariableofnpc( .renttime[.@room], "Assistant" ) ) {
+		if ( .inuseid[.@room] == getcharid( .type[.@room] ) ) {
+			warp "pvp_n_"+ .@room + "-1", 0,0;
+			close;
+		} else {
+			mes .@name$;
+			mes "Cette salle est déjà réservée par la team "+ .color$[ .type[.@room] ] + .whoinuse$[.@room] +"^000000.";
+			mes "Choisis en une autre.";
+			close;
+		}
+	}
+	set .@type, 1;
+	if ( !getcharid(.@type) ) {
+		mes .@name$;
+		mes "Tu ne fais pas partie d'une "+( ( .@type == 1 )? "team" : "Guild" )+". Je ne peux rien faire pour toi.";
+		close;
+	}
+	else if ( Zeny < getvariableofnpc( .rentcost, "Assistant" ) ) {
+		mes "Tu n'as pas assez de zeny pour réserver une salle.";
+		close;
+	}
+	else if ( getvariableofnpc( .renttime[.@room], "Assistant" ) ) {
+		mes .@name$;
+		mes "Désolé, quelqu'un d'autre vient de réserver cette salle.";
+		close;
+	}
+	for ( .@i = 1; .@i <= 8; .@i++ ) {
+		if ( ( getvariableofnpc( .renttime[.@i], "Assistant" ) ) && .@type == .type[.@i] && getcharid(.@type) == .inuseid[.@i] ) {
+			mes .@name$;;
+			mes "La salle#"+ .@i +" t'es déjà réservée.";
+			close;
+		}
+	}
+	set .type[.@room], .@type;
+	set .inuseid[.@room], getcharid(.@type);
+	set .whoinuse$[.@room], strcharinfo( ( .@type == 3 )? 0 : .@type );
+	// Zeny -= getvariableofnpc( .rentcost, "Assistant" );
+	warp "pvp_n_"+ .@room + "-1", 0,0;
+	killmonsterall "pvp_n_"+ .@room + "-1";
+	donpcevent "Assistant#"+ .@room +"::OnEnterMap";
+	close;
+OnInit:
+	.color$[1] =  "^EE8800"; // party color
+	.color$[2] =  "^70CC11"; // guild color
+	.color$[3] =  "^0000FF"; // account color
+	end;
+}
+
+-	script	Assistant	-1,{
+	mes "[Assistant]";
+	mes "Temps restant : ";
+	mes callfunc( "Time2Str", .renttime[ atoi( strnpcinfo(2) ) ] + .timeout * 60 );
+	mes "Je peux t'aider ?";
+	next;
+	switch ( select(.menu$) ) {
+	case 5:
+		mes "[Assistant]";
+		mes "Ok, je te renvois à ton respawn.";
+		next;
+		// if ( select( "Yes:No") == 1 )
+		warp "SavePoint", 0, 0;
+		close;
+	case 6:
+		mes "[Assistant]";
+		if ( getmapusers( strcharinfo(3) ) > 1 ) {
+			mes "Pour rendre la salle tu dois etre le dernier joueur présent sur la map.";
+			close;
+		}
+		mes "D'accord, je vais terminer la réservation.";
+		if ( .rentcost )
+			mes "Il faudra à nouveau payer pour revenir dans cette salle.";
+		next;
+		// if ( select( "Yes", "No" ) == 2 ) close;
+		warp "SavePoint", 0, 0;
+		awake strnpcinfo(0);
+		end;
+	}
+	close;
+
+OnMobDead:
+	end;
+
+OnEnterMap:
+	.@id = atoi( strnpcinfo(2) );
+	.renttime[.@id] = gettimetick(2);
+	sleep 2000;
+	mapannounce strnpcinfo(4), "Bienvenue dans la DB Room ! Un NPC se trouve au sud du pont pour sortir ou terminer la réservation.", bc_map;
+		removemapflag strnpcinfo(4),mf_pvp;
+		removemapflag strnpcinfo(4),mf_pvp_noguild;
+		removemapflag strnpcinfo(4),mf_nightmaredrop;
+	sleep .timeout * 60000;
+	mapwarp strnpcinfo(4), .respawnmap$, .respawnx, .respawny;
+	.renttime[.@id] = 0;
+	killmonsterall strnpcinfo(4);
+	end;
+
+OnInit:
+
+	if ( !getstrlen( strnpcinfo(2) ) ) {
+
+//	Config ---------------------------------------------------------------------------------------
+
+	// Room rental time, in minutes.
+	// When time runs out, all players inside the room will be kicked out.
+	// Do NOT set this to zero!
+	set .timeout, 60;
+
+	set .rentcost, 0;	// Zeny cost for renting a room (0 = free)
+	set .mvpcost, 100000;	// Zeny cost to summon an MVP (0 = free)
+	set .bosscost, 50000;	// Zeny cost to summon a boss monster (0 = free)
+
+	//	Options setting inside MVP room
+	set .@menu[1], 0;	// Turn Heal option On/Off
+	set .@menu[2], 0;	// Turn MVP Summoning On/Off
+	set .@menu[3], 0;	// Turn Mini boss Summoning On/Off
+	set .@menu[4], 0;	// Sell items (branches) On/Off (see shop below, before the mapflags)
+
+	// Respawn point when players leave the room
+	set .respawnmap$, "prontera";
+	set .respawnx, 155;
+	set .respawny, 185;
+
+//	Config Ends ------------------------------------------------------------------------
+
+		if ( !.timeout ) set .timeout, 60;
+		.menu$ = ( .@menu[1] ? "Heal" : "" ) +":" ;
+		.menu$ = .menu$ + ( .@menu[2] ? "Summon MVP" : "" ) +":";
+		.menu$ = .menu$ + ( .@menu[3] ? "Summon Mini-boss" : "" ) +":";
+		.menu$ = .menu$ + ( .@menu[4] ? "Buy branches" : "" ) +":";
+		.menu$ = .menu$ + "Quitter la salle:Rendre la salle";
+	}
+	else {
+		mapannounce strnpcinfo(4), "Un GM a effectué un reloadscript, veuillez re-louer cette salle.", bc_map;
+		// mapwarp strnpcinfo(4), .respawnmap$, .respawnx, .respawny;
+	}
+	end;
+}
+
+-	shop	MVP room#branch	-1,604:100000,12103:1000000
+
+pvp_n_1-1,109,69,4	duplicate(Assistant)	Assistant#1	116
+pvp_n_2-1,109,69,4	duplicate(Assistant)	Assistant#2	116
+pvp_n_3-1,109,69,4	duplicate(Assistant)	Assistant#3	116
+pvp_n_4-1,109,69,4	duplicate(Assistant)	Assistant#4	116
+pvp_n_5-1,109,69,4	duplicate(Assistant)	Assistant#5	116
+pvp_n_6-1,109,69,4	duplicate(Assistant)	Assistant#6	116
+pvp_n_7-1,109,69,4	duplicate(Assistant)	Assistant#7	116
+pvp_n_8-1,109,69,4	duplicate(Assistant)	Assistant#8	116
+
+// pvp_n_1-1,111,133,4	duplicate(Assistant)	Assistant#11	116
+// pvp_n_2-1,111,133,4	duplicate(Assistant)	Assistant#12	116
+// pvp_n_3-1,111,133,4	duplicate(Assistant)	Assistant#13	116
+// pvp_n_4-1,111,133,4	duplicate(Assistant)	Assistant#14	116
+// pvp_n_5-1,111,133,4	duplicate(Assistant)	Assistant#15	116
+// pvp_n_6-1,111,133,4	duplicate(Assistant)	Assistant#16	116
+// pvp_n_7-1,111,133,4	duplicate(Assistant)	Assistant#17	116
+// pvp_n_8-1,111,133,4	duplicate(Assistant)	Assistant#18	116
+
+pvp_n_1-1	mapflag	nowarpto
+pvp_n_2-1	mapflag	nowarpto
+pvp_n_3-1	mapflag	nowarpto
+pvp_n_4-1	mapflag	nowarpto
+pvp_n_5-1	mapflag	nowarpto
+pvp_n_6-1	mapflag	nowarpto
+pvp_n_7-1	mapflag	nowarpto
+pvp_n_8-1	mapflag	nowarpto
+pvp_n_1-1	mapflag	nomemo
+pvp_n_2-1	mapflag	nomemo
+pvp_n_3-1	mapflag	nomemo
+pvp_n_4-1	mapflag	nomemo
+pvp_n_5-1	mapflag	nomemo
+pvp_n_6-1	mapflag	nomemo
+pvp_n_7-1	mapflag	nomemo
+pvp_n_8-1	mapflag	nomemo
+pvp_n_1-1	mapflag	noteleport
+pvp_n_2-1	mapflag	noteleport
+pvp_n_3-1	mapflag	noteleport
+pvp_n_4-1	mapflag	noteleport
+pvp_n_5-1	mapflag	noteleport
+pvp_n_6-1	mapflag	noteleport
+pvp_n_7-1	mapflag	noteleport
+pvp_n_8-1	mapflag	noteleport
+pvp_n_1-1	mapflag	nosave	SavePoint
+pvp_n_2-1	mapflag	nosave	SavePoint
+pvp_n_3-1	mapflag	nosave	SavePoint
+pvp_n_4-1	mapflag	nosave	SavePoint
+pvp_n_5-1	mapflag	nosave	SavePoint
+pvp_n_6-1	mapflag	nosave	SavePoint
+pvp_n_7-1	mapflag	nosave	SavePoint
+pvp_n_8-1	mapflag	nosave	SavePoint
+pvp_n_1-1	mapflag	nopenalty
+pvp_n_2-1	mapflag	nopenalty
+pvp_n_3-1	mapflag	nopenalty
+pvp_n_4-1	mapflag	nopenalty
+pvp_n_5-1	mapflag	nopenalty
+pvp_n_6-1	mapflag	nopenalty
+pvp_n_7-1	mapflag	nopenalty
+pvp_n_8-1	mapflag	nopenalty

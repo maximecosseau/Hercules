@@ -1,0 +1,91 @@
+//===== rAthena Script =======================================
+//= Infirmier
+//===== By: ==================================================
+//= Euphy edited by Energy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena SVN
+//===== Description: =========================================
+//= Basic Infirmier script.
+//============================================================
+
+-	script	Infirmier	-1,{
+	
+	set .@name$, "^0000FF[Infirmier]^000000";
+	set .@price, (BaseLevel + 1) * 20; // prix multiplié par blv+1
+	set .@limit, 60; // niveau maximum pour les buffs
+	
+	if (Zeny > .@price) {
+		mes .@name$;
+		mes "Bonjour ! As-tu besoin de soins ?";
+		mes "Ça ne te coûtera que ^5555FF"+.@price+"^000000 Zeny.";
+		
+		if (BaseLevel < .@limit) {
+			mes "Vu ton level, tu aura même droit à un ^5555FFboost gratuit ^000000!";
+			mes "Oui, je suis vraiment gentil.";
+		}
+		next;
+		
+		if (select("Cool ! Je veux bien.:En fait ça ira.") == 2) {
+			mes .@name$;
+			mes "Ok dommage.";
+			mes "Reviens me voir quand tu veux !";
+			close;
+		}
+		
+		set Zeny, Zeny-.@price;
+		specialeffect2 313; percentheal 100,100;
+		if (BaseLevel < .@limit) {
+			specialeffect2 37; sc_start SC_INCREASEAGI,240000,10;
+			specialeffect2 42; sc_start SC_BLESSING,240000,10;
+		}
+		
+		mes .@name$;
+		mes "Et voilà, tu es soigné !";
+		mes "Fais attention à toi quand même.";
+		close;
+	}
+	
+	mes .@name$;
+	mes "Bonjour !";
+	mes "Je suis le soigneur de la ville.";
+	mes "Tu n'as pas beaucoup d'argent dis moi... Reviens me voir quand tu aura vendu quelques jellopy.";
+	close;
+	
+}
+
+alberta,25,240,6	duplicate(Infirmier)	Infirmier#alb	402
+aldebaran,135,118,6	duplicate(Infirmier)	Infirmier#alde	402
+amatsu,200,79,4	duplicate(Infirmier)	Infirmier#ama	402
+ayothaya,207,169,6	duplicate(Infirmier)	Infirmier#ayo	402
+brasilis,194,221,6	duplicate(Infirmier)	Infirmier#bra	402
+comodo,184,158,6	duplicate(Infirmier)	Infirmier#com	402
+dewata,193,175,6	duplicate(Infirmier)	Infirmier#dew	402
+eclage,105,35,4	duplicate(Infirmier)	Infirmier#ecl	402
+einbech,142,244,4	duplicate(Infirmier)	Infirmier#einbe	402
+einbroch,57,202,6	duplicate(Infirmier)	Infirmier#einbr	402
+dicastes01,201,194,4	duplicate(Infirmier)	Infirmier#dic	402
+geffen,115,72,6	duplicate(Infirmier)	Infirmier#gef	402
+gonryun,156,122,6	duplicate(Infirmier)	Infirmier#gon	402
+hugel,89,150,6	duplicate(Infirmier)	Infirmier#hug	402
+izlude,125,118,5	duplicate(Infirmier)	Infirmier#izl	402
+lighthalzen,149,103,6	duplicate(Infirmier)	Infirmier#li	402
+louyang,225,103,4	duplicate(Infirmier)	Infirmier#lou	402
+malangdo,226,188,4	duplicate(Infirmier)	Infirmier#mal	402
+malaya,205,205,6	duplicate(Infirmier)	Infirmier#malay	402
+manuk,256,176,6	duplicate(Infirmier)	Infirmier#man	402
+mid_camp,203,289,6	duplicate(Infirmier)	Infirmier#mid	402
+mora,106,100,6	duplicate(Infirmier)	Infirmier#mora	402
+morocc,153,97,6	duplicate(Infirmier)	Infirmier#mor	402
+moscovia,215,194,6	duplicate(Infirmier)	Infirmier#mos	402
+niflheim,188,180,5	duplicate(Infirmier)	Infirmier#nif	402
+payon,179,106,4	duplicate(Infirmier)	Infirmier#pay	402
+prontera,162,193,4	duplicate(Infirmier)	Infirmier#pront	402
+rachel,125,116,6	duplicate(Infirmier)	Infirmier#rac	402
+splendide,201,153,4	duplicate(Infirmier)	Infirmier#spl	402
+thor_camp,249,74,4	duplicate(Infirmier)	Infirmier#thor	402
+umbala,129,132,4	duplicate(Infirmier)	Infirmier#umb	402
+veins,217,121,4	duplicate(Infirmier)	Infirmier#ve	402
+xmas,143,136,6	duplicate(Infirmier)	Infirmier#xmas	402
+yuno,164,45,4	duplicate(Infirmier)	Infirmier#yuno	402

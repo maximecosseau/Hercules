@@ -1,0 +1,74 @@
+//===== rAthena Script =======================================
+//= Reset NPC
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.3
+//===== Compatible With: =====================================
+//= rAthena SVN
+//===== Description: =========================================
+//= Resets skills, stats, or both.
+//===== Additional Comments: =================================
+//= 1.0 First Version
+//= 1.1 Optimized for the greater good. [Kisuka]
+//= 1.2 Cleaning [Euphy]
+//= 1.3 All statuses removed upon skill reset. [Euphy]
+//============================================================
+
+prontera,149,193,4	script	Reset Girl	124,{
+
+	set .@name$,"^0000FF[Reset Girl]^000000";
+	set .@ResetStat,25000;	// Zeny for stat reset
+	set .@ResetSkill,25000;	// Zeny for skill reset
+	set .@ResetBoth,50000;	// Zeny for resetting both together
+
+	mes .@name$;
+	mes "Salut. On m'a confié le pouvoir de faire oublier aux gens toutes leurs compétences.";
+	mes "Par contre je fais payer, héhé !";
+	next;
+	mes .@name$;
+	mes "Voici mes prix :";
+	mes "^FF0000Reset Stats: ^000000"+ .@ResetStat +"z";
+	mes "^FF0000Reset Skills: ^000000"+ .@ResetSkill +"z";
+	mes "^0000FFLes deux: ^000000"+ .@ResetBoth +"z";
+	next;
+	switch(select("^FF0000Reset Stats:Reset Skills^000000:^0000FFLes deux^000000:C'est trop cher !")) {
+	case 1:
+		mes .@name$;
+		if (Zeny < .@ResetStat) {
+			mes "Désolée, tu n'as pas les moyens.";
+			close;
+		}
+		set Zeny, Zeny-.@ResetStat;
+		resetstatus;
+		mes "Et voila !";
+		close;
+	case 2:
+		mes .@name$;
+		if (Zeny < .@ResetSkill) {
+			mes "Désolée, tu n'as pas les moyens.";
+			close;
+		}
+		set Zeny, Zeny-.@ResetSkill;
+		sc_end SC_ALL;
+		resetskill;
+		mes "Et voila !";
+		close;
+	case 3:
+		mes .@name$;
+		if (Zeny < .@ResetBoth) {
+			mes "Désolée, tu n'as pas les moyens.";
+			close;
+		}
+		set Zeny, Zeny-.@ResetBoth;
+		sc_end SC_ALL;
+		resetskill;
+		resetstatus;
+		mes "Et voilà !";
+		close;
+	case 4:
+		mes .@name$;
+		mes "Dommage.";
+		close;
+	}
+}

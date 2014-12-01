@@ -1,0 +1,45 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Identifieur
+//
+// - Créé par : Sky
+//
+// - Description : Permet d'identifier tous les items
+//   présents dans l'inventaire du joueur
+//
+//------------------------------------------------------------//
+
+prontera,164,175,3	script	Identifieur	866,{
+
+	set .@n$,"^0000FF[Identifieur]^000000";
+	mes .@n$;
+	mes "Bonjour, pour 100 zeny je peux identifier tous tes items ! Ça t'interesse ?";
+	next;
+	switch(select("Oui:Non")) {
+	case 1:
+		if(Zeny < 100) {
+			mes .@n$;
+			mes "Euh, tu n'as pas assez d'argent.";
+			close;
+		}
+		
+		mes .@n$;
+		mes "Ok, c'est fait.";
+		set Zeny,Zeny - 100;
+		getinventorylist;
+		
+		for( set .@i,0; .@i < @inventorylist_count; set .@i, .@i + 1 ) {
+			if ( @inventorylist_identify[.@i] == 1 ) continue;
+			delitem2 @inventorylist_id[.@i],1,0,0,0,0,0,0,0;
+			getitem @inventorylist_id[.@i],1;
+		}
+		break;
+	case 2:
+		mes .@n$;
+		mes "Comme tu voudra.";
+		break;
+	}
+	close;
+}
+
