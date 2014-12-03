@@ -195,6 +195,14 @@ pvp_n_8-1,109,69,4	duplicate(Assistant)	Assistant#8	116
 // pvp_n_7-1,111,133,4	duplicate(Assistant)	Assistant#17	116
 // pvp_n_8-1,111,133,4	duplicate(Assistant)	Assistant#18	116
 
+pvp_n_1-1	mapflag	nobranch	off
+pvp_n_2-1	mapflag	nobranch	off
+pvp_n_3-1	mapflag	nobranch	off
+pvp_n_4-1	mapflag	nobranch	off
+pvp_n_5-1	mapflag	nobranch	off
+pvp_n_6-1	mapflag	nobranch	off
+pvp_n_7-1	mapflag	nobranch	off
+pvp_n_8-1	mapflag	nobranch	off
 pvp_n_1-1	mapflag	nowarpto
 pvp_n_2-1	mapflag	nowarpto
 pvp_n_3-1	mapflag	nowarpto

@@ -12,9 +12,9 @@ use_MD5_passwords: yes
 
 // Client MD5 hash check
 // Note: see doc/md5_hashcheck.txt for more details.
-client_hash_check: off
+client_hash_check: yes
 
 // Client valid MD5 hashes (client_hash: group_id, hash)
-//client_hash: 0, 113e195e6c051bb1cfb12a644bb084c5
-//client_hash: 10, cb1ea78023d337c38e8ba5124e2338ae
-//client_hash: 99, disabled
+client_hash: 0, e508bfbe8282d27db118b5043e9f1851
+client_hash: 99, b2bcc999d6852776a7acd54ed087caf0
+// client_hash: 99, disabled

@@ -3072,7 +3072,7 @@ packet(0x020d,-1);
 #endif
 
 #if PACKETVER >= 20130807
-	packetKeys(0x7E241DE0,0x5E805580,0x3D807D80); /* Thanks to Shakto */
+	packetKeys(0x611B7097,0x01F957A1,0x768A0FCB); /* Thanks to Shakto -- Edited by Sky */
 #endif
 
 #if PACKETVER >= 20130814

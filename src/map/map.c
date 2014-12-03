@@ -3306,7 +3306,10 @@ void map_flags_init(void) {
 			}
 			aFree(map->list[i].zone_mf);
 		}
-
+		
+		// customs
+		map->list[i].flag.nobranch = 1; // bloque les DB partout
+		
 		map->list[i].zone_mf = NULL;
 		map->list[i].zone_mf_count = 0;
 		map->list[i].prev_zone = map->list[i].zone;
