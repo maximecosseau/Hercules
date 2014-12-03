@@ -10,6 +10,7 @@
 //====================================================
 // run when any character logs in, attached to them.
 -	script	HerculesMOTD	-1,{
-	message strcharinfo(0),"Welcome to Hercules! Enjoy! Please report any bugs you find.";
+	message strcharinfo(0),"Bienvenue sur Caelum, amusez vous bien !";
+	message strcharinfo(0),"Si vous trouvez un bug, merci de nous en faire part sur le forum.";
 	end;
 }

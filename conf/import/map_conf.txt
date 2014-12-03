@@ -20,6 +20,6 @@ map_port: 5121
 enable_spy: no
 
 // Database autosave time
-autosave_time: 120
+autosave_time: 180
 
 import: conf/import/map_local.txt

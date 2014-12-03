@@ -3,7 +3,7 @@
 //
 //  Nom du script v0.1
 //
-// - CrÃ©Ã© par : Sky
+// - Créé par : Sky
 //
 // - Description : Blablabla
 //
@@ -16,7 +16,7 @@
 //
 //  Nom du script
 //
-// - CrÃ©Ã© par : Sky
+// - Créé par : Sky
 //
 // - Description : Blablabla
 //

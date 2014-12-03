@@ -26,15 +26,20 @@
 			// atcommand "@hide";
 		}
 		
-		if (getgmlevel() == 1 ) {
+		if (getgmlevel() == 2 ) { // Law Enforcement
+		
+			dispbottom "Bienvenue GM "+strcharinfo(0)+" ! Sois sans pitié avec les joueurs.";
+			atcommand "@monsterignore";
+		}
+		
+		if (getgmlevel() == 1 ) { // Event Manager
 		
 			dispbottom "Bienvenue GM "+strcharinfo(0)+".";
 			atcommand "@monsterignore";
 		}
 		
-		if (getgmlevel() == 0 ) {
+		if (getgmlevel() == 0 ) { // Player
 		
-			dispbottom "Bonjour "+strcharinfo(0)+".";
 			dispbottom "Pour voir la liste des commandes du serveur, tapez @commands";
 		}
 		
