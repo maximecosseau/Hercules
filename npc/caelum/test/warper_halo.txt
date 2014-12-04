@@ -1,0 +1,42 @@
+//------------------------------------------------------------//
+//----- Imagination.2 Script ---------------------------------//
+//
+//  Warpeur Imagination.
+//
+// - Créé par : Sky. (mai 2011)
+//
+// - Description : Le warpeur Imagination, en forme de halo.
+//    Warp vers toutes les zones et tous les donjons,
+//    sous réserve de les avoir débloqués avant.
+//
+// - Changelog :
+//    0.1: Création du script.
+//    0.2: <...>
+//
+//------------------------------------------------------------//
+
+prontera,152,181,5	script	Warpeur	139,2,2,{
+	
+OnInit:
+	specialeffect 247;
+	sleep 10800;
+	goto OnInit;
+	
+OnTouch:
+	sleep2 1000;
+	getmapxy(@mapname$,@mapx,@mapy,0);
+	getmapxy(@mapname2$,@mapx2,@mapy2,1);
+	if (@mapx <= @mapx2 + 2 && @mapx >= @mapx2 - 2
+		&& @mapy <= @mapy2 + 2 && @mapy >= @mapy2 - 2){
+		specialeffect2 120;
+		mes "Vous vous sentez partir...";
+		mes " ";
+		mes "...";
+		mes "...";
+		next;
+		mes "En fait non, il se passe rien.";
+		mes " ";
+		mes "Ce NPC c'est pas encore opérationnel.";
+		close;
+	}
+}

@@ -1,1 +1,24 @@
 
+-	script	mapEvent	-1,{
+
+OnPCLoadMapEvent:
+//   announce "Holy Shit !",16;
+   
+   bonus2 bHPRegenRate,MaxHP/100,500;
+//   bonus bHPrecovRate,100;
+   end;
+
+OnPCLoginEvent:
+
+	set .time,gettimetick(2);
+	end;
+   
+OnPCLogoutEvent:
+   
+	announce gettimetick(2)-.time,0;
+	end;
+   
+}
+
+prontera	mapflag	loadevent
+

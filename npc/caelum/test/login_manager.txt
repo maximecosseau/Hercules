@@ -1,0 +1,84 @@
+//------------------------------------------------------------//
+//----- Imagination.2 Script ---------------------------------//
+//
+//  Login Manager.
+//
+// - Créé par : Sky. (mai 2011)
+//
+// - Description : NPC de configuration pour choisir quelles
+//    atcommands sont activées automatiquement au login.
+//
+//    > Commandes // bitmask
+//		- @autoloot		// 1
+//		- @showexp		// 2
+//		- @showzeny		// 4
+//		- @showdelay	// 8
+//
+// - Changelog :
+//    0.1: Création du script.
+//    0.2: <...>
+//
+// - TODO :
+//    Permettre le choix de plusieurs valeurs pour @autoloot.
+//
+//------------------------------------------------------------//
+
+prontera,161,189,3	script	Login Manager	899,{
+
+	set @name$,"Login Manager";
+	set @commande$,"";
+	
+	mes "[" + @name$ + "]";
+	mes "Salut !";
+	mes "Je m'occupe des préférences de chaque joueur. Je peux activer certaines commandes automatiquement lorsque tu te connectes.";
+	mes "Ça t'intéresse ?";
+	next;
+	menu "Oui !",prefs,"Non, merci.",-;
+
+	mes "[" + @name$ + "]";
+	mes "Ok. Si tu changes d'avis, n'hésite pas à revenir !";
+	close;
+	
+prefs:
+	if (loginPrefs & 1) set @autoloot$,"@autoloot [^00FF00 ON^000000 ]";
+	else set @autoloot$,"@autoloot [^FF0000 OFF^000000 ]";
+	if (loginPrefs & 2) set @showexp$,"@showexp [^00FF00 ON^000000 ]";
+	else set @showexp$,"@showexp [^FF0000 OFF^000000 ]";
+	if (loginPrefs & 4) set @showzeny$,"@showzeny [^00FF00 ON^000000 ]";
+	else set @showzeny$,"@showzeny [^FF0000 OFF^000000 ]";
+	if (loginPrefs & 8) set @showdelay$,"@showdelay [^00FF00 ON^000000 ]";
+	else set @showdelay$,"@showdelay [^FF0000 OFF^000000 ]";
+	
+	mes "[" + @name$ + "]";
+	if (@commande$ == "") mes "Très bien.";
+	else {
+		mes "Et hop !";
+		mes "L'état de " + @commande$ + " a été modifié.";
+	}
+	mes "Je te laisse choisir quelle commande tu veux modifier.";
+	next;
+	switch (select (@autoloot$,@showexp$,@showzeny$,@showdelay$,"J'ai fini."))
+	{
+		case 1:
+			set loginPrefs,loginPrefs^1;
+			set @commande$,"@autoloot";
+			goto prefs;
+		case 2:
+			set loginPrefs,loginPrefs^2;
+			set @commande$,"@showexp";
+			goto prefs;
+		case 3:
+			set loginPrefs,loginPrefs^4;
+			set @commande$,"@showzeny";
+			goto prefs;
+		case 4:
+			set loginPrefs,loginPrefs^8;
+			set @commande$,"@showdelay";
+			goto prefs;
+		case 5:
+			mes "[" + @name$ + "]";
+			mes "Ok, salut !";
+			mes "Et n'hésite pas à revenir.";
+			close;
+	}
+}

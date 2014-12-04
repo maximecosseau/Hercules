@@ -1,1 +1,24 @@
 
+prontera,150,186,5	script	DA Check	50,{
+
+	mes "[DA Checkeur]";
+	if (callfunc ("da_check") == 1){
+		mes "Bonjour !";
+		mes "Il fait beau, non ?";
+		mes " ";
+		mes "Au fait ! Ton IP est : "+callfunc ("ip_check")+".";
+		close;
+	}
+	mes "Désolé, je ne parle pas aux gens qui trichent..";
+	close;
+	
+}
+
+// prontera,148,184,5	script	GIF	968,{
+
+	// mes "[GIF]";
+	// mes "Alors, bien cette animation ?";
+	// callfunc ("cutin_anim", "anim_", 3, 0, 63, 100);
+	// close;
+	
+// }

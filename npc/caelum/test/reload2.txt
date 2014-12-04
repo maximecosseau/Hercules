@@ -1,1 +1,15 @@
 
+-	script	atcmd_caelum2::@cash	-1,{
+
+OnInit:
+	bindatcmd "cash2",strnpcinfo(3)+"::OnAtcommand";
+	end;
+
+OnAtcommand:
+	//if (.@atcmd_numparameters=2) {
+
+	getitem 550,1;
+	dispbottom "test"+.@atcmd_numparameters+.@atcmd_parameters$[0];
+	end;
+
+}
