@@ -223,13 +223,13 @@ L_CONSOS:
 		goto L_MENU;
 	case 2:
 		mes .name$;
-		if (countitem(7828) < .@price[.@i]) {
+		if (countitem(7829) < .@price[.@i]) {
 			mes "Je suis désolée, tu n'as pas assez de badges. Tu veux autre chose ?";
 			next;
 			goto L_MENU;
 		}
 		mes "Tiens, c'est pour toi ! Merci pour les badges, à bientôt.";
-		delitem 7828,.@price[.@i];
+		delitem 7829,.@price[.@i];
 		getitem .@items[.@i],.@amount[.@i];
 		break;
 	}
@@ -311,13 +311,13 @@ L_EQUIP:
 		goto L_MENU;
 	case 2:
 		mes .name$;
-		if (countitem(7828) < .@price) {
+		if (countitem(7829) < .@price) {
 			mes "Je suis désolée, tu n'as pas assez de badges. Tu veux autre chose ?";
 			next;
 			goto L_MENU;
 		}
 		mes "Tiens, c'est pour toi ! Merci pour les badges, à bientôt.";
-		delitem 7828,.@price;
+		delitem 7829,.@price;
 		getitem .@items[.@i],1;
 		close2;
 		cutin "",255;
@@ -362,14 +362,16 @@ OnPCLoadMapEvent:
 	}
 	sleep2 15000;
 	if (checkidle() >= 29 && strcharinfo(3) == "bat_b01") {
+		bg_leave;
 		dispbottom "Vous avez été éjecté du Battleground après 30 secondes d'inactivité.";
 		warp "SavePoint",0,0;
 	}
 	while(strcharinfo(3) == "bat_b01") {
-		if (checkidle() >= 14 && checkidle() <= 18) {
+		if (checkidle() >= 14 && checkidle() <= 16) {
 			dispbottom "Attention, vous êtes inactif depuis 15 seconde.";
 		}
 		if (checkidle() >= 29) {
+			bg_leave;
 			dispbottom "Vous avez été éjecté du Battleground après 30 secondes d'inactivité.";
 			warp "SavePoint",0,0;
 		}
@@ -387,6 +389,5 @@ bat_room,157,146,3	script	Battleground Eject	81,10,10,{
 }
 
 // battleground mapflags
-
 bat_b01	mapflag	loadevent
 
