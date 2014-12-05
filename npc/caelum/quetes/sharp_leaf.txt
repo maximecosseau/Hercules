@@ -1,0 +1,242 @@
+//===== rAthena Script =======================================
+//= iRO Repeatable EXP Quests.
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena SVN
+//===== Description: =========================================
+//= [Aegis Conversion]
+//= Added Monster Killing quests.
+//= Repeatable EXP Quest (Sharp Leaves)
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//============================================================
+
+um_fild01,34,281,5	script	Lilla#Dryad_Hunt	724,{
+	if (questprogress(60131) != 0) {
+		if (questprogress(60131,HUNTING) != 2 ) {
+			mes "[Lilla]";
+			mes "Tu as fini de chasser les 50 Dryads ?";
+			next;
+			switch(select("Oui:Non:J'abandonne")) {
+			case 1:
+				mes "[Lilla]";
+				mes "Je ne pense pas que tu en ai chassé 50...";
+				close;
+			case 2:
+				mes "[Lilla]";
+				mes "Rappele-toi, j'ai besoin d'aide pour chasser 50 Dryads !";
+				close;
+			case 3:
+				mes "[Lilla]";
+				mes "Tu es sur de vouloir abandonner la chasse ?";
+				mes "Tout ce que tu aura chassé sera perdu.";
+				next;
+				switch(select("Oui:Non")) {
+				case 1:
+					mes "[Lilla]";
+					mes "Bon d'accord, alors, reviens me voir si tu change d'avis.";
+					erasequest 60131;
+					close;
+				case 2:
+					mes "[Lilla]";
+					mes "Va tuer 50 Dryads s'il te plaît.";
+					close;
+				}
+			}
+		}
+		else {
+			mes "[Lilla]";
+			mes "Tu as fais ça si vite ! Impressionnant !";
+			getexp 262485,141835;
+			erasequest 60131;
+			close;
+		}
+	}
+	if (questprogress(60132) != 0) {
+		if (questprogress(60132,HUNTING) != 2 ) {
+			mes "[Lilla]";
+			mes "Tu as fini de chasser ces 100 Dryads ?";
+			next;
+			switch(select("Oui:Non:J'abandonne")) {
+			case 1:
+				mes "[Lilla]";
+				mes "Je ne pense pas que tu en ai chassé 100...";
+				close;
+			case 2:
+				mes "[Lilla]";
+				mes "Rappele-toi, j'ai besoin d'aide pour chasser 100 Dryads !";
+				close;
+			case 3:
+				mes "[Lilla]";
+				mes "Tu es sur de vouloir abandonner la chasse ?";
+				mes "Tout ce que tu aura chassé sera perdu.";
+				next;
+				switch(select("Oui:Non")) {
+				case 1:
+					mes "[Lilla]";
+					mes "Bon d'accord, alors, reviens me voir si tu change d'avis.";
+					erasequest 60132;
+					close;
+				case 2:
+					mes "[Lilla]";
+					mes "Va tuer 100 Dryads s'il te plaît.";
+					close;
+				}
+			}
+		}
+		else {
+			mes "[Lilla]";
+			mes "Tu as fais ça si vite ! Impressionnant !";
+			getexp 262485,141835;
+			getexp 262485,141835;
+			erasequest 60132;
+			close;
+		}
+	}
+	if (questprogress(60133) != 0) {
+		if (questprogress(60133,HUNTING) != 2 ) {
+			mes "[Lilla]";
+			mes "Tu as fini de chasser ces 150 Dryads ?";
+			next;
+			switch(select("Oui:Non:J'abandonne")) {
+			case 1:
+				mes "[Lilla]";
+				mes "Je ne pense pas que tu en ai chassé 150...";
+				close;
+			case 2:
+				mes "[Lilla]";
+				mes "Rappele-toi, j'ai besoin d'aide pour chasser 150 Dryads !.";
+				close;
+			case 3:
+				mes "[Lilla]";
+				mes "Tu es sur de vouloir abandonner la chasse ?";
+				mes "Tout ce que tu aura chassé sera perdu.";
+				next;
+				switch(select("Oui:Non")) {
+				case 1:
+					mes "[Lilla]";
+					mes "Bon d'accord, alors, reviens me voir si tu change d'avis.";
+					erasequest 60133;
+					close;
+				case 2:
+					mes "[Lilla]";
+					mes "Va tuer 150 Dryads s'il te plaît.";
+					close;
+				}
+			}
+		}
+		else {
+			mes "[Lilla]";
+			mes "Tu as fais ça si vite ! Impressionnant !";
+			getexp 262485,141835;
+			getexp 262485,141835;
+			getexp 262485,141835;
+			erasequest 60133;
+			close;
+		}
+	}
+	//for minimum level
+	if (BaseLevel > 59) {
+		//for maximum level
+		if (BaseLevel < 86) {
+			mes "[Lilla]";
+			mes "Bien le bonjour !";
+			mes "Tu ressemble à quelqu'un qui pourrait peut-être me donner un coup de main";
+			next;
+			switch(select("Pourquoi pas !:Non désolé...")) {
+			case 1:
+				mes "[Lilla]";
+				mes "Sérieusement ?!";
+				mes "Génial !";
+				next;
+				switch(select("Récupérer des items:Chasser des Dryads:Tout compte fait...")) {
+				case 1:
+					// Item turn in
+					mes "[Lilla]";
+					mes "J'ai vraiment besoin que tu m'apporte des ^00CE0050 Sharp Leafs^000000 pour ma collection de thé.";
+					mes "Tu en aurais sur toi ?";
+					next;
+					switch(select("J'ai quelques Sharp Leafs oui:De quoi tu as besoin déjà ?")) {
+					case 1:
+						/*
+						if (checkweight(504,10) == 0) {
+							mes "[Lilla]";
+							mes "Hey on dirait que ça pèse lourd.";
+							mes "Tu va te briser le dos. Reviens";
+							mes "quand tu aura perdu un peu de poids.";
+							close;
+						}
+						*/
+						if (countitem(7100) > 49) {
+							mes "[Lilla]";
+							mes "T'es une personne en or.";
+							mes "Merci mille fois de m'avoir aidé !";
+							next;
+							mes "[Lilla]";
+							mes "Oh, j'allais presque oublier, voila pour toi ^_^";
+							mes "Merci encore pour ton aide.";
+							delitem 7100,50; //Sharp_Leaf
+							getexp 262485,141835;
+							//getitem 504,10; //White_Potion
+							close;
+						}
+						else {
+							mes "[Lilla]";
+							mes "Pourquoi tu fais ça ? J'ai peut-être l'air mignonne mais ne te moque pas de moi.";
+							close;
+						}
+					case 2:
+						mes "[Lilla]";
+						mes "J'ai besoin de ^00CE0050 Sharp Leafs^000000.";
+						close;
+					}
+				case 2:
+					// Kill Count Quest
+					mes "[Lilla]";
+					mes "Ah d'accord, je pense que tu peux m'aider et chasser quelques Dryads.";
+					mes "Combien tu serais prêt à en chasser ?";
+					next;
+					switch(select("50 Dryads:100 Dryads:150 Dryads")) {
+					case 1:
+						mes "[Lilla]";
+						mes "Reviens me voir quand tu as fini et je te donnerais un petit quelque chose.";
+						setquest 60131;
+						close;
+					case 2:
+						mes "[Lilla]";
+						mes "Reviens me voir quand tu as fini et je te donnerais un petit quelque chose.";
+						setquest 60132;
+						close;
+					case 3:
+						mes "[Lilla]";
+						mes "Reviens me voir quand tu as fini et je te donnerais un petit quelque chose.";
+						setquest 60133;
+						close;
+					}
+				case 3:
+					mes "[Lilla]";
+					mes "Si tu change d'avis, reviens me voir.";
+					close;
+				}
+			case 2:
+				mes "[Lilla]";
+				mes "Si tu change d'avis, reviens me voir.";
+				close;
+			}
+		}
+		else {
+			mes "[Lilla]";
+			mes "Désolé mais tu me fais trop peur je veux pas te parler.";
+			close;
+		}
+	}
+	else {
+		mes "[Lilla]";
+		mes "Tu n'as pas ce qu'il faut pour m'aider...";
+		mes "Merci quand-même pour ton offre.";
+		close;
+	}
+}

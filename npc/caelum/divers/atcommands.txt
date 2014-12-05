@@ -9,6 +9,27 @@
 //
 //------------------------------------------------------------//
 
+// -- @reloadnpc -----------------------------------------------
+// Reload un seul fichier de npc
+-	script	atcommand_reloadnpc	-1,{
+	end;
+
+OnInit:
+	bindatcmd "reloadnpc",strnpcinfo(0)+"::OnAtcommand",4,100,1;
+	end;
+	
+OnAtcommand:
+	if (.@atcmd_numparameters == 1) {
+		atcommand "@unloadnpcfile " + .@atcmd_parameters$[0];
+		sleep2 1000;
+		atcommand "@loadnpc " + .@atcmd_parameters$[0];
+	}
+	else {
+		dispbottom "Chemin du script invalide, doit être sous la forme npc/caelum/script.txt";
+	}
+	end;
+}
+
 // -- @storage -----------------------------------------------
 // Bloque l'utilisation de @storage sur les maps GvG
 -	script	atcommand_storage	-1,{
