@@ -1,0 +1,503 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Hats Customs
+//
+// - Créé par : Energy
+//
+// - Description : Quetes permettant d'obtenir des hats non dropables
+//
+// - Hats disponibles :
+//    Sunglasses Slot
+//    Robo Eyes
+//    Gentleman Pipe
+//    Yellow Ribbon
+//    Alice Doll
+//    Gigantic Magestic Goat
+//    Ramen Hat
+//------------------------------------------------------------//
+
+//----Sunglasses Slot----//
+
+comodo,160,282,3	script	Rayshune	866,{
+	mes "[^5EABEARayshune^000000]";
+	mes "Salut toi !";
+	mes "Tu veux pas des superbes lunettes slottées ?";
+	mes "En plus t'aurais trop la classe avec ça !";
+	mes "Alors tu veux ?";
+	next;
+	menu "Il me faut quoi pour ça ?",L_required,"J'ai toute ta camelotte !",L_check,"T'es fou l'vieux !",L_partir;
+
+	L_required:
+		mes "[^5EABEARayshune^000000]";
+		mes "^FF00001^000000 Black Dyestuffs"; //983
+		mes "^FF00001^000000 Jack be Dandy"; //2271
+		mes "^FF00001^000000 Sunglasses"; //2201
+		mes "^0000FF10000000^000000 zeny";
+		close;
+
+	L_check:
+		if(countitem(983) < 1) goto L_manque;
+		if(countitem(2271) < 1) goto L_manque;
+		if(countitem(2201) < 1) goto L_manque;
+		if(Zeny < 10000000) goto L_manque;
+		mes "[^5EABEARayshune^000000]";
+		mes "Et bien voila !";
+		mes "Je pense que ça n'a pas été facile pas vrai ?";
+		mes "Allez, voila pour toi ! Et non pour 1z de plus tu n'as pas de seconde paire";
+		delitem 983,1;
+		delitem 2271,1;
+		delitem 2201,1;
+		set Zeny, Zeny - 1000000;
+		getitem 2202,1;
+		close;
+
+	L_manque:
+	
+		mes "[^5EABEARayshune^000000]";
+		mes "Il te manque";
+		if(countitem(7086) < 1) mes "^FF0000"+(1 - countitem(983)) +"^000000 Black Dyestuffs";
+		if(countitem(2271) < 1) mes "^FF0000"+(1 - countitem(2271)) +"^000000 Jack be Dandy";
+		if(countitem(2201) < 1) mes "^FF0000"+(1 - countitem(2201)) +"^000000 Sunglasses";
+		if(Zeny < 10000000) mes "^0000FF"+(10000000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^5EABEARayshune^000000]";
+		mes "Passe une bonne journée !";
+		close;
+}
+
+//----Robo Eyes----//
+
+sec_in01,78,36,4	script	Ingenieur	748,{
+	mes "[^265A77Ingenieur^000000]";
+	mes "Salut toi !";
+	mes "Tu voudrais pas m'aider par hasard ?";
+	mes "J'ai perdu mes lunettes ultra-perfectionnées et j'en ai besoin !";
+	mes "Si tu m'aide je te fais même une paire pour toi !";
+	next;
+	menu "Il me faut quoi pour t'aider ?",L_required,"Je crois que j'ai tout ce qu'il te faut.",L_check,"Pas que ça à faire !",L_partir;
+
+	L_required:
+		mes "[^265A77Ingenieur^000000]";
+		mes "^FF000025^000000 Fragment"; //7094
+		mes "^FF00002^000000 Crest Piece"; //7358
+		mes "^FF000010^000000 Transparent Plate"; //7353
+		mes "^FF000020^000000 Rusty Crews"; //7317
+		mes "^0000FF100000^000000 zeny";
+		close;
+
+	L_check:
+		if(countitem(7094) < 25) goto L_manque;
+		if(countitem(7358) < 2) goto L_manque;
+		if(countitem(7353) < 10) goto L_manque;
+		if(countitem(7317) < 20) goto L_manque;
+		if(Zeny < 100000) goto L_manque;
+		mes "[^265A77Ingenieur^000000]";
+		mes "Et bien voila qui me sauve ! ";
+		mes "C'était pas très facile je présume si ?";
+		mes "Allez, voila pour toi ! Et encore merci !! ^__^";
+		delitem 7094,25;
+		delitem 7358,2;
+		delitem 7353,10;
+		delitem 7317,20;
+		set Zeny, Zeny - 100000;
+		getitem 5325,1;
+		close;
+
+	L_manque:
+		mes "[^265A77Ingenieur^000000]";
+		mes "Il manque";
+		if(countitem(7094) < 25) mes "^FF0000"+(25 - countitem(7094)) +"^000000 Fragment";
+		if(countitem(7358) < 2) mes "^FF0000"+(2 - countitem(7358)) +"^000000 Crest Piece";
+		if(countitem(7353) < 10) mes "^FF0000"+(10 - countitem(7353)) +"^000000 Transparent Plate";
+		if(countitem(7317) < 20) mes "^FF0000"+(20 - countitem(7317)) +"^000000 Rusty Crews";
+		if(Zeny < 100000) mes "^0000FF"+(100000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^265A77Ingenieur^000000]";
+		mes "Bonne journée et merci !";
+		close;
+}
+
+//----Gentleman Pipe----//
+
+umbala,138,226,4	script	Umgoro	784,{
+	mes "[^000000Umgoro^000000]";
+	mes "Bonjour vous !";
+	mes "Nous avoir besoin ressources !";
+	mes "Nous bien récompenser vous si vous nous aider !";
+	mes "";
+	next;
+	menu "J'ai pas tout compris mais il me faut quoi ?",L_required,"Moi avoir tout",L_check,"Euh... Moi pas comprendre",L_partir;
+
+	L_required:
+		mes "[^000000Umgoro^000000]";
+		mes "^FF00001^000000 Pipe"; //2268
+		mes "^FF000050^000000 Rough Elunium"; //757
+		mes "^FF000050^000000 Trunk"; //1019
+		mes "^FF000050^000000 Fine-Grained Trunk"; //1067
+		mes "^FF000050^000000 Solid Trunk"; //1068
+		mes "^FF000050^000000 Barren Trunk"; //1069
+		mes "^FF00001^000000 Golden Tulip Flower"; //7951
+		mes "^0000FF1000000^000000 zeny";
+		next;
+		mes "^000000Soupira^000000]";
+		mes "Pour la Tulipe en Or, ^B30000trouvez Elika à Dewata^000000, elle saura comment en fabriquer";
+		close;
+
+	L_check:
+		if(countitem(2268) < 1) goto L_manque;
+		if(countitem(757) < 50) goto L_manque;
+		if(countitem(1019) < 50) goto L_manque;
+		if(countitem(1067) < 50) goto L_manque;
+		if(countitem(1068) < 50) goto L_manque;
+		if(countitem(1069) < 50) goto L_manque;
+		if(countitem(7951) < 1) goto L_manque;
+		if(Zeny < 1000000) goto L_manque;
+		mes "[^000000Umgoro^000000]";
+		mes "Oh vous être revenu ! ";
+		mes "Merci vous avoir aidé nous !";
+		delitem 2268,1;
+		delitem 757,50;
+		delitem 1019,50;
+		delitem 1067,50;
+		delitem 1068,50;
+		delitem 1069,50;
+		delitem 7951,1;
+		set Zeny, Zeny - 1000000;
+		getitem 5377,1;
+		close;
+
+	L_manque:
+		mes "[^000000Umgoro^000000]";
+		mes "Vous manquer";
+		if(countitem(2268) < 1) mes "^FF0000"+(1 - countitem(2268)) +"^000000 Pipe";
+		if(countitem(757) < 50) mes "^FF0000"+(50 - countitem(757)) +"^000000 Rough Elunium";
+		if(countitem(1019) < 50) mes "^FF0000"+(50 - countitem(1019)) +"^000000 Trunk";
+		if(countitem(1067) < 50) mes "^FF0000"+(50 - countitem(1067)) +"^000000 Fine-Grained Trunk";
+		if(countitem(1068) < 50) mes "^FF0000"+(50 - countitem(1068)) +"^000000 Solid Trunk";
+		if(countitem(1069) < 50) mes "^FF0000"+(50 - countitem(1069)) +"^000000 Barren Trunk";
+		if(countitem(7951) < 1) mes "^FF0000"+(1 - countitem(7951)) +"^000000 Golden Tulip Flower";
+		if(Zeny < 1000000) mes "^0000FF"+(1000000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Umgoro^000000]";
+		mes "Au revoir";
+		close;
+}
+
+//----Yellow Ribbon----//
+
+in_orcs01,41,183,4	script	Soupira	431,{
+	mes "[^000000Soupira^000000]";
+	mes "Bonjour ! Enfin... Pas vraiment";
+	mes "Tu n'est pas un symbole de beauté, pas comme moi ! Ha !";
+	mes "Tu veux de l'aide ? Voila ma recette miracle";
+	next;
+	menu "Que me faut-il ?",L_required,"J'ai tout ce qui vous faut !",L_check,"C'est une blague j'imagine ? Mauvaise journée aussi !",L_partir;
+
+	L_required:
+		mes "[^000000Soupira^000000]";
+		mes "^FF000025^000000 Gold"; //969
+		mes "^FF00001^000000 Ribbon"; //2209
+		mes "^FF00001^000000 Big Ribbon"; //2244
+		mes "^FF00001^000000 Golden Tulip Flower"; //7951
+		mes "^FF00001^000000 Spiky Band"; //2258
+		mes "^0000FF100000^000000 zeny";
+		next;
+		mes "^000000Soupira^000000]";
+		mes "Pour la Tulipe en Or, ^B30000trouvez Elika à Dewata^000000, elle saura comment en fabriquer";
+		close;
+
+	L_check:
+		if(countitem(969) < 25) goto L_manque;
+		if(countitem(2209) < 1) goto L_manque;
+		if(countitem(2244) < 1) goto L_manque;
+		if(countitem(7951) < 1) goto L_manque;
+		if(countitem(2258) < 1) goto L_manque;
+		if(Zeny < 100000) goto L_manque;
+		mes "[^000000Soupira^000000]";
+		mes "Oh vous êtes revenu ! ";
+		mes "Merci de ton aide !";
+		delitem 969,25;
+		delitem 2209,1;
+		delitem 2244,1;
+		delitem 7951,1;
+		delitem 2258,1;
+		set Zeny, Zeny - 100000;
+		getitem 5278,1;
+		close;
+
+	L_manque:
+		mes "[^000000Soupira^000000]";
+		mes "Il manque encore";
+		if(countitem(969) < 25) mes "^FF0000"+(25 - countitem(969)) +"^000000 Gold";
+		if(countitem(2209) < 1) mes "^FF0000"+(1 - countitem(2209)) +"^000000 Ribbon";
+		if(countitem(2244) < 1) mes "^FF0000"+(1 - countitem(2244)) +"^000000 Big Ribbon";
+		if(countitem(7951) < 1) mes "^FF0000"+(1 - countitem(7951)) +"^000000 Golden Tulip Flower";
+		if(countitem(2258) < 1) mes "^FF0000"+(1 - countitem(2258)) +"^000000 Spiky Band";
+		if(Zeny < 100000) mes "^0000FF"+(100000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Soupira^000000]";
+		mes "Au revoir laideron !";
+		close;
+}
+
+//----Golden Tulip Flower (pour Yellow Ribbon)----//
+
+dewata,248,224,4	script	Elika	91,{
+	mes "[^000000Elika^000000]";
+	mes "Je suis sur le point de créer la plus magnifique des fleurs !";
+	mes "Mais j'ai besoin d'aide...";
+	mes "Tu veux bien m'aider ?";
+	next;
+	menu "Que me faut-il ?",L_required,"J'ai tout ce qui vous faut !",L_check,"Désolé j'ai peur de n'être d'aucun secours.",L_partir;
+
+	L_required:
+		mes "[^000000Elika^000000]";
+		mes "^FF000025^000000 Gold"; //969
+		mes "^FF00001^000000 Love Flower"; //7864
+		mes "^FF00001^000000 Romantic Flower"; //2269
+		mes "^FF00001^000000 Singing Flower"; //629
+		mes "^FF00001^000000 Withered Flower"; //6086
+		mes "^FF00001^000000 Valhalla Flower"; //7510
+		mes "^0000FF100000^000000 zeny";
+		next;
+		close;
+
+	L_check:
+		if(countitem(969) < 25) goto L_manque;
+		if(countitem(7864) < 1) goto L_manque;
+		if(countitem(2269) < 1) goto L_manque;
+		if(countitem(629) < 1) goto L_manque;
+		if(countitem(6086) < 1) goto L_manque;
+		if(countitem(7510) < 1) goto L_manque;
+		if(Zeny < 100000) goto L_manque;
+		mes "[^000000Elika^000000]";
+		mes "Oh vous êtes revenu ! ";
+		mes "Merci de ton aide !";
+		delitem 969,25;
+		delitem 7864,1;
+		delitem 2269,1;
+		delitem 629,1;
+		delitem 6086,1;
+		delitem 7510,1;
+		set Zeny, Zeny - 100000;
+		getitem 7951,1;
+		close;
+
+	L_manque:
+		mes "[^000000Elika^000000]";
+		mes "Il manque encore";
+		if(countitem(969) < 25) mes "^FF0000"+(25 - countitem(969)) +"^000000 Gold";
+		if(countitem(7864) < 1) mes "^FF0000"+(1 - countitem(7864)) +"^000000 Love Flower";
+		if(countitem(2269) < 1) mes "^FF0000"+(1 - countitem(2269)) +"^000000 Romantic Flower";
+		if(countitem(629) < 1) mes "^FF0000"+(1 - countitem(629)) +"^000000 Singing Flower";
+		if(countitem(6086) < 1) mes "^FF0000"+(1 - countitem(6086)) +"^000000 Withered Flower";
+		if(countitem(7510) < 1) mes "^FF0000"+(1 - countitem(7510)) +"^000000 Valhalla Flower";
+		if(Zeny < 100000) mes "^0000FF"+(100000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Elika^000000]";
+		mes "Au revoir";
+		close;
+}
+
+//----Alice Doll----//
+
+lhz_in02,273,222,4	script	Halliciel	894,{
+	mes "[^000000Halliciel^000000]";
+	mes "Bonjour !";
+	mes "Il me manque quelques poupées pour finir ma collection";
+	mes "Vous voudriez bien m'aider à les confectionner ?";
+	mes "Il me faut seulement quelques fournitures...";
+	next;
+	menu "Pourquoi pas ! ",L_required,"J'ai ce qu'il faut !",L_check,"Partir",L_partir;
+
+	L_required:
+		mes "[^000000Halliciel^000000]";
+		mes "^FF0000175^000000 Alice's Apron"; //7047
+		mes "^FF000050^000000 Soft Silk"; //7166
+		mes "^FF000050^000000 Black Hair"; //1020
+		mes "^FF00001^000000 Marionette Doll"; //5141
+		mes "^FF000010^000000 Soft Apron"; //661
+		mes "^FF00001^000000 Cobalt Blue Dyestuff"; //978
+		mes "^FF00001^000000 White Dyestuff"; //982
+		mes "^0000FF150000^000000 zeny";
+		close;
+
+	L_check:
+		if(countitem(7047) < 175) goto L_manque;
+		if(countitem(7166) < 50) goto L_manque;
+		if(countitem(1020) < 50) goto L_manque;
+		if(countitem(5141) < 1) goto L_manque;
+		if(countitem(661) < 10) goto L_manque;
+		if(countitem(978) < 1) goto L_manque;
+		if(countitem(982) < 1) goto L_manque;
+		if(Zeny < 150000) goto L_manque;
+		mes "[^000000Halliciel^000000]";
+		mes "Oh vous avez reussi ! Génial !";
+		mes "Grace à ça je vais pouvoir finir ma collection !";
+		mes "Merci mille fois ! ^__^";
+		delitem 7047,175;
+		delitem 7166,50;
+		delitem 1020,50;
+		delitem 5141,1;
+		delitem 661,10;
+		delitem 978,1;
+		delitem 982,1;
+		set Zeny, Zeny - 150000;
+		getitem 5132,1;
+		close;
+
+	L_manque:
+		mes "[^000000Halliciel^000000]";
+		mes "Il manque";
+		if(countitem(7047) < 175) mes "^FF0000"+(175 - countitem(7047)) +"^000000 Alice's Apron";
+		if(countitem(7166) < 50) mes "^FF0000"+(50 - countitem(7166)) +"^000000 Soft Silk";
+		if(countitem(1020) < 50) mes "^FF0000"+(50 - countitem(1020)) +"^000000 Black Hair";
+		if(countitem(5141) < 1) mes "^FF0000"+(1 - countitem(5141)) +"^000000 Marionette Doll";
+		if(countitem(661) < 10) mes "^FF0000"+(10 - countitem(661)) +"^000000 Soft Apron";
+		if(countitem(978) < 1) mes "^FF0000"+(1 - countitem(978)) +"^000000 Cobalt Blue Dyestuff";
+		if(countitem(982) < 1) mes "^FF0000"+(1 - countitem(982)) +"^000000 White Dyestuff";
+		if(Zeny < 150000) mes "^0000FF"+(150000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Halliciel^000000]";
+		mes "Bonne journée !";
+		close;
+}
+
+//----Gigantic Magestic Goat----//
+
+xmas,232,310,4	script	Ground	873,{
+	mes "[^000000Ground^000000]";
+	mes "Bonjour ! Bravo vous avez reussi à me trouver !";
+	mes "Comment ça je vous fais pas peur ? Mais...";
+	mes "Je suis un rêne parlant et qui fume !";
+	mes "Bref passons ! J'ai une offre à vous faire";
+	mes "Apportez moi ce qu'il faut et je vous ferais";
+	mes "Un magnifique trophée pour chez vous !";
+	next;
+	menu "Deal !",L_required,"J'ai ce qu'il faut !",L_check,"Partir",L_partir;
+
+	L_required:
+		mes "[^000000Ground^000000]";
+		mes "^FF00001^000000 Cursed Baphomet Doll"; //6004
+		mes "^FF00001^000000 Magestic Goat"; //2256
+		mes "^FF000055^000000 Crystal of Darkness"; //7799
+		mes "^FF000075^000000 Fragment of Darkness"; //7798
+		mes "^FF00001^000000 Gigantic Magestic Goat ( "; //5374
+		mes "^0000FF150000^000000 zeny";
+		close;
+
+	L_check:
+		if(countitem(6004) < 1) goto L_manque;
+		if(countitem(2256) < 1) goto L_manque;
+		if(countitem(7799) < 55) goto L_manque;
+		if(countitem(7798) < 75) goto L_manque;
+		if(countitem(5374) < 1) goto L_manque;
+		if(Zeny < 150000) goto L_manque;
+		mes "[^000000Ground^000000]";
+		mes "Oh vous avez reussi ! Génial !";
+		mes "Grace à ça vous pourrez vous vanter d'avoir cet objet !";
+		mes "Bonne journée :)";
+		delitem 6004,1;
+		delitem 2256,1;
+		delitem 7799,55;
+		delitem 7798,75;
+		delitem 5374,1;
+		set Zeny, Zeny - 150000;
+		getitem 5518,1;
+		close;
+
+	L_manque:
+		mes "[^000000Ground^000000]";
+		mes "Il te manque";
+		if(countitem(6004) < 1) mes "^FF0000"+(1 - countitem(6004)) +"^000000 Cursed Baphomet Doll";
+		if(countitem(2256) < 1) mes "^FF0000"+(1 - countitem(2256)) +"^000000 Magestic Goat";
+		if(countitem(7799) < 55) mes "^FF0000"+(55 - countitem(7799)) +"^000000 Crystal of Darkness";
+		if(countitem(7798) < 75) mes "^FF0000"+(75 - countitem(7798)) +"^000000 Fragment of Darkness";
+		if(countitem(5374) < 1) mes "^FF0000"+(1 - countitem(5374)) +"^000000 Gigantic Magestic Goat ( ";
+		if(Zeny < 150000) mes "^0000FF"+(150000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Ground^000000]";
+		mes "Bonne journée !";
+		close;
+}
+
+//----Ramen Hat----//
+
+lou_in02,52,182,4	script	Natoru	886,{
+	mes "[^000000Natoru^000000]";
+	mes "Salut ptit gars !";
+	mes "Vous gouterez bien ma recette spéciale non ?!";
+	mes "Par contre le resto est sur la paille donc,";
+	mes "il va falloir que tu aille me chercher les ingrédients !";
+	next;
+	menu "Euh... Il vous faut quoi ?",L_required,"J'ai ce qu'il vous faut !",L_check,"J'ai pas faim merci",L_partir;
+
+	L_required:
+		mes "[^000000Natoru^000000]";
+		mes "^FF00002^000000 Tantan Noodles"; //12395
+		mes "^FF00005^000000 Hwergelmir's Tonic"; //12095
+		mes "^FF00001^000000 Battered Pot"; //10010
+		mes "^FF000075^000000 Green Herb"; //511
+		mes "^FF000075^000000 Yellow Herb"; //508
+		mes "^FF000075^000000 Mushroom Spore"; //921
+		mes "^FF000050^000000 Spoon Stub"; //7016
+		mes "^0000FF250000^000000 zeny";
+		close;
+
+	L_check:
+		if(countitem(12395) < 2) goto L_manque;
+		if(countitem(12095) < 5) goto L_manque;
+		if(countitem(10010) < 1) goto L_manque;
+		if(countitem(511) < 75) goto L_manque;
+		if(countitem(508) < 75) goto L_manque;
+		if(countitem(921) < 75) goto L_manque;
+		if(countitem(7016) < 50) goto L_manque;
+		if(Zeny < 250000) goto L_manque;
+		mes "[^000000Natoru^000000]";
+		mes "Régale toi bien !";
+		mes "A plus mon gars !";
+		delitem 12395,2;
+		delitem 12095,5;
+		delitem 10010,1;
+		delitem 511,75;
+		delitem 508,75;
+		delitem 921,75;
+		delitem 7016,50;
+		set Zeny, Zeny - 250000;
+		getitem 5293,1;
+		close;
+
+	L_manque:
+		mes "[^000000Natoru^000000]";
+		mes "Il te faut";
+		if(countitem(12395) < 2) mes "^FF0000"+(2 - countitem(12395)) +"^000000 Tantan Noodles";
+		if(countitem(12095) < 5) mes "^FF0000"+(5 - countitem(12095)) +"^000000 Hwergelmir's Tonic";
+		if(countitem(10010) < 1) mes "^FF0000"+(1 - countitem(10010)) +"^000000 Battered Pot";
+		if(countitem(511) < 75) mes "^FF0000"+(75 - countitem(511)) +"^000000 Green Herb";
+		if(countitem(508) < 75) mes "^FF0000"+(75 - countitem(508)) +"^000000 Yellow Herb";
+		if(countitem(921) < 75) mes "^FF0000"+(75 - countitem(921)) +"^000000 Mushroom Spore";
+		if(countitem(7016) < 50) mes "^FF0000"+(50 - countitem(7016)) +"^000000 Spoon Stub";
+		if(Zeny < 250000) mes "^0000FF"+(250000 - Zeny)+"^000000 Zeny";
+		close;
+
+	L_partir:
+		mes "[^000000Natoru^000000]";
+		mes "Bonne journée !";
+		close;
+}
+

@@ -1,0 +1,550 @@
+//------------------------------------------------------------//
+//----- Caelum Custom Script ---------------------------------//
+//
+//  Event Noel 2014
+//
+// - Créé par : Moogle (21/11/2014) - (29/11/2014)
+//
+// - Description : Quête de Noël 2014
+//
+//------------------------------------------------------------//
+
+prontera,167,199,5	script	Fillette	793,{
+
+	mes "[Fillette]";
+	mes "Bonjour Monsieur...";
+	mes "Vous pourriez me rendre un service ?";
+	mes "Ma maman m'a dit que le père Noël ne serait pas prêt cette année.";
+	mes "Cela me rend bien triste...";
+	mes "Vous pouviez aller voir ce qui ne va pas ?";
+	mes "S'il vous plait...";
+	next;
+	
+	if (select("Oh non, ça m'ennui.","Oui ma petite, je vais voir ça.")==2) {
+		mes "[Fillette]";
+		mes "Oh oui super !";
+		mes "Merci énormément !";
+		mes "On m'a dit que vous pourriez le trouver à Lutie.";
+		mes "Je compte sur vous !";
+		close;
+	}	
+		
+	else {
+		mes "[Fillette]";
+		mes "Ah bon, je comprend...";
+		mes "N'hésitez pas à y aller si vous changez d'avis...";
+		close;
+	}
+	
+}
+
+xmas,204,206,3	script	Pere Noel	718,{
+	
+	mes "[Père Noël]";
+	mes "Bonjour mon brave ! Il fait froid non ?";
+	mes "Vous souhaitez vous réchauffer ?";
+	mes "Parce que j'ai exactement ce qu'il vous faut pour cela.";
+	mes "En effet, mes lutins ont fait la fête et nous sommes en retard.";
+	mes "Accepteriez-vous de nous aider ?";
+	next;
+	
+	if (select("Roo non, ça me barbe.","J'accepte avec joie !") ==2) {
+		mes "Super ! De la main d'oeuvre bon prix !";
+		mes "Heu non, je n'ai rien dit... *siflotte*";
+		next;
+		
+		mes "[Père Noël]";
+		mes "Donc, il faut que vous me rameniez :";
+		mes "100 feather";
+		mes "50 white herb";
+		mes "50 blue herb";
+		mes "2 level 1 frost driver";
+		mes "35 gift box";
+		next;
+		
+		mes "[Père Noël]";
+		mes "20 level 3 coldbolt";
+		mes "25 pearl";
+		mes "100 candy";
+		mes "50 piece of cake";
+		mes "50 candy cane";
+		mes "5 old blue box";
+		next;
+		
+		mes "[Père Noël]";
+		mes "1 matchstick";
+		mes "100 ice cubic";
+		mes "1 pinafore";
+		mes "1 nursing bottle";
+		mes "35 trunk";
+		mes "1 cookie card";
+		mes "50 puppet";
+		next;
+		
+		if (countitem(949) < 100 || countitem(509) < 50 || countitem(510) < 50 || countitem(12000) < 1 || countitem(644) < 35 || countitem(688) < 20 || countitem(722) < 25 || countitem(529) < 100 || countitem(530) < 50 || countitem(539) < 50 || countitem(603) < 5 || countitem(7035) < 1 || countitem(7066) < 100 || countitem(7269) < 1 || countitem(727) < 1 && countitem(1019) < 35 || countitem(4293) < 1 || countitem(740) < 50)
+			{
+			mes "[Père Noël]";
+			mes "Oh non, il vous manque des objets !";
+			close;
+			}
+		else {
+			delitem 949,100;	//feather//
+			delitem 509,50;		//white herb//
+			delitem 510,50;		//blue herb//
+			delitem 12000,1;	//level 1 frost driver//
+			delitem 644,35;		//giftbox//
+			delitem 688,20;		//level 3 coldbolt//
+			delitem 722,25;		//pearl//
+			delitem 529,100;	//candy//
+			delitem 530,50;		//piece of cake//
+			delitem 539,50;		//candy cane//
+			delitem 603,5;		//old blue box//
+			delitem 7035,1;		//matchstick//
+			delitem 7066,100;	//ice cubic//
+			delitem 7269,1;		//pinafore//
+			delitem 727,1;		//nursing bottle//
+			delitem 1019,35;	//trunk//
+			delitem 4293,1;		//cookie card//
+			delitem 740,50;		//puppet//
+			getitem 5742,1;   	//Rudolph santa hat//
+				mes "[Père Noël]";
+				mes "Merci bien pour votre aide, voici votre récompense.";
+				mes "Espérons que les cadeaux pourront être livré à temps.";
+				mes "Oh, mais c'est étrange que ma fille ne soit pas revenu de sa collecte de lettres.";
+				mes "Pouvez vous aller la voir dans le village au sud de lutie ?";
+				close;
+		}
+		
+	}
+	
+	else {
+		mes "[Père Noël]";
+		mes "Foncez vers la cheminée vous réchauffer alors !";
+		close;
+	}
+}
+
+splendide,92,258,8	script	Panneau1	837,{
+	
+	mes "Papa Noël !";
+	mes "Cette année je veux devenir un grand voleur.";
+	mes "Cela te dérangerait d'aller me chercher des mushrooms à la cave ?";
+	mes "Bah oui, le test des voleurs est ennuyant...";
+	mes "Je savais que je pouvais compter sur toi !";
+	close;
+}
+
+malangdo,154,141,7	script	Panneau2	857,{
+	
+	mes "Miaw miaw Père Mioel !";
+	mes "Je voudrais un yarm gigantesque s'il te plait.";
+	mes "Et beaucoup de milk car les passants sont avares.";
+	mes "Si tu le fais, nous retarderons de quelques mois nos plans.";
+	mes "Ceux de la conquête de Caelum bien entendu.";
+	close;
+}
+
+manuk,197,187,5	script	Panneau3	858,{
+	
+	mes "Cher le papa noël,";
+	mes "J'ai été très sage toute l'année !";
+	mes "Alors s'il te plait, donne moi ce que je veux pour Noël.";
+	mes "Je voudrais que mon papa me fasse faire une balade à Peco,";
+	mes "Quand il ne travaille pas à la garde royale.";
+	mes "Merci papa Noël !";
+	close;
+}
+
+xmas_fild01,176,124,6	script	Fille Noel	714,{
+	
+	if (countitem(5742) < 1) {
+		
+		mes "[Fille Noël]";
+		mes "Ralala, c'est la misère, que vais-je faire ?";
+		mes "Oups, pardon, vous m'entendiez ?";
+		mes "Ah bah vous tombez bien tien !";
+		mes "Je n'ai pas eu le temps de récuperer des lettres.";
+		mes "Allez me les chercher !";
+		
+		if (select("Okay j'irai...","Au revoir~")) {
+			mes "[Fille Noël]";
+			mes "Elles ont été affichée sur les panneaux dans les villes.";
+			mes "Allez me chercher celle de Splendide.";
+			mes "Ne perdez pas de temps !";
+			Noel2014 = 1;
+			close;
+		}
+		
+		else {
+			mes "[Fille Noël]";
+			mes "...";
+			close;
+		}
+	}
+	else {
+		mes "[Fille Noël]";
+		mes "Je crois que mon papa a besoin d'aide.";
+		close;
+	}
+
+	
+	if (Noel2014 == 1) {
+		mes "[Fille Noël]";
+		mes "Alors, cette lettre ?";
+		next;
+		input @var1_1;
+			if (@var1_1=="Papa Noël !") {
+				next; }
+			else {
+				close;
+			}
+		input @var1_2;
+			if (@var1_2=="Cette année je veux devenir un grand voleur.") {
+				next; }
+			else {
+				close;
+			}	
+		input @var1_3;
+			if (@var1_3=="Cela te dérangerait d'aller me chercher des mushrooms à la cave ?") {
+				next; }
+			else {
+				close;
+			}
+		input @var1_4;
+			if (@var1_4=="Bah oui, le test des voleurs est ennuyant...") {
+				next; }
+			else {
+				close;
+			}
+		input @var1_5;
+			if (@var1_5=="Je savais que je pouvais compter sur toi !") {
+				mes "[Fille Noël]";
+				mes "C'est ça. Merci !";
+				mes "Bon, il m'en manquerait une à Malangdo également.";
+				mes "Vous pourriez me la trouver ?";
+				Noel2014 = 2;
+				next;
+				if (select("J'y fonce !","Non j'arrête")==1) {
+					mes "[Fille Noël]";
+					mes "Super, à Malangdo alors !";
+					close;
+				}
+				else {
+					mes "[Fille Noël]";
+					mes "Je comprend...";
+					close;
+				}
+			}
+			else {
+				close;
+			}
+	}
+	
+	if (Noel2014 == 2) {
+		mes "[Fille Noël]";
+		mes "Alors, cette seconde lettre ?";
+		next;
+		input @var2_1;
+			if (@var2_1=="Miaw miaw Père Mioel !") {
+				next; }
+			else {
+				close;
+			}
+		input @var2_2;
+			if (@var2_2=="Je voudrais un yarm gigantesque s'il te plait.") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var2_3;
+			if (@var2_3=="Et beaucoup de milk car les passants sont avares.") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var2_4;
+			if (@var2_4=="Si tu le fais, nous retarderons de quelques mois nos plans.") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var2_5;
+			if (@var2_5=="Ceux de la conquête de Caelum bien entendu.") {
+				mes "[Fille Noël]";
+				mes "Ah génial, une en plus.";
+				mes "Il n'en reste qu'une seule à Manuk.";
+				mes "Vous pourriez aller la chercher ?";
+				Noel2014 = 3;
+				next;
+				if (select("Oh non c'est assez.","Avec joie.")==2) {
+					mes "[Fille Noël]";
+					mes "Super, je vous attend ici.";
+					mes "N'oubliez pas, à Manuk.";
+					close;
+				}
+				else {
+					mes "[Fille Noël]";
+					mes "Je comprend...";
+					mes "Joyeux Noël...";
+					close;
+				}
+			}
+			else {
+				close;
+			}		
+	}
+	
+	if (Noel2014 == 3) {
+		mes "[Fille Noël]";
+		mes "Vous avez réussi à trouver la dernière lettre ?";	
+		next;
+		input @var3_1;
+			if (@var3_1=="Cher le papa noël,") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var3_2;
+			if (@var3_2=="J'ai été très sage toute l'année !") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var3_3;
+			if (@var3_3=="Alors s'il te plait, donne moi ce que je veux pour Noël.") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var3_4;
+			if (@var3_4=="Je voudrais que mon papa me fasse faire une balade à Peco,") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var3_5;
+			if (@var3_5=="Quand il ne travaille pas à la garde royale.") {
+				next;
+			}
+			else {
+				close;
+			}
+		input @var3_6;
+			if (@var3_6=="Merci papa Noël !") {
+				mes "[Fille Noël]";
+				mes "Nous y sommes arrivés !";
+				mes "Nous avons maintenant toute les lettres.";
+				mes "Merci beaucoup à vous.";
+				next;
+				mes "[Fille Noël]";
+				mes "Tenez, un petit cadeau en remerciement.";
+				mes "Au fait, il me semble que le lutin de toy factory a besoin de quelque chose.";
+				mes "Allez donc voir, on ne sait jamais.";
+				getitem 12132,10;  // santa bags //
+				getitem 14550,10;  // firecrackers "merry christmas" //
+				Noel2014 = 4;
+				close;
+			}
+			else {
+				close;
+			}
+	}
+	if (Noel2014 >= 4)
+	{
+		mes "[Fille Noël]";
+		mes "Allez à Toy Factory pour voir si le lutin a besoin d'aide.";
+		mes "Encore merci pour m'avoir aidée.";
+		close;
+	}
+}
+
+
+xmas_dun02,43,229,5	script	Lutin Suspect	1265,{
+	
+	if (Noel2014 == 4) {
+		mes "[Lutin Suspect]";
+		mes "Bonjour à toi grand sauveur de Noël.";
+		mes "Ton nom est connu dans l'entreprise de Noël.";
+		mes "Pour te récompenser pour tes efforts,";
+		mes "Je te propose de nous aider à distribuer les cadeaux.";
+		next;
+		mes "[Lutin Suspect]";
+		mes "Je collectionne les porings coins.";
+		mes "Je t'échange des objets contre les porings coins (pc).";
+		mes "Choisi donc !";
+		next;
+		mes "[Lutin Suspect]";
+		mes "1 Twin Santa Hat pour 25 pc";
+		mes "3 Old card album pour 15 pc";
+		mes "3 Old purple box pour 10 pc";
+		mes "5 old blue box pour 5 pc";
+		mes "25 gift box pour 1 pc";
+		mes "4 santa bag pour 5 pc";
+		mes "40 dead branch pour 1 pc";
+		mes "3 bloody branch pour 15 pc";
+		mes "20 Xmas Firecrackers pour 1 pc";
+		mes "Que veux-tu ?";
+		next;
+		
+		switch(select("Twin Santa Hat:Old Card Album:Old Purple Box:Old Blue Box:Gif Box:Santa Bag:Dead Branch:Bloody Branch:Xmas Firecrackers"))
+		{
+			case 1:
+				if (countitem(7539) < 25) {
+					mes "[Lutin Suspect]";
+					mes "Vous n'avez pas ce qu'il faut.";
+					mes "Revenez avec 25 Poring coins.";
+					close;
+				}
+				else {
+					delitem 7539,25;		//poring coins//
+					getitem 5488,1;			//Twin Santa Hat//
+					mes "[Lutin Suspect]";
+					mes "Le voici, Joyeux Noël !";
+					close;
+				}
+			case 2:
+				if (countitem(7539) < 15) {
+					mes "[Lutin Suspect]";
+					mes "Vous n'avez pas ce qu'il faut.";
+					mes "Revenez avec 15 poring coins.";
+					close;
+				}
+				else {
+					delitem 7539,15;		//poring coins//
+					getitem 616,3;			//Old Card Album//
+					mes "[Lutin Suspect]";
+					mes "Et voilà, Joyeux Noël !";
+					close;
+				}
+				
+			case 3:
+				if (countitem(7539) < 10) {
+					mes "[Lutin Suspect]";
+					mes "Il vous faut 10 poring coins.";
+					mes "Vous n'en avez pas assez.";
+					close;
+				}
+				else {
+					delitem 7539,10;		//poring coins//
+					getitem 617,3;			//Old Purple Box//
+					mes "[Lutin Suspect]";
+					mes "Voili voilou les petites box.";
+					mes "Joueux Noël !";
+					close;
+				}
+				
+			case 4:
+				if (countitem(7539) < 5) {
+					mes "[Lutin Suspect]";
+					mes "Aha ! Vous pensiez m'avoir !";
+					mes "J'ai bien vu que vous n'aviez pas les 5 poring coins !";
+					close;
+				}
+				else {
+					delitem 7539,5;			//poring coins//
+					getitem 603,5;			//Old Blue Box//
+					mes "[Lutin Suspect]";
+					mes "Aller, voilà pour toi.";
+					mes "Joyeux Noël !";
+					close;
+				}
+					
+			case 5:
+				if (countitem(7539) < 1) {
+					mes "[Lutin Suspect]";
+					mes "Mais il en manque !";
+					mes "Je vous ai demandé 1 poring coin...";
+					close;
+				}
+				else {
+					delitem 7539,1;			//poring coins//
+					getitem 644,25;			//Gift Box//
+					mes "[Lutin Suspect]";
+					mes "Et des box qui partent !";
+					mes "Joyeux Noël !";
+					close;
+				}
+			
+			case 6:
+				if (countitem(7539) < 5) {
+					mes "[Lutin Suspect]";
+					mes "Et non, vous ne les aurez pas aujourd'hui.";
+					mes "Revenez avec 5 poring coins pour les avoir.";
+					close;
+				}
+				else {
+					delitem 7539,5;			//poring coins//
+					getitem 12132,4;		//Santa Bag//
+					mes "[Lutin Suspect]";
+					mes "Et des déguisements de Noël !";
+					mes "Passez de bonnes fêtes.";
+					close;
+				}
+					
+			case 7:
+				if (countitem(7539) < 1) {
+					mes "[Lutin Suspect]";
+					mes "Mais, je vous avais dit 1 poring coin.";
+					mes "Revenez avec si vous voulez vos dead branch.";
+					close;
+				}
+				else {
+					delitem 7539,1;			//Poring Coin//
+					getitem 604,40;			//Dead Branch//
+					mes "[Lutin Suspect]";
+					mes "Et des brindilles qui s'en vont !";
+					mes "Faites un bon feu pour Noël.";
+					close;
+				}
+				
+			case 8: 
+				if (countitem(7539) < 15) {
+					mes "[Lutin Suspect]";
+					mes "Ah, pas de gros monstre aujourd'hui.";
+					mes "Revenez avec 15 poring coins si vous les voulez.";
+					close;
+				}
+				else {
+					delitem 7539,15;		//Poring Coins//
+					getitem 12103,3;		//Bloody Branch//
+					mes "[Lutin Suspect]";
+					mes "Attention, elles semblent maléfiques.";
+					mes "Faites bien attention à vous pour Noël.";
+					close;
+				}
+					
+			case 9:
+				if (countitem(7539) < 1) {
+					mes "[Lutin Suspect]";
+					mes "Pas de feu aujourd'hui.";
+					mes "J'ai besoin d'un poring coin pour les fabriquer.";
+					close;
+				}
+				else {
+					delitem 7539,1;			//poring coins//
+					getitem 14550,20;		//Xmas Firecrackers//
+					mes "[Lutin Suspect]";
+					mes "Faites bien la fête avec ça !";
+					mes "Mais évitez les incendies à Noël !";
+					close;
+				}
+		}	
+	}
+	else {
+		mes "[Lutin Suspect]";
+		mes "Oh la la,...";
+		mes "Il me semble que le Père Noël a bien des difficultés.";
+		mes "Et ne parlons pas de la Fille Noël...";
+		mes "Si seulement je pouvais aller les aider...";
+		close;
+	}
+	
+}
+
