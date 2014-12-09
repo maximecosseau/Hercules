@@ -41,24 +41,26 @@ prontera,167,199,5	script	Fillette	793,{
 xmas,204,206,3	script	Pere Noel	718,{
 	
 	mes "[Père Noël]";
-	mes "Bonjour mon brave ! Il fait froid non ?";
+	mes "Bonjour mon brave !";
+	mes "Il fait froid non ?";
 	mes "Vous souhaitez vous réchauffer ?";
 	mes "Parce que j'ai exactement ce qu'il vous faut pour cela.";
-	mes "En effet, mes lutins ont fait la fête et nous sommes en retard.";
+	mes "Mes lutins ont fait la fête et nous sommes en retard.";
 	mes "Accepteriez-vous de nous aider ?";
 	next;
 	
 	if (select("Roo non, ça me barbe.","J'accepte avec joie !") ==2) {
-		mes "Super ! De la main d'oeuvre bon prix !";
+		mes "Super !";
+		mes "De la main d'oeuvre bon prix !";
 		mes "Heu non, je n'ai rien dit... *siflotte*";
 		next;
 		
 		mes "[Père Noël]";
-		mes "Donc, il faut que vous me rameniez :";
+		mes "Donc, il faut que vous me rameniez:";
 		mes "100 feather";
 		mes "50 white herb";
 		mes "50 blue herb";
-		mes "2 level 1 frost driver";
+		mes "2 level 5 frost driver";
 		mes "35 gift box";
 		next;
 		
@@ -81,17 +83,17 @@ xmas,204,206,3	script	Pere Noel	718,{
 		mes "50 puppet";
 		next;
 		
-		if (countitem(949) < 100 || countitem(509) < 50 || countitem(510) < 50 || countitem(12000) < 1 || countitem(644) < 35 || countitem(688) < 20 || countitem(722) < 25 || countitem(529) < 100 || countitem(530) < 50 || countitem(539) < 50 || countitem(603) < 5 || countitem(7035) < 1 || countitem(7066) < 100 || countitem(7269) < 1 || countitem(727) < 1 && countitem(1019) < 35 || countitem(4293) < 1 || countitem(740) < 50)
+		if (countitem(949) < 100 || countitem(509) < 50 || countitem(510) < 50 || countitem(12000) < 2 || countitem(644) < 35 || countitem(688) < 20 || countitem(722) < 25 || countitem(529) < 100 || countitem(530) < 50 || countitem(539) < 50 || countitem(603) < 5 || countitem(7035) < 1 || countitem(7066) < 100 || countitem(7269) < 1 || countitem(727) < 1 || countitem(1019) < 35 || countitem(4293) < 1 || countitem(740) < 50)
 			{
 			mes "[Père Noël]";
-			mes "Oh non, il vous manque des objets !";
+			mes "Oh non, il vous manque des objets!";
 			close;
 			}
 		else {
 			delitem 949,100;	//feather//
 			delitem 509,50;		//white herb//
 			delitem 510,50;		//blue herb//
-			delitem 12000,1;	//level 1 frost driver//
+			delitem 12000,2;	//level 5 frost driver//
 			delitem 644,35;		//giftbox//
 			delitem 688,20;		//level 3 coldbolt//
 			delitem 722,25;		//pearl//
@@ -157,67 +159,69 @@ manuk,197,187,5	script	Panneau3	858,{
 
 xmas_fild01,176,124,6	script	Fille Noel	714,{
 	
-	if (countitem(5742) < 1) {
-		
-		mes "[Fille Noël]";
-		mes "Ralala, c'est la misère, que vais-je faire ?";
-		mes "Oups, pardon, vous m'entendiez ?";
-		mes "Ah bah vous tombez bien tien !";
-		mes "Je n'ai pas eu le temps de récuperer des lettres.";
-		mes "Allez me les chercher !";
-		
-		if (select("Okay j'irai...","Au revoir~")) {
+	if (Noel2014 == 0) {
+		if (countitem(5742) >= 1) {
+			
 			mes "[Fille Noël]";
-			mes "Elles ont été affichée sur les panneaux dans les villes.";
-			mes "Allez me chercher celle de Splendide.";
-			mes "Ne perdez pas de temps !";
-			Noel2014 = 1;
-			close;
+			mes "Ralala, c'est la misère, que vais-je faire ?";
+			mes "Oups, pardon, vous m'entendiez ?";
+			mes "Ah bah vous tombez bien tiens !";
+			mes "Je n'ai pas eu le temps de récuperer des lettres.";
+			mes "Allez me les chercher !";
+			next;
+			
+			if (select("Okay j'irai...","Au revoir~") == 1) {
+				mes "[Fille Noël]";
+				mes "Elles ont été affichée sur les panneaux dans les villes.";
+				mes "Allez me chercher celle de Splendide.";
+				mes "Ne perdez pas de temps !";
+				Noel2014 = 1;
+				close;
+			}
+			
+			else {
+				mes "[Fille Noël]";
+				mes "...";
+				close;
+			}
 		}
-		
 		else {
 			mes "[Fille Noël]";
-			mes "...";
+			mes "Je crois que mon papa a besoin d'aide.";
 			close;
 		}
 	}
-	else {
-		mes "[Fille Noël]";
-		mes "Je crois que mon papa a besoin d'aide.";
-		close;
-	}
 
-	
 	if (Noel2014 == 1) {
 		mes "[Fille Noël]";
 		mes "Alors, cette lettre ?";
 		next;
-		input @var1_1;
-			if (@var1_1=="Papa Noël !") {
+		input @var1_1$;
+			if (@var1_1$=="Papa Noël !") {
 				next; }
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var1_2;
-			if (@var1_2=="Cette année je veux devenir un grand voleur.") {
+		input @var1_2$;
+			if (@var1_2$=="Cette année je veux devenir un grand voleur.") {
 				next; }
 			else {
-				close;
+				goto ERREUR;
 			}	
-		input @var1_3;
-			if (@var1_3=="Cela te dérangerait d'aller me chercher des mushrooms à la cave ?") {
+		input @var1_3$;
+			if (@var1_3$=="Cela te dérangerait d'aller me chercher des mushrooms à la cave ?") {
 				next; }
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var1_4;
-			if (@var1_4=="Bah oui, le test des voleurs est ennuyant...") {
+		input @var1_4$;
+			if (@var1_4$=="Bah oui, le test des voleurs est ennuyant...") {
 				next; }
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var1_5;
-			if (@var1_5=="Je savais que je pouvais compter sur toi !") {
+		input @var1_5$;
+			if (@var1_5$=="Je savais que je pouvais compter sur toi !") {
 				mes "[Fille Noël]";
 				mes "C'est ça. Merci !";
 				mes "Bon, il m'en manquerait une à Malangdo également.";
@@ -244,35 +248,35 @@ xmas_fild01,176,124,6	script	Fille Noel	714,{
 		mes "[Fille Noël]";
 		mes "Alors, cette seconde lettre ?";
 		next;
-		input @var2_1;
-			if (@var2_1=="Miaw miaw Père Mioel !") {
+		input @var2_1$;
+			if (@var2_1$=="Miaw miaw Père Mioel !") {
 				next; }
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var2_2;
-			if (@var2_2=="Je voudrais un yarm gigantesque s'il te plait.") {
+		input @var2_2$;
+			if (@var2_2$=="Je voudrais un yarm gigantesque s'il te plait.") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var2_3;
-			if (@var2_3=="Et beaucoup de milk car les passants sont avares.") {
+		input @var2_3$;
+			if (@var2_3$=="Et beaucoup de milk car les passants sont avares.") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var2_4;
-			if (@var2_4=="Si tu le fais, nous retarderons de quelques mois nos plans.") {
+		input @var2_4$;
+			if (@var2_4$=="Si tu le fais, nous retarderons de quelques mois nos plans.") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var2_5;
-			if (@var2_5=="Ceux de la conquête de Caelum bien entendu.") {
+		input @var2_5$;
+			if (@var2_5$=="Ceux de la conquête de Caelum bien entendu.") {
 				mes "[Fille Noël]";
 				mes "Ah génial, une en plus.";
 				mes "Il n'en reste qu'une seule à Manuk.";
@@ -301,43 +305,43 @@ xmas_fild01,176,124,6	script	Fille Noel	714,{
 		mes "[Fille Noël]";
 		mes "Vous avez réussi à trouver la dernière lettre ?";	
 		next;
-		input @var3_1;
-			if (@var3_1=="Cher le papa noël,") {
+		input @var3_1$;
+			if (@var3_1$=="Cher le papa noël,") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var3_2;
-			if (@var3_2=="J'ai été très sage toute l'année !") {
+		input @var3_2$;
+			if (@var3_2$=="J'ai été très sage toute l'année !") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var3_3;
-			if (@var3_3=="Alors s'il te plait, donne moi ce que je veux pour Noël.") {
+		input @var3_3$;
+			if (@var3_3$=="Alors s'il te plait, donne moi ce que je veux pour Noël.") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var3_4;
-			if (@var3_4=="Je voudrais que mon papa me fasse faire une balade à Peco,") {
+		input @var3_4$;
+			if (@var3_4$=="Je voudrais que mon papa me fasse faire une balade à Peco,") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var3_5;
-			if (@var3_5=="Quand il ne travaille pas à la garde royale.") {
+		input @var3_5$;
+			if (@var3_5$=="Quand il ne travaille pas à la garde royale.") {
 				next;
 			}
 			else {
-				close;
+				goto ERREUR;
 			}
-		input @var3_6;
-			if (@var3_6=="Merci papa Noël !") {
+		input @var3_6$;
+			if (@var3_6$=="Merci papa Noël !") {
 				mes "[Fille Noël]";
 				mes "Nous y sommes arrivés !";
 				mes "Nous avons maintenant toute les lettres.";
@@ -356,6 +360,7 @@ xmas_fild01,176,124,6	script	Fille Noel	714,{
 				close;
 			}
 	}
+	
 	if (Noel2014 >= 4)
 	{
 		mes "[Fille Noël]";
@@ -363,6 +368,13 @@ xmas_fild01,176,124,6	script	Fille Noel	714,{
 		mes "Encore merci pour m'avoir aidée.";
 		close;
 	}
+	
+ERREUR:
+
+	mes "[Fille Noël]";
+	mes "Je crois que tu t'es trompé.";
+	close;
+	
 }
 
 
@@ -370,10 +382,8 @@ xmas_dun02,43,229,5	script	Lutin Suspect	1265,{
 	
 	if (Noel2014 == 4) {
 		mes "[Lutin Suspect]";
-		mes "Bonjour à toi grand sauveur de Noël.";
-		mes "Ton nom est connu dans l'entreprise de Noël.";
-		mes "Pour te récompenser pour tes efforts,";
-		mes "Je te propose de nous aider à distribuer les cadeaux.";
+		mes "Bonjour à toi grand sauveur de Noël. Ton nom est connu dans l'entreprise de Noël.";
+		mes "Pour te récompenser pour tes efforts, je te propose de nous aider à distribuer les cadeaux.";
 		next;
 		mes "[Lutin Suspect]";
 		mes "Je collectionne les porings coins.";
