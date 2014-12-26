@@ -33,7 +33,7 @@ comodo,160,282,3	script	Rayshune	866,{
 		mes "^FF00001^000000 Black Dyestuffs"; //983
 		mes "^FF00001^000000 Jack be Dandy"; //2271
 		mes "^FF00001^000000 Sunglasses"; //2201
-		mes "^0000FF10000000^000000 zeny";
+		mes "^0000FF10 000 000^000000 zeny";
 		close;
 
 	L_check:
@@ -48,7 +48,7 @@ comodo,160,282,3	script	Rayshune	866,{
 		delitem 983,1;
 		delitem 2271,1;
 		delitem 2201,1;
-		set Zeny, Zeny - 1000000;
+		set Zeny, Zeny - 10000000;
 		getitem 2202,1;
 		close;
 
@@ -70,7 +70,7 @@ comodo,160,282,3	script	Rayshune	866,{
 
 //----Robo Eyes----//
 
-sec_in01,78,36,4	script	Ingenieur	748,{
+einbroch,48,107,4	script	Ingenieur	748,{
 	mes "[^265A77Ingenieur^000000]";
 	mes "Salut toi !";
 	mes "Tu voudrais pas m'aider par hasard ?";
@@ -138,9 +138,9 @@ umbala,138,226,4	script	Umgoro	784,{
 		mes "^FF00001^000000 Pipe"; //2268
 		mes "^FF000050^000000 Rough Elunium"; //757
 		mes "^FF000050^000000 Trunk"; //1019
-		mes "^FF000050^000000 Fine-Grained Trunk"; //1067
-		mes "^FF000050^000000 Solid Trunk"; //1068
-		mes "^FF000050^000000 Barren Trunk"; //1069
+		mes "^FF000050^000000 Fine-Grained Trunk"; //1066
+		mes "^FF000050^000000 Solid Trunk"; //1067
+		mes "^FF000050^000000 Barren Trunk"; //1068
 		mes "^FF00001^000000 Golden Tulip Flower"; //7951
 		mes "^0000FF1000000^000000 zeny";
 		next;
@@ -152,9 +152,9 @@ umbala,138,226,4	script	Umgoro	784,{
 		if(countitem(2268) < 1) goto L_manque;
 		if(countitem(757) < 50) goto L_manque;
 		if(countitem(1019) < 50) goto L_manque;
+		if(countitem(1066) < 50) goto L_manque;
 		if(countitem(1067) < 50) goto L_manque;
 		if(countitem(1068) < 50) goto L_manque;
-		if(countitem(1069) < 50) goto L_manque;
 		if(countitem(7951) < 1) goto L_manque;
 		if(Zeny < 1000000) goto L_manque;
 		mes "[^000000Umgoro^000000]";
@@ -163,9 +163,9 @@ umbala,138,226,4	script	Umgoro	784,{
 		delitem 2268,1;
 		delitem 757,50;
 		delitem 1019,50;
+		delitem 1066,50;
 		delitem 1067,50;
 		delitem 1068,50;
-		delitem 1069,50;
 		delitem 7951,1;
 		set Zeny, Zeny - 1000000;
 		getitem 5377,1;
@@ -177,9 +177,9 @@ umbala,138,226,4	script	Umgoro	784,{
 		if(countitem(2268) < 1) mes "^FF0000"+(1 - countitem(2268)) +"^000000 Pipe";
 		if(countitem(757) < 50) mes "^FF0000"+(50 - countitem(757)) +"^000000 Rough Elunium";
 		if(countitem(1019) < 50) mes "^FF0000"+(50 - countitem(1019)) +"^000000 Trunk";
-		if(countitem(1067) < 50) mes "^FF0000"+(50 - countitem(1067)) +"^000000 Fine-Grained Trunk";
-		if(countitem(1068) < 50) mes "^FF0000"+(50 - countitem(1068)) +"^000000 Solid Trunk";
-		if(countitem(1069) < 50) mes "^FF0000"+(50 - countitem(1069)) +"^000000 Barren Trunk";
+		if(countitem(1066) < 50) mes "^FF0000"+(50 - countitem(1066)) +"^000000 Fine-Grained Trunk";
+		if(countitem(1067) < 50) mes "^FF0000"+(50 - countitem(1067)) +"^000000 Solid Trunk";
+		if(countitem(1068) < 50) mes "^FF0000"+(50 - countitem(1068)) +"^000000 Barren Trunk";
 		if(countitem(7951) < 1) mes "^FF0000"+(1 - countitem(7951)) +"^000000 Golden Tulip Flower";
 		if(Zeny < 1000000) mes "^0000FF"+(1000000 - Zeny)+"^000000 Zeny";
 		close;
@@ -262,7 +262,6 @@ dewata,248,224,4	script	Elika	91,{
 	L_required:
 		mes "[^000000Elika^000000]";
 		mes "^FF000025^000000 Gold"; //969
-		mes "^FF00001^000000 Love Flower"; //7864
 		mes "^FF00001^000000 Romantic Flower"; //2269
 		mes "^FF00001^000000 Singing Flower"; //629
 		mes "^FF00001^000000 Withered Flower"; //6086
@@ -273,7 +272,6 @@ dewata,248,224,4	script	Elika	91,{
 
 	L_check:
 		if(countitem(969) < 25) goto L_manque;
-		if(countitem(7864) < 1) goto L_manque;
 		if(countitem(2269) < 1) goto L_manque;
 		if(countitem(629) < 1) goto L_manque;
 		if(countitem(6086) < 1) goto L_manque;
@@ -283,7 +281,6 @@ dewata,248,224,4	script	Elika	91,{
 		mes "Oh vous êtes revenu ! ";
 		mes "Merci de ton aide !";
 		delitem 969,25;
-		delitem 7864,1;
 		delitem 2269,1;
 		delitem 629,1;
 		delitem 6086,1;
@@ -296,7 +293,6 @@ dewata,248,224,4	script	Elika	91,{
 		mes "[^000000Elika^000000]";
 		mes "Il manque encore";
 		if(countitem(969) < 25) mes "^FF0000"+(25 - countitem(969)) +"^000000 Gold";
-		if(countitem(7864) < 1) mes "^FF0000"+(1 - countitem(7864)) +"^000000 Love Flower";
 		if(countitem(2269) < 1) mes "^FF0000"+(1 - countitem(2269)) +"^000000 Romantic Flower";
 		if(countitem(629) < 1) mes "^FF0000"+(1 - countitem(629)) +"^000000 Singing Flower";
 		if(countitem(6086) < 1) mes "^FF0000"+(1 - countitem(6086)) +"^000000 Withered Flower";
@@ -354,7 +350,7 @@ lhz_in02,273,222,4	script	Halliciel	894,{
 		delitem 978,1;
 		delitem 982,1;
 		set Zeny, Zeny - 150000;
-		getitem 5132,1;
+		getitem 5137,1;
 		close;
 
 	L_manque:

@@ -165,7 +165,7 @@ OnInit:	// configuration
 	.minLevel = 80; // niveau minimum pour participer aux BG
 	.bgColor$ = "0x00c8a9"; // couleur des annonces
 	
-	.flaviusMin = 12; // nombre minimum de joueurs pour lancer le BG
+	.flaviusMin = 10; // nombre minimum de joueurs pour lancer le BG
 	.flaviusMax = 20; // nombre maximum de joueurs autorisés dans le BG
 	
 		// ne pas toucher
