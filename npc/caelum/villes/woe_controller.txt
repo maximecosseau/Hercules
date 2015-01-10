@@ -62,7 +62,9 @@ OnInit:
 	// -- when given directly: <itemID>,<amount>{,<itemID>,<amount>,...}
 	// -- via mail (option 2): <itemID>,<amount>,<Zeny>
 	setarray .Reward[0],14001,1;
-
+	if (!$guild_dungeon) {
+		$guild_dungeon = 0;
+	}
 // -----------------------------------------------------------
 //  Constants (leave this section alone).
 // -----------------------------------------------------------
@@ -98,6 +100,9 @@ OnMinute00:
 		for(set .@i,0; .@i<.Size; set .@i,.@i+4)
 			if (gettime(4) == $WOE_CONTROL[.@i] && gettime(3) == $WOE_CONTROL[.@i+2]) {
 			OnWOEEnd:
+
+				// Selection aléatoire d'un "Guild Dungeon"
+				$guild_dungeon = rand(1,4);
 				announce "La War of Emperium est finie !",bc_all|bc_woe;
 				agitend; agitend2;
 				sleep 1000;

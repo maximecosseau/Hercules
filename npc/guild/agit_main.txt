@@ -925,6 +925,7 @@ OnRecvCastle:
 		close;
 	}
 
+	/*
 	if (compare(strnpcinfo(2),"aldeg")) {
 		.@destination$ = "gld_dun02";
 		if (compare(strnpcinfo(2),"cas01")) setarray .@coordinates[0],32,122;
@@ -961,6 +962,38 @@ OnRecvCastle:
 	else {
 		end;
 	}
+	*/
+
+
+
+	/* Warp de Dongeon de Guilde de façon aléatoire chaque semaine après la fin de la WoE */
+	switch($guild_dungeon) {
+		case 1:
+			.@destination$ = "gld_dun03";
+			setarray .@coordinates[0],28,251;
+			break;
+
+		case 2:
+			.@destination$ = "gld_dun02";
+			setarray .@coordinates[0],32,122;
+			break;
+
+		case 3:
+			.@destination$ = "gld_dun04";
+			setarray .@coordinates[0],39,258;
+			break;
+
+		case 4:
+			.@destination$ = "gld_dun01";
+			setarray .@coordinates[0],186,165;
+			break;
+
+		default:
+			// Var non initialisée ?
+			// On l'initialise de manière aléatoire.
+			$guild_dungeon = rand(1,4);
+			break;
+	}
 
 	mes "[Ringing Voice]";
 	mes "'Only the truly brave can take the test.'";
@@ -969,10 +1002,13 @@ OnRecvCastle:
 	mes "There's a small lever. Will you pull it?";
 	next;
 	if(select("Pull.:Don't pull.") == 1) {
-		if (getcharid(2) == .@GID) {
+		if (getcharid(2) == .@GID && .@coordinates[0] != 0 && .@coordinates[1] != 0) {
 			close2;
 			warp .@destination$,.@coordinates[0],.@coordinates[1];
 			end;
+		} else {
+			mes "Une erreur est survenue.";
+			mes "Si ce problème persiste, merci de contacter le Staff.";
 		}
 		mes " ";
 		mes "Nothing happened.";
