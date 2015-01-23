@@ -1,0 +1,123 @@
+morocc,250,297,4	script	Larry	968,{
+	
+	mes "^990066[Larry]^000000";
+	mes "Hello, comment ça va ?";
+	mes "Je fabique des peluches, tu en veux une ?";
+	switch(select("Ouai, j'en ai besoin !:Nan, je suis plus un bébé.")){
+		
+		case 1:
+			next;
+			mes "^990066[Larry]^000000";
+			mes "Bon, je te propose 3 peluches.";
+			mes "Laquelle veux-tu ?";
+			switch(select("^000099Leaf Cat Hat:Yoyo Hat:Sting Hat^000000")){
+				
+				case 1:
+					next;
+					mes "^990066[Larry]^000000";
+					mes "Très bien ! C'est une belle peluche en plus !";
+					mes "Alors c'est décidé, tu prends celle là ?";
+					menu "Oui, elle est trop mignone !",doItem1,"Non, finalement... Je pense être assez grand.",-;
+					next;
+					mes "^990066[Larry]^000000";
+					mes "Ok, pas de problème.";
+					close;
+					
+				doItem1:
+					next;
+					if (countitem(7198)==100 && countitem(610)==20 && countitem(4195)==1){
+						
+						delitem 7198,100;
+						delitem 610,20;
+						delitem 4195,1;
+						getitem 5555,1;
+						mes "^990066[Larry]^000000";
+						mes "Merci beaucoup, à bientôt !";
+						close;
+					}
+					else{
+						mes "^990066[Larry]^000000";
+						mes "Bon, du coups, il me faut tout ça:";
+						mes "^5757FF100 Huge Leaf^000000";
+						mes "^5757FF20 Yggdrasil Leaf^000000";
+						mes "^5757FF1 Leaf Cat Card^000000";
+						close;
+					}
+				
+				case 2:
+					next;
+					mes "^990066[Larry]^000000";
+					mes "Très bien ! C'est une belle peluche en plus !";
+					mes "Alors c'est décidé, tu prends celle là ?";
+					menu "Oui, elle est trop mignone !",doItem2,"Non, finalement... Je pense être assez grand.",-;
+					next;
+					mes "^990066[Larry]^000000";
+					mes "Ok, pas de problème.";
+					close;
+					
+				doItem2:
+					next;
+					if (countitem(753)==1 && countitem(919)==50 && countitem(942)==75 && countitem(513)==100){
+						
+						delitem 753,1;
+						delitem 919,50;
+						delitem 942,75;
+						delitem 513,100;
+						getitem 5385,1;
+						mes "[Larry]^000000";
+						mes "Merci beaucoup, à bientôt !";
+						close;
+					}
+					else{
+						mes "^990066[Larry]^000000";
+						mes "Bon, du coups, il me faut tout ça:";
+						mes "^5757FF1 Yoyo Doll^000000";
+						mes "^5757FF50 Animal Skin^000000";
+						mes "^5757FF75 Yoyo Tails^000000";
+						mes "^5757FF100 Banana^000000";
+						close;
+					}
+			
+				case 3:
+					next;
+					mes "^990066[Larry]^000000";
+					mes "Très bien ! C'est une belle peluche en plus !";
+					mes "Alors c'est décidé, tu prends celle là ?";
+					menu "Oui, elle est trop mignone !",doItem3,"Non, finalement... Je pense être assez grand.",-;
+					next;
+					mes "^990066[Larry]^000000";
+					mes "Ok, pas de problème.";
+					close;
+					
+				doItem3:
+					next;
+					if (countitem(10007)==1 && countitem(719)==10 && countitem(7004)==150){
+						
+						delitem 10007,1;
+						delitem 719,10;
+						delitem 7004,150;
+						getitem 5509,1;
+						mes "^990066[Larry]^000000";
+						mes "Merci beaucoup, à bientôt !";
+						close;
+					}
+					else{
+						mes "^990066[Larry]^000000";
+						mes "Bon du coups, il me faut tout ça:";
+						mes "^5757FF1 Silk Ribbon^000000";
+						mes "^5757FF10 Amethyst^000000";
+						mes "^5757FF150 Mud Lump^000000";
+						close;
+					}
+						
+			}
+			
+		case 2:
+			next;
+			mes "[Larry]";
+			mes "Ok Ok ! Ne le prend pas mal comme ça !";
+			mes "Je te souhaite une bonne journée alors.";
+			close;
+	}
+	
+}

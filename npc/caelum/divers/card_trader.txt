@@ -1,0 +1,82 @@
+//===== rAthena Script =======================================
+//= Card Trader
+//===== By: ==================================================
+//= Maracuja
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena SVN
+
+prontera,144,131,6	script	Card Trader	90,{
+	mes "[Card Trader]";
+	mes "Salut, "+strcharinfo(0)+"!";
+	mes "Qu'est-ce que je peux faire pour toi?"; 
+/* Texte */
+	next;
+
+	switch(select(" > Information: > Echanger des cards: > Partir")) {
+
+	case 1:
+		mes "[Card Trader]";
+		mes "Trouves-tu que tu as pas mal de cards inutiles?";
+		mes "Je serais ravi de t'en débarasser!";
+		next;
+		mes "[Card Trader]";
+		mes "Je t'échange ^0055FF un OCA ^000000 contre 5 cartes différentes";
+		emotion e_cash;
+		close;
+	case 2:
+		goto echange;
+
+	case 3:
+		mes "[Card Trader]";
+		mes "*yawn*";
+		mes "A la prochaine!";
+		emotion e_yawn;
+		close;		
+	}
+
+echange:
+	mes "Cartes à échanger:";
+	getinventorylist;
+	setarray .@menuitems$[0],"";
+	mes "-----------------------------------";
+	for(set .@i,0; .@i<inventorylist_count; set .@i,.@i+1)
+		if (@inventorylist_id[.@i] > 4000 && @inventorylist_id[.@i] < 4700) {
+			set .@card_id[getarraysize(.@card_id)], @inventorylist_id[.@i];
+			set .@card_amt[getarraysize(.@card_amt)], @inventorylist_amount[.@i];
+			set .@menuitems$[.@i],"  ^777777"+@inventorylist_amount[.@i]+"x "+getitemname(@inventorylist_id[.@i])+"^000000";
+		}
+	deletearray @inventorylist_id[0], getarraysize(@inventorylist_id);
+	deletearray @inventorylist_amount[0], getarraysize(@inventorylist_amount);	
+
+	if (getarraysize(.@card_id)<5) {
+		mes "  ^777777Pas assez de cartes différentes dans l'inventaire^000000";
+		emotion e_swt;
+		close;
+	}
+	mes " ";
+	next;
+	mes "---------- Cartes qui vont être échangées: ";
+	for(set .@i,0; .@i<5; set .@i,.@i+1) {
+		mes .@menuitems$[.@i];
+	}
+	if(select(" > ^0055FFConfirmer...^000000: > ^777777Annuler^000000") == 2) {
+		mes "[Card Trader]";
+		mes "Oh...";
+		emotion e_hmm;
+		close;
+	}
+	for(set .@i,0; .@i<5; set .@i,.@i+1) {
+		if (countitem(.@card_id[.@i])>0)
+			delitem .@card_id[.@i],1;
+		else 
+			mes "Vous avez essayé de me voler...";
+	}
+	next;
+	mes "[Card Trader]";
+	mes "Merci ! Voilà un OCA en échange !";
+	getitem 616,1;
+	emotion e_ho;
+	close;
+}

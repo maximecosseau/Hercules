@@ -1,0 +1,253 @@
+prt_fild08,356,333,3	script	Angeling	948,{
+	
+	mes "^990066[Angeling]^000000";
+	mes "Bonjour mon ami ! Quelle jolie plaine tu ne trouve pas ?";
+	mes "Des porings, des Lunatics et des Fabres, quelle harmonie !";
+	menu "Oui, vous avez raison !",-,"Mouais, je trouve pas.",-;
+	next;
+	mes "Pour aller avec l'environnement, j'ai plusieurs hats à te proposer.";
+	mes "Fais ton choix :";
+	switch(select("Angeling Hat:Poporing Hat:Triple Poring Hat:Poring Cake Hat:Angeling Hairpin:Flapping Angel Wing:Flapping Angeling Hat:Archangeling Hat")){
+		
+	case 1:
+		next;
+		mes "Mon ami, veux-tu ce Angeling Hat ?";
+		menu "Oh oui ! Avec plaisir !",doItem1,"Non,je n'ai pas envie.",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+		
+		doItem1:
+			next;
+     		if (countitem(5035)==1 && countitem(2254)==1 && countitem(5040)==1 && countitem(741)==10 && countitem(507)==100 && countitem(990)==100 && countitem(716)==100){
+		
+				delitem 5035,1;
+				delitem 2254,1;
+				delitem 5040,1;
+				delitem 741,10;
+				delitem 507,100;
+				delitem 990,100;
+				delitem 716,100;
+				getitem 5132,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFPoring Hat^000000";
+				mes "1 ^5757FFAngel Wing^000000";
+				mes "1 ^5757FFBlush^000000";
+				mes "10 ^5757FFPoring Doll^000000";
+				mes "100 ^5757FFRed Herb^000000";
+				mes "100 ^5757FFRed Blood^000000";
+				mes "100 ^5757FFRed Gemstone^000000";
+			close;
+			}	
+	case 2:
+		next;
+		mes "Mon ami, veux-tu ce Poporing Hat ?";
+		menu "Oh oui ! Avec plaisir !",doItem2,"Non, je n'ai pas envie.",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+			
+		doItem2:
+			next;
+			if (countitem(4033)==1 && countitem(979)==1 && countitem(511)==100 && countitem(993)==100){
+				
+				delitem 4033,1;
+				delitem 979,1;
+				delitem 511,100;
+				delitem 993,100;
+				getitem 5352,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFPoporing Card^000000";
+				mes "1 ^5757FFDarkGreen Dyestuf^000000";
+				mes "100 ^5757FFGreen herb^000000";
+				mes "100 ^5757FFGreen Live^000000";
+			close;	
+			}
+	case 3:
+		next;
+		mes "Mon ami, veux-tu ce Triple Poring Hat ?";
+		menu "Oh oui ! Avec plaisir !",doItem3,"Non, je n'ai pas envie.",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+		
+		doItem3:
+			next;
+			if (countitem(4001)==1 && countitem(2213)==1 && countitem(507)==150 && countitem(7054)==150){
+				
+				delitem 4001,1;
+				delitem 2213,1;
+				delitem 507,150;
+				delitem 7054,150;
+				getitem 5255,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFPoring Card^000000";
+				mes "1 ^5757FFKitty Band^000000";
+				mes "150 ^5757FFRed Herb^000000";
+				mes "150 ^5757FFBrigan^000000";
+			close;
+			}
+	case 4:
+		next;
+		mes "Mon ami, veux-tu ce Poring Cake Hat ?";
+		menu "Oh oui ! Avec plaisir !",doItem4,"Non, je n'ai pas envie.",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+		
+		doItem4:
+			next;
+			if (countitem(4001)==1 && countitem(5024)==1 && countitem(550)==20 && countitem(539)==100 && countitem(507)==100){
+				
+				delitem 4001,1;
+				delitem 5024,1;
+				delitem 550,20;
+				delitem 539,100;
+				delitem 507,100;
+				delitem 7575,100;
+				getitem 5415,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFPoring Card^000000";
+				mes "1 ^5757FFCake Hat^000000";
+				mes "20 ^5757FFRice Cake^000000";
+				mes "100 ^5757FFPiece of Cake^000000";
+				mes "100 ^5757FFRed Herb^000000";
+			close;
+			}
+	case 5:
+		next;
+		mes "Mon ami, veux-tu ce Angeling Hairpin ?";
+		menu "Oh oui ! Avec plaisir !",doitem5,"Non, je n'ai pas envie.",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+		
+		doItem5:
+			next;
+			if (countitem(725)==10 && countitem(507)==150 && countitem(7200)==150){
+				
+				delitem 725,10;
+				delitem 507,150;
+				delitem 7200,150;
+				getitem 5153,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "10 ^5757FFSardonyx^000000";
+				mes "150 ^5757FFRed Herb^000000";
+				mes "150 ^5757FFElastic Band^000000";
+			close;
+			}
+	case 6:
+		next;
+		mes " Mon ami, veux-tu ce Flapping Angel Wing ?";
+		menu "Oh oui ! Avec plaisir !",doItem6,"Non, je n'ai pas envie",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+		
+		doItem6:
+			next;
+			if (countitem(2254)==1 && countitem(982)==1 && countitem(547)==10 && countitem(509)==50 && countitem(916)==75 && countitem(7063)==75){
+				
+				delitem 2254,1;
+				delitem 982,1;
+				delitem 547,10;
+				delitem 509,50;
+				delitem 916,75;
+				delitem 7063,75;
+				getitem 5210,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFAngel Wing^000000";
+				mes "1 ^5757FFWhite Dyestuf^000000";
+				mes "10 ^5757FFCondensed White Potion^000000";
+				mes "50 ^5757FFWhite Herb^000000";
+				mes "75 ^5757FFFeather of Birds^000000";
+				mes "75 ^5757FFSoft Feather^000000";
+			close;
+			}
+	case 7:
+		next;
+		mes "Mon ami, veux-tu ce Flapping Angeling Hat ?";
+		menu "Oh oui ! Avec plaisir !",doItem7,"Non, je n'ai pas envie.",-;
+		mes "Très bien, passe une bonne journée alors.";
+		close;
+		
+		doItem7:
+			next;
+			if (countitem(5210)==1 && countitem(5132)==1 && countitem(509)==50 && countitem(507)==50){
+				
+				delitem 5210,1;
+				delitem 5132,1;
+				delitem 509,50;
+				delitem 507,50;
+				getitem 5334,1;
+				mes "Merci à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFFlapping Angel Wing^000000";
+				mes "1 ^5757FFAngeling Hat^000000";
+				mes "50 ^5757FFWhite Herb^000000";
+				mes "50 ^5757FFRed Herb^000000";
+			close;
+			}
+	case 8:
+		next;
+		mes "Mon ami, veux-tu ce Archangeling Hat?";
+		menu "oh oui ! Avec plaisir",doItem8,"Non je n'ai pas envie.",-;
+		mes "très bien, passe une bonne journée alors.";
+		close;
+		
+		doitem8:
+			next;
+			if (countitem(5210)==1 && countitem(5132)==1 && countitem(978)==1 && countitem(991)==50 && countitem(717)==75 && countitem(510)==100){
+				
+				delitem 5210,1;
+				delitem 5132,1;
+				delitem 978,1;
+				delitem 991,50;
+				delitem 717,75;
+				delitem 510,100;
+				getitem 5319,1;
+				mes "Merci, à bientôt !";
+				close;
+			}
+			else{
+				mes "^990066[Angeling]^000000";
+				mes "Très bien, ramène moi tout ça:";
+				mes "1 ^5757FFFlapping Angel Wing^000000";
+				mes "1 ^5757FFAngeling Hat^000000";
+				mes "1 ^5757FFCobaltblue Dyestuf^000000";
+				mes "50 ^5757FFCrystal Blue^000000";
+				mes "75 ^5757FFBlue Gemstone^000000";
+				mes "100 ^5757FFBlue Herb^000000";
+			close;
+			}
+	}	 
+		
+}

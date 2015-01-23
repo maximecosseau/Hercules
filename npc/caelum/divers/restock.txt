@@ -1,0 +1,322 @@
+function	script	Y_Restock	{
+
+L_menu:
+	mes "[^822100Restock^000000]";
+	mes "Bienvenue dans le restock ^0188ff"+strcharinfo(0)+"^000000, le restock va vous permettre de créer une liste d'objet vous permettant de retirer cette liste de votre storage rapidement.";
+	next;
+	menu 	"Restock",L_restk,
+		"Tout transférer en storage",L_storage,
+		"Voir son enregistrement",L_seelist,
+		"Changer de liste d'enregistrement",L_mdflist,
+		"Supprimer un objet d'une liste",L_delslot,
+		"Enregistrer ses objets",L_record,
+		"Supprimer une liste d'enregistrement",L_dellist,
+		"Quitter",-;
+close;
+//end L_menu
+
+L_storage:
+	mes "[^822100Restock^000000]";
+	mes "Que voulez-vous stocker?";
+	switch(select("Tous:Gardez les objets équipé:Gardez les équipements:Gardez les armes, consommables et munitions")){
+		case 1 : //tous
+			storeall(1); break;
+		case 2 : //don't unequip
+			storeall(0); break;
+		case 3 : //keep weapon armor
+			storeall(8); break;
+		case 4 : //
+			storeall(44); break;
+	}
+	next;
+goto L_menu;
+
+L_record:
+//	callsub S_delay_WPE;
+	if(listcount < 5) {
+		next;
+		mes "[^822100Restock^000000]";	
+		mes "Nous allons donc enregistrer votre liste d'objet de votre inventaire. Tous les objets de votre inventaire vont être mis dans cette liste.";
+		next;
+		mes "[^822100Restock^000000]";
+		mes "Sachez que vous avez le droit à un maximum de ^ff00005^000000 listes.";
+		next;
+		mes "[^822100Restock^000000]";
+		mes "Veuillez en premier temps donner un nom à votre nouvelle liste.";
+		do {	
+			set @ok,callsub(S_new_list);
+		} while(@ok==0);
+		query_sql "insert into `restock_lists`(list_name,char_id) values('"+escape_sql(@newlist$)+"',"+getcharid(0)+");";
+		query_sql "select list_id from `restock_lists` where list_name='"+escape_sql(@newlist$)+"' and char_id="+getcharid(0),@list_id;
+		set .@memook,callsub(S_memo_list,@list_id); //attemp to save list
+		next;
+		if(.@memook){
+			set restock_lsel,@list_id;
+			mes "[^822100Restock^000000]";
+			mes "Votre liste a été enregistrer avec succés sous le nom de ^019aff"+@newlist$+"^000000.";
+		}
+		else {	
+			query_sql "delete from `restock_lists` where list_id="+@list_id; //remove if association failed
+			mes "[^822100Restock^000000]";
+			mes "Impossible d'enregistrer votre liste, veuillez contacter l'administration.";
+		}
+	}	
+	else {
+		mes "[^822100Restock^000000]";
+		mes "Vous avez déjà atteint votre maximum de liste, vous ne pouvez pas créer de nouvelle liste.";
+	}
+//	set #restocktick,gettimetick(0);
+	next;
+	goto L_menu;
+//end L_record
+
+
+L_restk:
+//	callsub S_delay_WPE;
+	callsub S_countlist;
+	query_sql "select item_id,item_nb,refine,identify,attribute,card0,card1,card2,card3 from `restock_items` where list_id="+restock_lsel,.@item_id[0],.@item_nb[0],.@item_ref[0],.@item_iden[0],.@item_att[0],.@item_c0[0],.@item_c1[0],.@item_c2[0],.@item_c3[0]; //that the query man !
+
+	for(set .@i,0; .@i<getarraysize(.@item_id); set .@i, .@i+1){
+		set .@inv_nb, countitem2(.@item_id[.@i],.@item_iden[.@i],.@item_ref[.@i],.@item_att[.@i],.@item_c0[.@i],.@item_c1[.@i],.@item_c2[.@i],.@item_c3[.@i]); //inventory amount for item		
+		if (.@inv_nb > .@item_nb[.@i]) { //put extra in storage
+			set .@diff_it, .@inv_nb - .@item_nb[.@i];
+			set @ok,inv2stor(.@item_id[.@i],.@diff_it,.@item_iden[.@i],.@item_ref[.@i],.@item_att[.@i],.@item_c0[.@i],.@item_c1[.@i],.@item_c2[.@i],.@item_c3[.@i]);
+		}
+		else if (.@inv_nb < .@item_nb[.@i]) { //try to retrive diff from storage
+			set .@diff_it, .@item_nb[.@i] - .@inv_nb;
+			set .@stor_nb,countstorageitem(0,.@item_id[.@i],.@item_iden[.@i],.@item_ref[.@i],.@item_att[.@i],.@item_c0[.@i],.@item_c1[.@i],.@item_c2[.@i],.@item_c3[.@i]);
+			if(.@stor_nb >= .@diff_it){
+				set @ok,stor2inv(.@item_id[.@i],.@diff_it,.@item_iden[.@i],.@item_ref[.@i],.@item_att[.@i],.@item_c0[.@i],.@item_c1[.@i],.@item_c2[.@i],.@item_c3[.@i]);
+			}
+			else {
+				dispbottom "L'objet suivant n'est pas disponible en storage: "+.@item_id[.@i]+", le reste des objets va être retiré.";
+				set @ok,stor2inv(.@item_id[.@i],.@stor_nb,.@item_iden[.@i],.@item_ref[.@i],.@item_att[.@i],.@item_c0[.@i],.@item_c1[.@i],.@item_c2[.@i],.@item_c3[.@i]);
+			}	
+		}			
+	}
+/* tmp desactivation
+	getinventorylist();
+	for(set .@i,0; .@i<@inventorylist_count; set .@i, .@i+1){ //put all remaining not in list in kafra
+		for(set .@j,0; .@i<getarraysize(.@item_id); set .@j, .@j+1){
+			if(@inventorylist_id[.@i]!=.@item_id[.@j])
+				set @ok,inv2stor(@inventorylist_id[.@i],@inventorylist_amount[.@i],@inventorylist_refine[.@i],@inventorylist_identify[.@i],@inventorylist_attribute[.@i],@inventorylist_card1[.@i],@inventorylist_card2[.@i],@inventorylist_card3[.@i],@inventorylist_card4[.@i]);
+		}
+	} //TODO if(!@ok) error blabla
+*/
+//	set #restocktick,gettimetick(0);
+	if(select("Quittez:Retour au menu")==1) close;		
+	goto L_menu;
+//end rstk
+
+L_seelist:
+	callsub S_countlist;
+	query_sql "select list_name from `restock_lists` where list_id="+restock_lsel,.@lname$;
+	mes "[^822100Restock^000000]";
+	mes "Nom de la liste actuel : ^019aff"+.@lname$+"^000000";
+	callsub(S_build_slots,1);
+	next;
+	goto L_menu;
+//end seelist
+
+L_delslot:
+//	callsub S_delay_WPE;
+	callsub S_countlist;
+	query_sql "select list_name from `restock_lists` where list_id="+restock_lsel,.@lname$; //name lookup
+	mes "[^822100Restock^000000]";
+	mes "Nom de la liste actuel : ^019aff"+.@lname$+"^000000";
+	set .@slotmenu$,callsub(S_build_slots,0);
+	mes "Quel objet voulez vous supprimez ?";
+	select(.@slotmenu$);
+	query_sql "delete from `restock_items` where list_id="+restock_lsel+" and id="+(@id_sql[@menu-1]);
+	mes "[^822100Restock^000000]";
+	mes "L'objet a été supprimer de la liste avec succés.";
+//	set #restocktick,gettimetick(0);
+	next;
+	goto L_menu;
+//end delslot
+
+	
+L_mdflist:
+//	callsub S_delay_WPE;
+	callsub S_countlist;
+	mes "[^822100Restock^000000]";
+	mes "Choisissez ci-dessous la liste que vous voudriez sélectionner.";
+	set .@menulist$,callsub(S_build_lists,0);
+	select(.@menulist$);
+	explode(.@options$,.@menulist$,":");
+	set .@list_select$,.@options$[@menu-1];
+	query_sql "select list_id from `restock_lists` where char_id="+getcharid(0)+" and list_name='"+escape_sql(.@list_select$)+"'",@list_id;
+	set restock_lsel,@list_id;
+//	set #restocktick,gettimetick(0);
+	next;
+	goto L_menu;
+//end mdflist
+
+L_dellist:
+//	callsub S_delay_WPE;
+	callsub S_countlist;
+	mes "[^822100Restock^000000]";
+	mes "Quel liste voulez-vous supprimer parmi celle-ci ?";
+	set .@menulist$,callsub(S_build_lists,0);
+	select(.@menulist$);
+	explode(.@options$,.@menulist$,":");
+	set .@list_select$,.@options$[@menu-1];
+	next;
+	mes "[^822100Restock^000000]";
+	mes "Êtes-vous sur de vouloir supprimer cette liste ?";
+	if(select("Oui:Non")==1){
+		query_sql "select list_id from `restock_lists` where char_id="+getcharid(0)+" and list_name='"+escape_sql(.@list_select$)+"'",@list_id;
+		query_sql "delete from `restock_lists` where list_id="+@list_id;
+		query_sql "delete from `restock_items` where list_id="+@list_id;
+	}
+//	set #restocktick,gettimetick(0);
+	next;
+	goto L_menu;
+//end L_dellist
+
+
+
+//sub function for easy call
+S_new_list:
+	next;
+	mes "[^822100Restock^000000]";
+	mes "Veuillez entrer le nom de votre liste.";
+	input @newlist$;				
+	if(@newlist$ == "") {
+		mes "[^822100Restock^000000]";
+		mes "Vous devez obligatoirement choisir un nom pour votre liste.";
+		next;
+		return 0;
+	}
+	set @list_id,0;
+	query_sql "select list_id from `restock_lists` where char_id="+getcharid(0)+" and list_name='"+escape_sql(@newlist$)+"'",@list_id;
+	if(@list_id != 0) {
+		mes "[^822100Restock^000000]";
+		mes "Une liste que vous avez crée existe déjà sous ce nom.";
+		next;
+		return 0;
+	}
+	return 1;
+//end newlist
+
+S_memo_list:
+	next;
+	mes "[^822100Restock^000000]";
+	mes "Nous allons désormais scanner votre inventaire, êtes-vous sur de vouloir scanner votre inventaire?";
+	mes " Attention Votre liste ne peux contenir qu'un maximum de 50 items";
+	set @list_id,getarg(0);
+	select("Oui:Non");
+	switch(@menu){
+		case 1: //scan inventaire
+			getinventorylist();
+			if(@inventorylist_count > 50) { //not possible normally but eh
+				mes "[^822100Restock^000000]";
+				mes "Votre liste d'objet doit être inférieur à 50 objets.";
+				return 0;
+			}
+			for (set .@slot,0; .@slot<@inventorylist_count; set .@slot,.@slot+1) {
+				query_sql "insert into `restock_items`(list_id,item_id,item_nb,refine,identify,attribute,card0,card1,card2,card3) values("+@list_id+","+@inventorylist_id[.@slot]+","+@inventorylist_amount[.@slot]+","+@inventorylist_refine[.@slot]+","+@inventorylist_identify[.@slot]+","+@inventorylist_attribute[.@slot]+","+@inventorylist_card1[.@slot]+","+@inventorylist_card2[.@slot]+","+@inventorylist_card3[.@slot]+","+@inventorylist_card4[.@slot]+");";
+			}
+		break;
+		
+		case 2: //Retour au menu
+		return 0;
+		break;
+	} //end switch
+	return 1;
+//end memo list	
+
+S_build_slots:
+	set .@display,getarg(0); // to not fetch every .@i
+	query_sql "select item_id,item_nb,id from `restock_items` where list_id="+restock_lsel,.@item_id[0],.@item_nb[0],@id_sql[0];
+	set .@slot_nb,getarraysize(.@item_id);
+	for(set .@i,0; .@i<.@slot_nb; set .@i, .@i+1) {
+		set .@slotmenu$,.@slotmenu$+"^808080N° "+.@i+"^000000 - ^019aff"+getitemname(.@item_id[.@i])+"^000000 x"+.@item_nb[.@i]+":";
+		if (.@display==1) mes "^808080N° "+.@i+"^000000 - ^019aff"+getitemname(.@item_id[.@i])+"^000000 x"+.@item_nb[.@i];
+	}
+	return .@slotmenu$;
+//end build_slots
+
+S_build_lists:
+	set .@display,getarg(0);
+	query_sql "select distinct list_name from `restock_lists` where char_id="+getcharid(0),.@listname$[0];
+	set .@lcount,getarraysize(.@listname$);
+	for(set .@numlist,0; .@numlist<.@lcount; set .@numlist, .@numlist+1) {
+		if (.@display==1) mes .@listname$[.@numlist];
+		set .@menulist$, .@menulist$+.@listname$[.@numlist]+":";
+	}
+	return .@menulist$;
+//end build_lists
+	
+S_countlist:
+	query_sql "select count(*) from `restock_lists` where char_id="+getcharid(0)+"",listcount;
+	if (listcount<=0){
+		mes "[Restockeur]";
+		mes "Vous n'avez fait aucun enregistrement sur le restock.";
+		next;
+		goto L_menu;
+	}
+	return listcount;
+//end countlist
+end; //extra end for security
+
+S_delay_WPE:
+	if(gettimetick(0)<(#restocktick+2000)){
+		mes "Vous devez attendre encore"+(#restocktick+2000-gettimetick(0))/1000+" secondes pour effectuer cette action";
+		close;
+	}
+return;
+
+}
+
+-	script	Restock#00	-1,{
+		callfunc "Y_Restock";
+		end;
+}
+
+//BG
+bat_room,146,139,4	duplicate(Restock#00)	Restock#01	641
+
+//NPC Brasilis
+brasilis,131,332,3	duplicate(Restock#00)	Restock#02	641
+//Plage
+brasilis,88,68,6	duplicate(Restock#00)	Restock#03	641
+//Jardin
+brasilis,321,145,3	duplicate(Restock#00)	Restock#04	641
+//Statue
+brasilis,201,206,3	duplicate(Restock#00)	Restock#05	641
+//Terrasse
+brasilis,270,123,1	duplicate(Restock#00)	Restock#06	641
+//Residence
+brasilis,76,158,5	duplicate(Restock#00)	Restock#07	641
+//Jardini
+brasilis,318,283,3	duplicate(Restock#00)	Restock#08	641
+
+//Team Deathmatch
+bat_b03,8,294,4	duplicate(Restock#00)	Restock#BG1	641
+bat_b03,388,14,4	duplicate(Restock#00)	Restock#BG2	641
+
+//Conquest
+schg_cas06,260,380,5	duplicate(Restock#00)	Restock#BG3	641
+schg_cas06,299,380,3	duplicate(Restock#00)	Restock#BG4	641
+
+//CTF
+bat_b01,386,15,5	duplicate(Restock#00)	Restock#BG5	641
+bat_b01,6,294,5	duplicate(Restock#00)	Restock#BG6	641
+
+//Stone Control
+bat_b02,386,15,5	duplicate(Restock#00)	Restock#BG7	641
+bat_b02,6,294,5	duplicate(Restock#00)	Restock#BG8	641
+
+//Rush
+rush_cas01,207,229,3	duplicate(Restock#00)	Restock#BG9	641
+
+//TI
+region_8,7,47,5	duplicate(Restock#00)	Restock#BG10	641
+region_8,47,92,3	duplicate(Restock#00)	Restock#BG11	641
+region_8,92,47,3	duplicate(Restock#00)	Restock#BG12	641
+
+//Bossnia
+
+bat_a03,47,371,5	duplicate(Restock#00)	Restock#BG13	641
+bat_a03,39,13,5	duplicate(Restock#00)	Restock#BG14	641

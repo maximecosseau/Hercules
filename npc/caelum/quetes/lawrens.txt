@@ -1,0 +1,114 @@
+xmas_dun01,30,83,5	script	Lawrens	503,{
+	
+	mes "^990066[Lawrens]^000000";
+	mes "Oh.. Vous m'avez trouvé.. Je n'était pas si bien caché que ça, finalement..";
+	mes "Bon, puisque vous êtes là, je vais vous proposer un marché.";
+	mes "Vous me rammenez des items, et en échange je vous donne un hat.";
+	mes "Vous êtes partant ?";
+	next;
+	switch(select("Ouai ! Carrément !:Non, je n'ai pas que ça à faire..")){
+	
+	case 1:
+		next;
+		mes "^990066[Lawrens]^000000";
+		mes "Ok, c'est cool que vous ayez de la motivation !";
+		mes "Regardez ces hats, lequel voulez-vous ?";
+		switch(select("Edga Doll Hat:Drooping Nine Tail Hat:Filir Hat")){
+			
+			case 1:
+				next;
+				mes "^990066[Lawrens]^000000";
+				mes "Très bon choix ! Mais êtes vous sûre de vous?";
+				menu "Oui, c'est celui là que je veux !",doItem1,"Enfaite non, j'ai fais le mauvais choix.",-;
+				mes "Ok, c'est dommage il était bien..";
+				close;
+			
+			doItem1:
+				next;
+				if (countitem(7267)==50 && countitem(1019)==50 && countitem(914)==100){
+					
+					delitem 7267,50;
+					delitem 1019,50;
+					delitem 914,100;
+					getitem 5497,1;
+					mes "^990066[Lawrens]^000000";
+					mes "Merci de m'avoir aidé. J'espère vous revoir vite !"; 
+					close;
+				}
+				else{
+					mes "^990066[Lawrens]^000000";
+					mes "D'abord, il faut que vous me rameniez tout ça:";
+					mes "50 ^5757FFTiger Pantie^000000";
+					mes "50 ^5757FFTrunk^000000";
+					mes "100 ^5757FFFluff^000000";
+				close;
+				}
+			
+			case 2:
+				next;
+				mes "^990066[Lawrens]^000000";
+				mes "Très bon choix ! Mais êtes vous sûre de vous ?";
+				menu "Oui, c'est celui là que je veux !",doItem2,"Enfaite non, j'ai fais le mauvais choix.",-;
+				mes "Ok, c'est dommage il était bien..";
+				close;
+				
+			doItem2:
+				next;
+				if (countitem(1022)==100 && countitem(914)==150 && countitem(5113)==1){
+					
+					delitem 1022,100;
+					delitem 914,150;
+					delitem 5113,1;
+					getitem 5296,1;
+					mes "^990066[Lawrens]^000000";
+					mes "Merci de m'avoir aidé. J'espère vous revoir vite !";
+					close;
+				}
+				else{
+					mes "^990066[Lawrens]^000000";
+					mes "D'abord, il faut que vous me rameniez tout ça:";
+					mes "100 ^5757FFNine Tails^000000";
+					mes "150 ^5757FFFluff^000000";
+					mes "1 ^5757FFAngry Snarl^000000";
+				close;
+				}	
+		
+			case 3:
+				next;
+				mes "^990066[Lawrens]^000000";
+				mes "Très bon choix ! Mais êtes vous sûre de vous ?";
+				menu " Oui, c'est celui là que je veux !",doItem3,"Enfaite non, j'ai fais le mauvais choix.",-;
+				mes "Ok, c'est dommage il était bien..";
+				close;
+				
+			doItem3:
+				next;
+				if (countitem(916)==100 && countitem(7063)==100 && countitem(510)==100 && countitem(991)==50){
+					
+					delitem 916,100;
+					delitem 7063,100;
+					delitem 510,100;
+					delitem 991,50;
+					getitem 5405,1;
+					mes "^990066[Lawrens]^000000";
+					mes "Merci de m'avoir aidé. J'espère vous revoir vite !";
+					close;
+				}
+				else{
+					mes "^990066[Lawrens]^000000";
+					mes "D'abord, il faut que vous me rameniez tout ça:";
+					mes "100 ^5757FFFeather of Birds^000000";
+					mes "100 ^5757FFSoft Feather^000000";
+					mes "100 ^5757FFBlue Herb^000000";
+					mes "50 ^5757FFCrystal Blue^000000";
+				close;
+				}
+		}
+			
+	case 2:
+		next;
+		mes "Ok.. Comme vous voulez..";
+		close;
+			
+	}
+}
